@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/8.0.141"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.ats.view.MainController">
+  <children>
+    <MenuBar VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem mnemonicParsing="false" text="New" />
+            <MenuItem mnemonicParsing="false" text="Open…" />
+            <Menu mnemonicParsing="false" text="Open Recent" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" text="Save" />
+            <MenuItem mnemonicParsing="false" text="Save As…" />
+            <MenuItem mnemonicParsing="false" text="Revert" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Preferences…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Undo" />
+            <MenuItem mnemonicParsing="false" text="Redo" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Cut" />
+            <MenuItem mnemonicParsing="false" text="Copy" />
+            <MenuItem mnemonicParsing="false" text="Paste" />
+            <MenuItem mnemonicParsing="false" text="Delete" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Select All" />
+            <MenuItem mnemonicParsing="false" text="Unselect All" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <children>
+            <SplitPane dividerPositions="0.29797979797979796" prefHeight="530.0" prefWidth="840.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <TextField layoutX="150.0" layoutY="41.0" prefHeight="25.0" prefWidth="83.0" />
+                        <TextField layoutX="150.0" layoutY="75.0" prefHeight="25.0" prefWidth="83.0" />
+                        <Label layoutX="64.0" layoutY="45.0" text="Курс USD " />
+                        <Label layoutX="64.0" layoutY="79.0" text="Курс  Euro " />
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="200.0" layoutX="11.0" layoutY="264.0" stroke="BLACK" strokeType="INSIDE" width="235.0">
+                           <effect>
+                              <Shadow height="6.17" radius="2.585" width="6.17" />
+                           </effect>
+                        </Rectangle>
+                        <Label layoutX="30.0" layoutY="279.0" text="Всего">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="26.0" layoutY="317.0" text="Профиль">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="26.0" layoutY="341.0" text="Комплектующие">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="26.0" layoutY="367.0" text="Уплотнители">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="26.0" layoutY="392.0" text="Фурнитура">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField layoutX="151.0" layoutY="315.0" prefHeight="25.0" prefWidth="90.0" />
+                        <TextField layoutX="151.0" layoutY="339.0" prefHeight="25.0" prefWidth="90.0" />
+                        <TextField layoutX="151.0" layoutY="365.0" prefHeight="25.0" prefWidth="90.0" />
+                        <TextField layoutX="151.0" layoutY="390.0" prefHeight="25.0" prefWidth="90.0" />
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff570436" height="50.0" layoutX="10.0" layoutY="469.0" stroke="BLACK" strokeType="INSIDE" width="235.0" />
+                        <Label layoutX="17.0" layoutY="477.0" text="ИГОГО">
+                           <font>
+                              <Font name="System Bold Italic" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="196.0" layoutY="477.0" text="USD">
+                           <font>
+                              <Font name="System Italic" size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField layoutX="92.0" layoutY="478.0" prefHeight="25.0" prefWidth="100.0" />
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="449.0" prefWidth="528.0">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2f9ff00" height="99.0" layoutX="15.0" layoutY="257.0" stroke="BLACK" strokeType="INSIDE" width="501.0">
+                           <effect>
+                              <Shadow height="6.17" radius="2.585" width="6.17" />
+                           </effect>
+                        </Rectangle>
+                        <RadioButton layoutX="28.0" layoutY="298.0" mnemonicParsing="false" text="RAL">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="color" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton layoutX="117.0" layoutY="298.0" mnemonicParsing="false" text="RAL9006" toggleGroup="$color" />
+                        <RadioButton layoutX="207.0" layoutY="298.0" mnemonicParsing="false" text="BiColor" toggleGroup="$color" />
+                        <RadioButton layoutX="282.0" layoutY="298.0" mnemonicParsing="false" text="Decor" toggleGroup="$color" />
+                        <Label layoutX="28.0" layoutY="257.0" prefHeight="25.0" prefWidth="280.0" text="Покраска">
+                           <font>
+                              <Font name="System Bold" size="23.0" />
+                           </font>
+                        </Label>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1ff0ff00" height="231.0" layoutX="14.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" width="557.0">
+                           <effect>
+                              <Shadow height="6.17" radius="2.585" width="6.17" />
+                           </effect>
+                        </Rectangle>
+                        <Label layoutX="28.0" layoutY="28.0" text="Наценки">
+                           <font>
+                              <Font name="System Bold" size="23.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="28.0" layoutY="116.0" text="F50">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="24.0" layoutY="156.0" text="W70">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="24.0" layoutY="193.0" text="L45">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="82.0" layoutY="94.0" text="10%" />
+                        <Label layoutX="117.0" layoutY="94.0" text="15%" />
+                        <Label layoutX="150.0" layoutY="94.0" text="20%" />
+                        <Label layoutX="184.0" layoutY="94.0" text="25%" />
+                        <Label layoutX="215.0" layoutY="94.0" text="30%" />
+                        <RadioButton layoutX="86.0" layoutY="121.0" mnemonicParsing="false">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="f50markup" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton layoutX="118.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
+                        <RadioButton layoutX="151.0" layoutY="121.0" mnemonicParsing="false" selected="true" toggleGroup="$f50markup" />
+                        <RadioButton layoutX="185.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
+                        <RadioButton layoutX="216.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
+                        <RadioButton layoutX="86.0" layoutY="161.0" mnemonicParsing="false">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="w70markup" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton layoutX="118.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
+                        <RadioButton layoutX="151.0" layoutY="161.0" mnemonicParsing="false" selected="true" toggleGroup="$w70markup" />
+                        <RadioButton layoutX="185.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
+                        <RadioButton layoutX="216.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
+                        <RadioButton layoutX="86.0" layoutY="198.0" mnemonicParsing="false">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="l45markup" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton layoutX="118.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
+                        <RadioButton layoutX="151.0" layoutY="198.0" mnemonicParsing="false" selected="true" toggleGroup="$l45markup" />
+                        <RadioButton layoutX="185.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
+                        <RadioButton layoutX="216.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
+                        <Label layoutX="308.0" layoutY="94.0" text="по прайсу" />
+                        <Label layoutX="376.0" layoutY="94.0" text="по весу" />
+                        <Label layoutX="444.0" layoutY="94.0" text="из себестоимости" />
+                        <RadioButton layoutX="331.0" layoutY="121.0" mnemonicParsing="false" selected="true">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="f50markupType" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton layoutX="397.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markupType" />
+                        <RadioButton layoutX="465.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markupType" />
+                        <RadioButton layoutX="330.0" layoutY="161.0" mnemonicParsing="false" selected="true">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="w70markupType" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton layoutX="396.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markupType" />
+                        <RadioButton layoutX="464.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markupType" />
+                        <RadioButton layoutX="330.0" layoutY="198.0" mnemonicParsing="false" selected="true">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="l45markupType" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton layoutX="396.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markupType" />
+                        <RadioButton layoutX="464.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markupType" />
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff02" height="148.0" layoutX="12.0" layoutY="368.0" stroke="BLACK" strokeType="INSIDE" width="322.0">
+                           <effect>
+                              <Shadow height="6.17" radius="2.585" width="6.17" />
+                           </effect>
+                        </Rectangle>
+                        <Label layoutX="27.0" layoutY="366.0" text="Скидки">
+                           <font>
+                              <Font name="System Bold" size="23.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="31.0" layoutY="408.0" text="Профиль">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="31.0" layoutY="432.0" text="Комплектующие">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="31.0" layoutY="458.0" text="Уплотнители">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="31.0" layoutY="483.0" text="Фурнитура">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="251.0" layoutY="410.0" text="\%" />
+                        <Label layoutX="251.0" layoutY="434.0" text="\%" />
+                        <Label layoutX="251.0" layoutY="460.0" text="\%" />
+                        <Label layoutX="251.0" layoutY="485.0" text="\%" />
+                        <TextField layoutX="182.0" layoutY="406.0" prefHeight="25.0" prefWidth="60.0">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </TextField>
+                        <TextField layoutX="182.0" layoutY="430.0" prefHeight="25.0" prefWidth="60.0" />
+                        <TextField layoutX="182.0" layoutY="456.0" prefHeight="25.0" prefWidth="60.0" />
+                        <TextField layoutX="182.0" layoutY="481.0" prefHeight="25.0" prefWidth="60.0" />
+                        <TextField layoutX="27.0" layoutY="322.0" prefHeight="25.0" prefWidth="70.0" />
+                        <TextField layoutX="115.0" layoutY="322.0" prefHeight="25.0" prefWidth="70.0" />
+                        <TextField layoutX="202.0" layoutY="322.0" prefHeight="25.0" prefWidth="70.0" />
+                        <TextField layoutX="285.0" layoutY="322.0" prefHeight="25.0" prefWidth="70.0" />
+                        <Label layoutX="158.0" layoutY="266.0" text="(цена в гривне)">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <CheckBox layoutX="360.0" layoutY="268.0" mnemonicParsing="false" text="Включить в стоимость" />
+                        <CheckBox layoutX="396.0" layoutY="375.0" mnemonicParsing="false" text="Без фурнитуры" />
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+            <Button layoutX="394.0" layoutY="536.0" mnemonicParsing="false" text="Расчитать">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button layoutX="512.0" layoutY="536.0" mnemonicParsing="false" text="Записать">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>

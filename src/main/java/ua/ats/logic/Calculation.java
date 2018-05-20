@@ -1,5 +1,6 @@
 package ua.ats.logic;
 
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -17,12 +18,11 @@ public class Calculation {
 
     private static final Path DIR = Paths.get("d://alumotr");
     private byte type;
-    private int startRow = 11;
-    private int startCell = 7;
+    private final static int START_ROW = 11;
+    private final static int START_CELL = 7;
 
-    public XSSFSheet getSheetType() {
-        Object obj = null;
-        XSSFSheet sheet = null;
+    public Row getStartRow() {
+        Row row = null;
         File file;
 
         try (DirectoryStream<Path> stream =
@@ -33,24 +33,24 @@ public class Calculation {
                 String str = file.getName();
                 if (str.endsWith(".xlsx")) {
                     XSSFWorkbook book = new XSSFWorkbook(new FileInputStream(file));
-                    sheet = book.getSheetAt(0);
-                    type = 1;
+                    XSSFSheet sheet = book.getSheetAt(0);
+                    row = sheet.getRow(START_ROW);
                 }
                 if (str.endsWith(".xls")) {
                     HSSFWorkbook book = new HSSFWorkbook(new FileInputStream(file));
-                    obj = book.getSheetAt(0);
-                    type = 2;
+                    HSSFSheet sheet = book.getSheetAt(0);
+                    row = sheet.getRow(START_ROW);
                 }
             }
         } catch (IOException x) {
             System.err.println(x);
         }
-        return sheet;
+        return row;
     }
 
 
     public void foo() {
-        Row row = getSheetType().getRow(startRow);
+        Row row = getStartRow();
 
 
 
