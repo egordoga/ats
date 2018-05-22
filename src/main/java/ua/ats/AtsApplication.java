@@ -2,38 +2,15 @@ package ua.ats;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.apache.poi.sl.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
 //import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import ua.ats.dao.ProductRepository;
-import ua.ats.entity.Product;
-import ua.ats.logic.Calculation;
-import ua.ats.view.AbstractJavaFxApplicationSupport;
-import ua.ats.view.ConfigurationControllers;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-
-@Lazy
+//@Lazy
 @SpringBootApplication
 //@Configuration
 //@EnableAutoConfiguration
@@ -127,7 +104,8 @@ public class AtsApplication  extends Application {         //AbstractJavaFxAppli
     @Override
     public void init() throws Exception {
         springContext = SpringApplication.run(AtsApplication.class);
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view.fxml"));
+        springContext.getAutowireCapableBeanFactory().autowireBean(this);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/view.fxml"));
         fxmlLoader.setControllerFactory(springContext::getBean);
         root = fxmlLoader.load();
     }

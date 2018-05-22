@@ -1,4 +1,4 @@
-package ua.ats.view;
+package ua.ats.util.oldInterest;
 
 import javafx.application.Application;
 import org.springframework.boot.SpringApplication;
