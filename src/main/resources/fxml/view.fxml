@@ -172,51 +172,51 @@
                         <Label layoutX="150.0" layoutY="94.0" text="20%" />
                         <Label layoutX="184.0" layoutY="94.0" text="25%" />
                         <Label layoutX="215.0" layoutY="94.0" text="30%" />
-                        <RadioButton layoutX="86.0" layoutY="121.0" mnemonicParsing="false">
+                        <RadioButton fx:id="f5010" layoutX="86.0" layoutY="121.0" mnemonicParsing="false">
                            <toggleGroup>
                               <ToggleGroup fx:id="f50markup" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton layoutX="118.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
-                        <RadioButton layoutX="151.0" layoutY="121.0" mnemonicParsing="false" selected="true" toggleGroup="$f50markup" />
-                        <RadioButton layoutX="185.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
-                        <RadioButton layoutX="216.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
-                        <RadioButton layoutX="86.0" layoutY="161.0" mnemonicParsing="false">
+                        <RadioButton fx:id="f5015" layoutX="118.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
+                        <RadioButton fx:id="f5020" layoutX="151.0" layoutY="121.0" mnemonicParsing="false" selected="true" toggleGroup="$f50markup" />
+                        <RadioButton fx:id="f5025" layoutX="185.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
+                        <RadioButton fx:id="f5030" layoutX="216.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
+                        <RadioButton fx:id="w7010" layoutX="86.0" layoutY="161.0" mnemonicParsing="false">
                            <toggleGroup>
                               <ToggleGroup fx:id="w70markup" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton layoutX="118.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
-                        <RadioButton layoutX="151.0" layoutY="161.0" mnemonicParsing="false" selected="true" toggleGroup="$w70markup" />
-                        <RadioButton layoutX="185.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
-                        <RadioButton layoutX="216.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
-                        <RadioButton layoutX="86.0" layoutY="198.0" mnemonicParsing="false">
+                        <RadioButton fx:id="w7015" layoutX="118.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
+                        <RadioButton fx:id="w7020" layoutX="151.0" layoutY="161.0" mnemonicParsing="false" selected="true" toggleGroup="$w70markup" />
+                        <RadioButton fx:id="w7025" layoutX="185.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
+                        <RadioButton fx:id="w7030" layoutX="216.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
+                        <RadioButton fx:id="l4510" layoutX="86.0" layoutY="198.0" mnemonicParsing="false">
                            <toggleGroup>
                               <ToggleGroup fx:id="l45markup" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton layoutX="118.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
-                        <RadioButton layoutX="151.0" layoutY="198.0" mnemonicParsing="false" selected="true" toggleGroup="$l45markup" />
-                        <RadioButton layoutX="185.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
-                        <RadioButton layoutX="216.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
+                        <RadioButton fx:id="l4515" layoutX="118.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
+                        <RadioButton fx:id="l4520" layoutX="151.0" layoutY="198.0" mnemonicParsing="false" selected="true" toggleGroup="$l45markup" />
+                        <RadioButton fx:id="l4525" layoutX="185.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
+                        <RadioButton fx:id="l4530" layoutX="216.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
                         <Label layoutX="308.0" layoutY="94.0" text="по прайсу" />
                         <Label layoutX="376.0" layoutY="94.0" text="по весу" />
                         <Label layoutX="444.0" layoutY="94.0" text="из себестоимости" />
-                        <RadioButton layoutX="331.0" layoutY="121.0" mnemonicParsing="false" selected="true">
+                        <RadioButton fx:id="f50price" layoutX="331.0" layoutY="121.0" mnemonicParsing="false" selected="true">
                            <toggleGroup>
                               <ToggleGroup fx:id="f50markupType" />
                            </toggleGroup>
                         </RadioButton>
                         <RadioButton layoutX="397.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markupType" />
                         <RadioButton layoutX="465.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markupType" />
-                        <RadioButton layoutX="330.0" layoutY="161.0" mnemonicParsing="false" selected="true">
+                        <RadioButton fx:id="w70price" layoutX="330.0" layoutY="161.0" mnemonicParsing="false" selected="true">
                            <toggleGroup>
                               <ToggleGroup fx:id="w70markupType" />
                            </toggleGroup>
                         </RadioButton>
                         <RadioButton layoutX="396.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markupType" />
                         <RadioButton layoutX="464.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markupType" />
-                        <RadioButton layoutX="330.0" layoutY="198.0" mnemonicParsing="false" selected="true">
+                        <RadioButton fx:id="l45price" layoutX="330.0" layoutY="198.0" mnemonicParsing="false" selected="true">
                            <toggleGroup>
                               <ToggleGroup fx:id="l45markupType" />
                            </toggleGroup>

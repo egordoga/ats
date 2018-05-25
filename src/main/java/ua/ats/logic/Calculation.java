@@ -1,17 +1,12 @@
 package ua.ats.logic;
 
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ua.ats.AtsApplication;
 import ua.ats.dao.ProductRepository;
 import ua.ats.entity.Product;
@@ -29,7 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-//@ComponentScan
+//@ComponentScan(basePackages = "ua.ats")
+
 public class Calculation {
 
     private static final Path DIR = Paths.get("d://alumotr");
@@ -45,24 +41,8 @@ public class Calculation {
     private List<String> noNeed = Arrays.asList("Профиль", "Итого по разделу", "Комплектующие",
             "Уплотнители", "Остекление (панели)", "Фурнитура", "Материалы для монтажа");
 
-    @Autowired
-    //private ApplicationContext context;
-    private ProductRepository repository;
 
-
-
-    //ConfigurableApplicationContext context = new AnnotationConfigApplicationContext();
-    //ProductRepository repository = context.getBean(ProductRepository.class);
-
-    /*@Autowired
-    public Calculation(ProductRepository repository) {
-        this.repository = repository;
-    }*/
-
-
-
-    @PostConstruct
-    public void fillLists() {
+    public void fillLists(ProductRepository productRepository) {
 
         int i = START_ROW - 1;
         Row row;
@@ -75,8 +55,9 @@ public class Calculation {
             }
             XSSFWorkbook book = new XSSFWorkbook(new FileInputStream(file));
             XSSFSheet sheet = book.getSheetAt(0);
+            row = sheet.getRow(START_ROW);
 
-            do {
+            while (!("ИТОГО".equals(row.getCell(START_CELL).getStringCellValue()))) {
                 i++;
                 row = sheet.getRow(i);
 
@@ -90,23 +71,33 @@ public class Calculation {
                     continue;
                 }
 
-                Product product = repository.findProductByName(name);
+                Product product = productRepository.findFirstByName(name);
 
-                switch (product.getSectionId()) {
-                    case 1:
-                        profile.add(product);
-                        break;
-                    case 2:
-                        accessories.add(product);
-                        break;
-                    case 3:
-                        sealant.add(product);
-                        break;
-                    case 4:
-                        furniture.add(product);
-                        break;
+                if (!(product == null)) {
+                    product.setColumnNumberExel(i);
+                    if (row.getCell(11) != null) {
+                        product.setQuantity(row.getCell(11).getNumericCellValue());
+                    } else {
+                        product.setQuantity(0);
+                    }
+
+
+                    switch (product.getSectionId()) {
+                        case 1:
+                            profile.add(product);
+                            break;
+                        case 2:
+                            accessories.add(product);
+                            break;
+                        case 3:
+                            sealant.add(product);
+                            break;
+                        case 4:
+                            furniture.add(product);
+                            break;
+                    }
                 }
-            } while ("ИТОГО".equals(row.getCell(START_CELL).getStringCellValue()));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

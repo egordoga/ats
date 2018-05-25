@@ -20,6 +20,12 @@ public class Product {
     private Integer groupId;
     private Integer measureId;
     private Integer sectionId;
+    private Integer columnNumberExel;
+    private Integer sum;
+    private double quantity;
+    private int cena;
+
+
 
     public Product() {
     }
@@ -185,6 +191,44 @@ public class Product {
     public void setSectionId(Integer sectionId) {
         this.sectionId = sectionId;
     }
+
+    @Transient
+    public Integer getColumnNumberExel() {
+        return columnNumberExel;
+    }
+
+    public void setColumnNumberExel(Integer columnNumberExel) {
+        this.columnNumberExel = columnNumberExel;
+    }
+
+    @Transient
+    public Integer getSum() {
+        return sum;
+    }
+
+    public void setSum(Integer sum) {
+        this.sum = sum;
+    }
+
+    @Transient
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    @Transient
+    public int getCena() {
+        return cena;
+    }
+
+    public void setCena(int cena) {
+        this.cena = cena;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

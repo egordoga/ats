@@ -15,13 +15,13 @@ import java.io.IOException;
 
 public class ParseExelForDB {
 
-    private ConfigurableApplicationContext context = SpringApplication.run(AtsApplication.class);
-    private ProductRepository repository = context.getBean(ProductRepository.class);
+    //private ConfigurableApplicationContext context = SpringApplication.run(AtsApplication.class);
+    //private ProductRepository repository = context.getBean(ProductRepository.class);
 
-    public void parseExel() {
+    public void parseExel(ProductRepository repository) {
         XSSFWorkbook book = null;
         try {
-            book = new XSSFWorkbook(new FileInputStream("d://1.xlsx"));
+            book = new XSSFWorkbook(new FileInputStream("d://1111.xlsx"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -30,7 +30,7 @@ public class ParseExelForDB {
 
 
         System.out.println("Start parsing");
-        for (int i = 1; i < 356; i++) {
+        for (int i = 1; i < 16; i++) {
 
             Row row = sheet.getRow(i);
 
