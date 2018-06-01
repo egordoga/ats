@@ -99,10 +99,6 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextField layoutX="151.0" layoutY="315.0" prefHeight="25.0" prefWidth="90.0" />
-                        <TextField layoutX="151.0" layoutY="339.0" prefHeight="25.0" prefWidth="90.0" />
-                        <TextField layoutX="151.0" layoutY="365.0" prefHeight="25.0" prefWidth="90.0" />
-                        <TextField layoutX="151.0" layoutY="390.0" prefHeight="25.0" prefWidth="90.0" />
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff570436" height="50.0" layoutX="10.0" layoutY="469.0" stroke="BLACK" strokeType="INSIDE" width="235.0" />
                         <Label layoutX="17.0" layoutY="477.0" text="ИГОГО">
                            <font>
@@ -114,8 +110,32 @@
                               <Font name="System Italic" size="18.0" />
                            </font>
                         </Label>
-                        <TextField layoutX="92.0" layoutY="478.0" prefHeight="25.0" prefWidth="100.0" />
                         <Label fx:id="fileLbl" layoutX="16.0" layoutY="23.0" prefHeight="34.0" prefWidth="187.0" text="Файл">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totProf" layoutX="154.0" layoutY="315.0" prefHeight="25.0" prefWidth="82.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totAll" layoutX="96.0" layoutY="476.0" prefHeight="30.0" prefWidth="89.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totAccess" layoutX="154.0" layoutY="339.0" prefHeight="25.0" prefWidth="82.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totSeal" layoutX="154.0" layoutY="365.0" prefHeight="25.0" prefWidth="82.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totFurnit" layoutX="154.0" layoutY="390.0" prefHeight="25.0" prefWidth="82.0">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -172,57 +192,57 @@
                         <Label layoutX="150.0" layoutY="94.0" text="20%" />
                         <Label layoutX="184.0" layoutY="94.0" text="25%" />
                         <Label layoutX="215.0" layoutY="94.0" text="30%" />
-                        <RadioButton fx:id="f5010" layoutX="86.0" layoutY="121.0" mnemonicParsing="false">
+                        <RadioButton fx:id="f5010" layoutX="86.0" layoutY="121.0" mnemonicParsing="false" onAction="#listenMarkupF50">
                            <toggleGroup>
                               <ToggleGroup fx:id="f50markup" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="f5015" layoutX="118.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
-                        <RadioButton fx:id="f5020" layoutX="151.0" layoutY="121.0" mnemonicParsing="false" selected="true" toggleGroup="$f50markup" />
-                        <RadioButton fx:id="f5025" layoutX="185.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
-                        <RadioButton fx:id="f5030" layoutX="216.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markup" />
-                        <RadioButton fx:id="w7010" layoutX="86.0" layoutY="161.0" mnemonicParsing="false">
+                        <RadioButton fx:id="f5015" layoutX="118.0" layoutY="121.0" mnemonicParsing="false" onAction="#listenMarkupF50" toggleGroup="$f50markup" />
+                        <RadioButton fx:id="f5020" layoutX="151.0" layoutY="121.0" mnemonicParsing="false" onAction="#listenMarkupF50" selected="true" toggleGroup="$f50markup" />
+                        <RadioButton fx:id="f5025" layoutX="185.0" layoutY="121.0" mnemonicParsing="false" onAction="#listenMarkupF50" toggleGroup="$f50markup" />
+                        <RadioButton fx:id="f5030" layoutX="216.0" layoutY="121.0" mnemonicParsing="false" onAction="#listenMarkupF50" toggleGroup="$f50markup" />
+                        <RadioButton fx:id="w7010" layoutX="86.0" layoutY="161.0" mnemonicParsing="false" onAction="#listenMarkupW70">
                            <toggleGroup>
                               <ToggleGroup fx:id="w70markup" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="w7015" layoutX="118.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
-                        <RadioButton fx:id="w7020" layoutX="151.0" layoutY="161.0" mnemonicParsing="false" selected="true" toggleGroup="$w70markup" />
-                        <RadioButton fx:id="w7025" layoutX="185.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
-                        <RadioButton fx:id="w7030" layoutX="216.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markup" />
-                        <RadioButton fx:id="l4510" layoutX="86.0" layoutY="198.0" mnemonicParsing="false">
+                        <RadioButton fx:id="w7015" layoutX="118.0" layoutY="161.0" mnemonicParsing="false" onAction="#listenMarkupW70" toggleGroup="$w70markup" />
+                        <RadioButton fx:id="w7020" layoutX="151.0" layoutY="161.0" mnemonicParsing="false" onAction="#listenMarkupW70" selected="true" toggleGroup="$w70markup" />
+                        <RadioButton fx:id="w7025" layoutX="185.0" layoutY="161.0" mnemonicParsing="false" onAction="#listenMarkupW70" toggleGroup="$w70markup" />
+                        <RadioButton fx:id="w7030" layoutX="216.0" layoutY="161.0" mnemonicParsing="false" onAction="#listenMarkupW70" toggleGroup="$w70markup" />
+                        <RadioButton fx:id="l4510" layoutX="86.0" layoutY="198.0" mnemonicParsing="false" onAction="#listenMarkupL45">
                            <toggleGroup>
                               <ToggleGroup fx:id="l45markup" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="l4515" layoutX="118.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
-                        <RadioButton fx:id="l4520" layoutX="151.0" layoutY="198.0" mnemonicParsing="false" selected="true" toggleGroup="$l45markup" />
-                        <RadioButton fx:id="l4525" layoutX="185.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
-                        <RadioButton fx:id="l4530" layoutX="216.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markup" />
+                        <RadioButton fx:id="l4515" layoutX="118.0" layoutY="198.0" mnemonicParsing="false" onAction="#listenMarkupL45" toggleGroup="$l45markup" />
+                        <RadioButton fx:id="l4520" layoutX="151.0" layoutY="198.0" mnemonicParsing="false" onAction="#listenMarkupL45" selected="true" toggleGroup="$l45markup" />
+                        <RadioButton fx:id="l4525" layoutX="185.0" layoutY="198.0" mnemonicParsing="false" onAction="#listenMarkupL45" toggleGroup="$l45markup" />
+                        <RadioButton fx:id="l4530" layoutX="216.0" layoutY="198.0" mnemonicParsing="false" onAction="#listenMarkupL45" toggleGroup="$l45markup" />
                         <Label layoutX="308.0" layoutY="94.0" text="по прайсу" />
                         <Label layoutX="376.0" layoutY="94.0" text="по весу" />
                         <Label layoutX="444.0" layoutY="94.0" text="из себестоимости" />
-                        <RadioButton fx:id="f50price" layoutX="331.0" layoutY="121.0" mnemonicParsing="false" selected="true">
+                        <RadioButton fx:id="f50price" layoutX="331.0" layoutY="121.0" mnemonicParsing="false" onAction="#listenTypeF50" selected="true">
                            <toggleGroup>
                               <ToggleGroup fx:id="f50markupType" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton layoutX="397.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markupType" />
-                        <RadioButton layoutX="465.0" layoutY="121.0" mnemonicParsing="false" toggleGroup="$f50markupType" />
-                        <RadioButton fx:id="w70price" layoutX="330.0" layoutY="161.0" mnemonicParsing="false" selected="true">
+                        <RadioButton fx:id="f50weight" layoutX="397.0" layoutY="121.0" mnemonicParsing="false" onAction="#listenTypeF50" toggleGroup="$f50markupType" />
+                        <RadioButton fx:id="f50cost" layoutX="465.0" layoutY="121.0" mnemonicParsing="false" onAction="#listenTypeF50" toggleGroup="$f50markupType" />
+                        <RadioButton fx:id="w70price" layoutX="330.0" layoutY="161.0" mnemonicParsing="false" onAction="#listenTypeW70" selected="true">
                            <toggleGroup>
                               <ToggleGroup fx:id="w70markupType" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton layoutX="396.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markupType" />
-                        <RadioButton layoutX="464.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$w70markupType" />
-                        <RadioButton fx:id="l45price" layoutX="330.0" layoutY="198.0" mnemonicParsing="false" selected="true">
+                        <RadioButton fx:id="w70weight" layoutX="396.0" layoutY="161.0" mnemonicParsing="false" onAction="#listenTypeW70" toggleGroup="$w70markupType" />
+                        <RadioButton fx:id="w70cost" layoutX="464.0" layoutY="161.0" mnemonicParsing="false" onAction="#listenTypeW70" toggleGroup="$w70markupType" />
+                        <RadioButton fx:id="l45price" layoutX="330.0" layoutY="198.0" mnemonicParsing="false" onAction="#listenTypeL45" selected="true">
                            <toggleGroup>
                               <ToggleGroup fx:id="l45markupType" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton layoutX="396.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markupType" />
-                        <RadioButton layoutX="464.0" layoutY="198.0" mnemonicParsing="false" toggleGroup="$l45markupType" />
+                        <RadioButton fx:id="l45weight" layoutX="396.0" layoutY="198.0" mnemonicParsing="false" onAction="#listenTypeL45" toggleGroup="$l45markupType" />
+                        <RadioButton fx:id="l45cost" layoutX="464.0" layoutY="198.0" mnemonicParsing="false" onAction="#listenTypeL45" toggleGroup="$l45markupType" />
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff02" height="148.0" layoutX="12.0" layoutY="368.0" stroke="BLACK" strokeType="INSIDE" width="322.0">
                            <effect>
                               <Shadow height="6.17" radius="2.585" width="6.17" />

@@ -20,13 +20,11 @@ public class AtsApplication extends Application {
 
     private ConfigurableApplicationContext springContext;
     private Parent root;
-   // public static ProductRepository productRepository;
 
     @Override
     public void init() throws Exception {
         springContext = SpringApplication.run(AtsApplication.class);
         springContext.getAutowireCapableBeanFactory().autowireBean(this);
-      //  productRepository = springContext.getBean(ProductRepository.class);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/view.fxml"));
         fxmlLoader.setControllerFactory(springContext::getBean);
         root = fxmlLoader.load();

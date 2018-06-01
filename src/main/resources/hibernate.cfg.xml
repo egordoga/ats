@@ -13,5 +13,6 @@
     <mapping class="ua.ats.entity.Measure"/>
     <mapping class="ua.ats.entity.Product"/>
     <mapping class="ua.ats.entity.Section"/>
+      <mapping class="ua.ats.entity.Group"/>
   </session-factory>
 </hibernate-configuration>

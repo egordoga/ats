@@ -1,6 +1,7 @@
 package ua.ats.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -12,33 +13,47 @@ public class Product {
     private Byte color;
     private Byte bicolor;
     private Byte bicolorWhite;
-    private Integer price;
-    private Integer cost;
-    private Integer weight;
-    private Integer square;
-    private Integer currencyId;
-    private Integer groupId;
-    private Integer measureId;
-    private Integer sectionId;
+    private BigDecimal price;
+    private BigDecimal cost;
+    private BigDecimal weight;
+    private BigDecimal square;
+
+    @ManyToOne
+    @JoinColumn(name = "CURRENCY_ID")
+    private Currency currency;
+
+    @ManyToOne
+    @JoinColumn(name = "GROUP_ID")
+    private Group group;
+
+    @ManyToOne
+    @JoinColumn(name = "MEASURE_ID")
+    private Measure measure;
+
+    @ManyToOne
+    @JoinColumn(name = "SECTION_ID")
+    private Section section;
+
+
     private Integer columnNumberExel;
-    private Integer sum;
-    private double quantity;
-    private int cena;
+    private BigDecimal sum;
+    private BigDecimal quantity;
+    private BigDecimal cena;
 
 
 
     public Product() {
     }
 
-    public Product(Integer ident, String name, String articul, Byte color, Integer price, Integer measureId, Integer sectionId, Integer currencyId) {
+    public Product(Integer ident, String name, String articul, Byte color, BigDecimal price, Measure measure, Section section, Currency currency) {
         this.ident = ident;
         this.name = name;
         this.articul = articul;
         this.color = color;
         this.price = price;
-        this.measureId = measureId;
-        this.sectionId = sectionId;
-        this.currencyId = currencyId;
+        this.measure = measure;
+        this.section = section;
+        this.currency = currency;
     }
 
     @Id
@@ -114,83 +129,44 @@ public class Product {
 
     @Basic
     @Column(name = "PRICE")
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
     @Basic
     @Column(name = "COST")
-    public Integer getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(Integer cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 
     @Basic
     @Column(name = "WEIGHT")
-    public Integer getWeight() {
+    public BigDecimal getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(BigDecimal weight) {
         this.weight = weight;
     }
 
     @Basic
     @Column(name = "SQUARE")
-    public Integer getSquare() {
+    public BigDecimal getSquare() {
         return square;
     }
 
-    public void setSquare(Integer square) {
+    public void setSquare(BigDecimal square) {
         this.square = square;
     }
 
-    @Basic
-    @Column(name = "CURRENCY_ID")
-    public Integer getCurrencyId() {
-        return currencyId;
-    }
-
-    public void setCurrencyId(Integer currencyId) {
-        this.currencyId = currencyId;
-    }
-
-    @Basic
-    @Column(name = "GROUP_ID")
-    public Integer getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Integer groupId) {
-        this.groupId = groupId;
-    }
-
-    @Basic
-    @Column(name = "MEASURE_ID")
-    public Integer getMeasureId() {
-        return measureId;
-    }
-
-    public void setMeasureId(Integer measureId) {
-        this.measureId = measureId;
-    }
-
-    @Basic
-    @Column(name = "SECTION_ID")
-    public Integer getSectionId() {
-        return sectionId;
-    }
-
-    public void setSectionId(Integer sectionId) {
-        this.sectionId = sectionId;
-    }
 
     @Transient
     public Integer getColumnNumberExel() {
@@ -202,33 +178,63 @@ public class Product {
     }
 
     @Transient
-    public Integer getSum() {
+    public BigDecimal getSum() {
         return sum;
     }
 
-    public void setSum(Integer sum) {
+    public void setSum(BigDecimal sum) {
         this.sum = sum;
     }
 
     @Transient
-    public double getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(double quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 
     @Transient
-    public int getCena() {
+    public BigDecimal getCena() {
         return cena;
     }
 
-    public void setCena(int cena) {
+    public void setCena(BigDecimal cena) {
         this.cena = cena;
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
 
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public Measure getMeasure() {
+        return measure;
+    }
+
+    public void setMeasure(Measure measure) {
+        this.measure = measure;
+    }
+
+    public Section getSection() {
+        return section;
+    }
+
+    public void setSection(Section section) {
+        this.section = section;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -246,16 +252,16 @@ public class Product {
                 Objects.equals(cost, product.cost) &&
                 Objects.equals(weight, product.weight) &&
                 Objects.equals(square, product.square) &&
-                Objects.equals(currencyId, product.currencyId) &&
-                Objects.equals(groupId, product.groupId) &&
-                Objects.equals(measureId, product.measureId) &&
-                Objects.equals(sectionId, product.sectionId);
+                Objects.equals(currency, product.currency) &&
+                Objects.equals(group, product.group) &&
+                Objects.equals(measure, product.measure) &&
+                Objects.equals(section, product.section);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, ident, name, articul, color, bicolor, bicolorWhite, price, cost, weight, square, currencyId, groupId, measureId, sectionId);
+        return Objects.hash(id, ident, name, articul, color, bicolor, bicolorWhite, price, cost, weight, square, currency, group, measure, section);
     }
 
     @Override
@@ -272,10 +278,10 @@ public class Product {
                 ", cost=" + cost +
                 ", weight=" + weight +
                 ", square=" + square +
-                ", currencyId=" + currencyId +
-                ", groupId=" + groupId +
-                ", measureId=" + measureId +
-                ", sectionId=" + sectionId +
+                ", currencyId=" + currency +
+                ", groupId=" + group +
+                ", measureId=" + measure +
+                ", sectionId=" + section +
                 '}';
     }
 }

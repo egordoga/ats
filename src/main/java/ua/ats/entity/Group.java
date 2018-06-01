@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Currency {
+public class Group {
     private int id;
     private String name;
 
-    @OneToMany(mappedBy = "currency")
+    @OneToMany(mappedBy = "group")
     List<Product> products = new ArrayList<>();
 
     @Id
@@ -37,9 +37,9 @@ public class Currency {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Currency currency = (Currency) o;
-        return id == currency.id &&
-                Objects.equals(name, currency.name);
+        Group group = (Group) o;
+        return id == group.id &&
+                Objects.equals(name, group.name);
     }
 
     @Override
