@@ -6,15 +6,16 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Group {
+public class Groupp {
     private int id;
     private String name;
 
-    @OneToMany(mappedBy = "group")
-    List<Product> products = new ArrayList<>();
+
+    private List<Product> products = new ArrayList<>();
 
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -33,13 +34,22 @@ public class Group {
         this.name = name;
     }
 
+    @OneToMany(mappedBy = "groupp")
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Group group = (Group) o;
-        return id == group.id &&
-                Objects.equals(name, group.name);
+        Groupp groupp = (Groupp) o;
+        return id == groupp.id &&
+                Objects.equals(name, groupp.name);
     }
 
     @Override

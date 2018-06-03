@@ -45,4 +45,11 @@ public class Section {
 
         return Objects.hash(id, name);
     }
+
+    @Override
+    public String toString() {
+        return "Section{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

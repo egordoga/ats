@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import ua.ats.AtsApplication;
 import ua.ats.dao.ProductRepository;
 import ua.ats.entity.Product;
@@ -17,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Controller
 public class MainController {
 
     public ToggleGroup color;
@@ -45,6 +46,9 @@ public class MainController {
     public BigDecimal discountSealant = new BigDecimal("1");
     public BigDecimal discountFurniture = new BigDecimal("1");
 
+    public BigDecimal colored = BigDecimal.ZERO;
+    public BigDecimal coloredBicolor = BigDecimal.ZERO;
+
     public BigDecimal cenaW70;
     public BigDecimal cenaF50;
     public BigDecimal cenaL45;
@@ -60,6 +64,7 @@ public class MainController {
     public BigDecimal totalFurniture;
     public BigDecimal totalProfile;
     public BigDecimal totalAll;
+    public BigDecimal totalColor;
 
 
     private List<Product> profileNew = new ArrayList<>();
@@ -70,24 +75,29 @@ public class MainController {
     private int costTypeF50 = 1;
     private int costTypeW70 = 1;
     private int costTypeL45 = 1;
+    private int bicolorWhiteType = 0;
 
     @FXML
     private Label fileLbl;
 
-    private Calculation calc = new Calculation();
+    //private Calculation calc = new Calculation();
 
 
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private Calculation calc;
+
     @FXML
     private void initLbl() {
         //calc.getStartRow();
-        //calc.fillLists(productRepository);
-        //fileLbl.setText("Файл: " + calc.getFile().getName());
         calc.fillLists(productRepository);
+        fileLbl.setText("Файл: " + calc.getFile().getName());
         initTotal();
         countAndWriteTotal();
+        //listenMarkupF50();
+        listenMarkupW70();
 
     }
 
@@ -294,80 +304,57 @@ public class MainController {
 
 
 
-    private void fillProfile(double markup, double discount) {
-        if (!(profileNew == null)) {
-            profileNew.clear();
-        }
-    }
-
-    private BigDecimal countCenaProfile(BigDecimal base, int markType) {
-        BigDecimal cena = null;
-        switch (markType) {
-            case 1:
-                cena = base.divide(new BigDecimal("120"));
-        }
-        return null;
-    }
-
-    private void switchMarkupType(BigDecimal base) {
-        f50markupType.selectedToggleProperty().addListener((ov, t, t1) -> {
+    private void colorListener() {
+        color.selectedToggleProperty().addListener((ov, t, t1) -> {
             RadioButton chk = (RadioButton) t1.getToggleGroup().getSelectedToggle();
 
             switch (chk.getId()) {
-                case "f50price":
-                    costF50 = base.divide(new BigDecimal("120"), 3);
+                case "noRal":
+                    colored = BigDecimal.ZERO;
+                    coloredBicolor = BigDecimal.ZERO;
+                    bicolorWhiteType = 0;
+                    break;
+                case "ral":
+                    colored = InitParam.color;
+                    bicolorWhiteType = 0;
+                    break;
+                case "ral9006":
+                    colored = InitParam.color9006;
+                    bicolorWhiteType = 0;
+                    break;
+                case "biIn":
+                    colored = InitParam.color;
+                    coloredBicolor = InitParam.bicolor;
+                    bicolorWhiteType = 2;
+                    break;
+                case "biOut":
+                    colored = InitParam.color;
+                    coloredBicolor = InitParam.bicolor;
+                    bicolorWhiteType = 3;
+                    break;
+                case "dec":
+                    colored = InitParam.color;
+                    bicolorWhiteType = 0;
+                    break;
+
+
+            }
+
+            switch (costTypeW70) {
+                case 1:
+                    calc.rewriteW70ByPrice();
+                    countAndWriteTotal();
+                    break;
+                case 2:
+                    calc.rewriteW70ByWeight();
+                    countAndWriteTotal();
+                    break;
+                case 3:
+                    calc.rewriteW705ByCost();
+                    countAndWriteTotal();
                     break;
             }
         });
-    }
-
-
-    private void makeCenaF50(int i) {
-        switch (costTypeF50) {
-            case 1:
-                cenaF50 = (new BigDecimal(calc.getProfile().get(i).getPrice().toString()))
-                        .divide(new BigDecimal("120"), 4)
-                        .multiply(markupF50).multiply(discountProfile);
-                cenaF50 = cenaF50.setScale(2, BigDecimal.ROUND_HALF_UP);
-                break;
-            case 2:
-                cenaF50 = (new BigDecimal(calc.getProfile().get(i).getWeight().toString()))
-                        .multiply(InitParam.costAlum).multiply(markupF50).multiply(discountProfile)
-                        .setScale(2, BigDecimal.ROUND_HALF_UP);
-                break;
-            case 3:
-                cenaF50 = (new BigDecimal(calc.getProfile().get(i).getCost().toString()))
-                        .multiply(markupF50).multiply(discountProfile)
-                        .setScale(2, BigDecimal.ROUND_HALF_UP);
-                break;
-        }
-    }
-
-    private void initArrays() {
-        profileNew.addAll(calc.getProfile());
-        accessoriesNew.addAll(calc.getAccessories());
-        sealantNew.addAll(calc.getSealant());
-        furnitureNew.addAll(calc.getFurniture());
-
-        for (int i = 0; i < profileNew.size(); i++) {
-            Product product = profileNew.get(i);
-            product.setCena(product.getPrice());
-        }
-
-        for (int i = 0; i < accessoriesNew.size(); i++) {
-            Product product = new Product();
-            product.setCena(product.getPrice());
-        }
-
-        for (int i = 0; i < sealantNew.size(); i++) {
-            Product product = new Product();
-            product.setCena(product.getPrice());
-        }
-
-        for (int i = 0; i < furnitureNew.size(); i++) {
-            Product product = new Product();
-            product.setCena(product.getPrice());
-        }
     }
 
     private void countAndWriteTotal() {
@@ -387,7 +374,7 @@ public class MainController {
         totAccess.setText(totalAccessories.toString());
         totSeal.setText(totalSealant.toString());
         totFurnit.setText(totalFurniture.toString());
-        totProf.setText(totalProfile.toString());
+        totAll.setText(totalAll.toString());
     }
 
 
