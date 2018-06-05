@@ -10,8 +10,7 @@ public class Currency {
     private int id;
     private String name;
 
-    @OneToMany(mappedBy = "currency")
-    List<Product> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
     @Id
     @Column(name = "ID")
@@ -46,5 +45,21 @@ public class Currency {
     public int hashCode() {
 
         return Objects.hash(id, name);
+    }
+
+    @Override
+    public String toString() {
+        return "Currency{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+
+    @OneToMany(mappedBy = "currency")
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

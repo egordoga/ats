@@ -9,10 +9,10 @@
     <property name="connection.driver_class">org.h2.Driver</property>
       <property name="hbm2ddl.auto">update</property>
       <mapping class="ua.ats.entity.Currency"/>
-   <!-- <mapping class="ua.ats.entity.Group"/>-->
+   <!-- <mapping class="ua.ats.entity.Grouppp"/>-->
     <mapping class="ua.ats.entity.Measure"/>
     <mapping class="ua.ats.entity.Product"/>
     <mapping class="ua.ats.entity.Section"/>
-      <mapping class="ua.ats.entity.Group"/>
+      <mapping class="ua.ats.entity.Groupp"/>
   </session-factory>
 </hibernate-configuration>

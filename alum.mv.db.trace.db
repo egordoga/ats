@@ -1,11 +1,11 @@
 2018-05-20 17:57:28 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLException: Синтаксическая ошибка в выражении SQL "CREATE TABLE GROUP[*] (ID INTEGER NOT NULL, NAME INTEGER, PRIMARY KEY (ID)) "; ожидалось "identifier"
 Syntax error in SQL statement "CREATE TABLE GROUP[*] (ID INTEGER NOT NULL, NAME INTEGER, PRIMARY KEY (ID)) "; expected "identifier"; SQL statement:
-create table group (id integer not null, name integer, primary key (id)) [42001-197]
+create table groupp (id integer not null, name integer, primary key (id)) [42001-197]
 2018-05-20 18:01:18 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLException: Синтаксическая ошибка в выражении SQL "CREATE TABLE GROUP[*] (ID INTEGER NOT NULL, NAME INTEGER, PRIMARY KEY (ID)) "; ожидалось "identifier"
 Syntax error in SQL statement "CREATE TABLE GROUP[*] (ID INTEGER NOT NULL, NAME INTEGER, PRIMARY KEY (ID)) "; expected "identifier"; SQL statement:
-create table group (id integer not null, name integer, primary key (id)) [42001-197]
+create table groupp (id integer not null, name integer, primary key (id)) [42001-197]
 2018-05-20 15:09:04 jdbc[3]: exception
 java.sql.SQLClientInfoException: Client info name 'ApplicationName' not supported.
 	at org.h2.jdbc.JdbcConnection.setClientInfo(JdbcConnection.java:1740)
@@ -240,3 +240,11 @@ java.sql.SQLClientInfoException: Client info name 'ApplicationName' not supporte
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
 	at java.lang.Thread.run(Thread.java:745)
+2018-06-02 20:47:01 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Синтаксическая ошибка в выражении SQL "CREATE TABLE GROUP[*] (ID INTEGER NOT NULL, NAME VARCHAR(255), PRIMARY KEY (ID)) "; ожидалось "identifier"
+Syntax error in SQL statement "CREATE TABLE GROUP[*] (ID INTEGER NOT NULL, NAME VARCHAR(255), PRIMARY KEY (ID)) "; expected "identifier"; SQL statement:
+create table groupp (id integer not null, name varchar(255), primary key (id)) [42001-197]
+2018-06-02 20:47:01 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Синтаксическая ошибка в выражении SQL "ALTER TABLE PRODUCT ADD CONSTRAINT FK8IVGWNC7PVG1F5U1DO7N9LOKD FOREIGN KEY (GROUP_ID) REFERENCES GROUP[*] "; ожидалось "identifier"
+Syntax error in SQL statement "ALTER TABLE PRODUCT ADD CONSTRAINT FK8IVGWNC7PVG1F5U1DO7N9LOKD FOREIGN KEY (GROUP_ID) REFERENCES GROUP[*] "; expected "identifier"; SQL statement:
+alter table product add constraint FK8ivgwnc7pvg1f5u1do7n9lokd foreign key (group_id) references groupp [42001-197]

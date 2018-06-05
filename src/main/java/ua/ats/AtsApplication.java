@@ -9,11 +9,13 @@ import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import ua.ats.dao.ProductRepository;
 import ua.ats.util.ParseExelForDB;
 
 
 @SpringBootApplication
+//@ComponentScan("ua.ats")
 public class AtsApplication extends Application {
 
 

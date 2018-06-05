@@ -122,7 +122,7 @@ public class ParseExelForDB {
                     section = 5;
                     break;
             }
-           // repository.save(new Product(ident, name, articul, color, price, unit, section, curr));
+            //repository.save(new Product(ident, name, articul, color, price, unit, section, curr));
         }
         System.out.println("END");
     }

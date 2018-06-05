@@ -12,26 +12,18 @@ public class Product {
     private String articul;
     private Byte color;
     private Byte bicolor;
-    private Byte bicolorWhite;
+    private Byte bicolorWhiteOut;
+
+
+
+    private Byte bicolorWhiteIn;
     private BigDecimal price;
     private BigDecimal cost;
     private BigDecimal weight;
     private BigDecimal square;
-
-    @ManyToOne
-    @JoinColumn(name = "CURRENCY_ID")
     private Currency currency;
-
-    @ManyToOne
-    @JoinColumn(name = "GROUP_ID")
-    private Group group;
-
-    @ManyToOne
-    @JoinColumn(name = "MEASURE_ID")
+    private Groupp groupp;
     private Measure measure;
-
-    @ManyToOne
-    @JoinColumn(name = "SECTION_ID")
     private Section section;
 
 
@@ -118,13 +110,23 @@ public class Product {
     }
 
     @Basic
-    @Column(name = "BICOLOR_WHITE")
-    public Byte getBicolorWhite() {
-        return bicolorWhite;
+    @Column(name = "BICOLOR_WHITE_OUT")
+    public Byte getBicolorWhiteOut() {
+        return bicolorWhiteOut;
     }
 
-    public void setBicolorWhite(Byte bicolorWhite) {
-        this.bicolorWhite = bicolorWhite;
+    public void setBicolorWhiteOut(Byte bicolorWhite) {
+        this.bicolorWhiteOut = bicolorWhite;
+    }
+
+    @Basic
+    @Column(name = "BICOLOR_WHITE_IN")
+    public Byte getBicolorWhiteIn() {
+        return bicolorWhiteIn;
+    }
+
+    public void setBicolorWhiteIn(Byte bicolorWhiteIn) {
+        this.bicolorWhiteIn = bicolorWhiteIn;
     }
 
     @Basic
@@ -204,6 +206,8 @@ public class Product {
         this.cena = cena;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "CURRENCY_ID")
     public Currency getCurrency() {
         return currency;
     }
@@ -212,14 +216,18 @@ public class Product {
         this.currency = currency;
     }
 
-    public Group getGroup() {
-        return group;
+    @ManyToOne
+    @JoinColumn(name = "GROUP_ID")
+    public Groupp getGroupp() {
+        return groupp;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setGroupp(Groupp groupp) {
+        this.groupp = groupp;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "MEASURE_ID")
     public Measure getMeasure() {
         return measure;
     }
@@ -228,6 +236,8 @@ public class Product {
         this.measure = measure;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "SECTION_ID")
     public Section getSection() {
         return section;
     }
@@ -247,13 +257,13 @@ public class Product {
                 Objects.equals(articul, product.articul) &&
                 Objects.equals(color, product.color) &&
                 Objects.equals(bicolor, product.bicolor) &&
-                Objects.equals(bicolorWhite, product.bicolorWhite) &&
+                Objects.equals(bicolorWhiteOut, product.bicolorWhiteOut) &&
                 Objects.equals(price, product.price) &&
                 Objects.equals(cost, product.cost) &&
                 Objects.equals(weight, product.weight) &&
                 Objects.equals(square, product.square) &&
                 Objects.equals(currency, product.currency) &&
-                Objects.equals(group, product.group) &&
+                Objects.equals(groupp, product.groupp) &&
                 Objects.equals(measure, product.measure) &&
                 Objects.equals(section, product.section);
     }
@@ -261,27 +271,19 @@ public class Product {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, ident, name, articul, color, bicolor, bicolorWhite, price, cost, weight, square, currency, group, measure, section);
+        return Objects.hash(id, ident, name, articul, color, bicolor, bicolorWhiteOut, price, cost, weight, square, currency, groupp, measure, section);
     }
 
     @Override
     public String toString() {
         return "Product{" +
-                "id=" + id +
-                ", ident=" + ident +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", articul='" + articul + '\'' +
-                ", color=" + color +
-                ", bicolor=" + bicolor +
-                ", bicolorWhite=" + bicolorWhite +
                 ", price=" + price +
                 ", cost=" + cost +
-                ", weight=" + weight +
-                ", square=" + square +
-                ", currencyId=" + currency +
-                ", groupId=" + group +
-                ", measureId=" + measure +
-                ", sectionId=" + section +
+                ", sum=" + sum +
+                ", quantity=" + quantity +
+                ", cena=" + cena +
                 '}';
     }
 }
