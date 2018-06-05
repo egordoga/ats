@@ -13,9 +13,6 @@ public class Product {
     private Byte color;
     private Byte bicolor;
     private Byte bicolorWhiteOut;
-
-
-
     private Byte bicolorWhiteIn;
     private BigDecimal price;
     private BigDecimal cost;
@@ -29,6 +26,7 @@ public class Product {
 
     private Integer columnNumberExel;
     private BigDecimal sum;
+    private BigDecimal colorSum;
     private BigDecimal quantity;
     private BigDecimal cena;
 
@@ -189,6 +187,15 @@ public class Product {
     }
 
     @Transient
+    public BigDecimal getColorSum() {
+        return colorSum;
+    }
+
+    public void setColorSum(BigDecimal colorSum) {
+        this.colorSum = colorSum;
+    }
+
+    @Transient
     public BigDecimal getQuantity() {
         return quantity;
     }
@@ -283,6 +290,7 @@ public class Product {
                 ", cost=" + cost +
                 ", sum=" + sum +
                 ", quantity=" + quantity +
+                ", square=" + square +
                 ", cena=" + cena +
                 '}';
     }

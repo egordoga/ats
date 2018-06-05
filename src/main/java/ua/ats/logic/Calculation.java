@@ -25,7 +25,7 @@ import java.util.List;
 @Component
 public class Calculation {
 
-    private static final Path DIR = Paths.get("e://alumotr");
+    private static final Path DIR = Paths.get("d://alumotr");
     private final static int START_ROW = 11;
     private final static int NAME_CELL = 7;
     private final static int ARTICUL_CELL = 4;
@@ -132,7 +132,7 @@ public class Calculation {
         for (Product product : furniture) {
             if ("EUR".equals(product.getCurrency().getName())) {
                 product.setCena(product.getPrice().divide(new BigDecimal("120"), 4, BigDecimal.ROUND_HALF_UP)
-                .multiply(InitParam.rateEur));
+                        .multiply(InitParam.rateEur));
             } else {
                 product.setCena(product.getPrice().divide(new BigDecimal("120"), 4, BigDecimal.ROUND_HALF_UP));
             }
@@ -154,7 +154,8 @@ public class Calculation {
             if ("F50".equals(product.getGroupp().getName())) {
                 BigDecimal cost = product.getPrice().divide(new BigDecimal("120"), 3, BigDecimal.ROUND_HALF_UP);
                 product.setCena(cost.multiply(mc.markupF50).multiply(mc.discountProfile));
-                product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
+                product.setSum((product.getCena().multiply(product.getQuantity()).add(product.getColorSum()))
+                        .setScale(2, BigDecimal.ROUND_HALF_UP));
             }
         }
         mc.totalProfile = profile.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -281,28 +282,106 @@ public class Calculation {
         mc.totalFurniture = furniture.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public void rewriteColor() {
-        for (Product product : profile) {
-            if ("F50".equals(product.getGroupp().getName())) {
-                product.setCena(product.getCost().multiply(mc.markupL45).multiply(mc.discountProfile));
-                product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
+    public void rewriteColor(int colorType) {
+        mc.totalColor = BigDecimal.ZERO;
+        /*for (Product product : profile) {
+            if (product.getColor() == 1) {
+
+                switch (colorType) {
+                    case 0:
+                        mc.totalColor = BigDecimal.ZERO;
+                    case 1:
+                        mc.totalColor = mc.totalColor.add(product.getQuantity().multiply(product.getSquare())
+                                .multiply(mc.colored).divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                                .setScale(2, BigDecimal.ROUND_HALF_UP);
+                        break;
+                    case 2:
+                        if (product.getBicolorWhiteIn() == 1) {
+                            mc.totalColor = mc.totalColor.add(product.getQuantity().multiply(product.getSquare())
+                                    .multiply(mc.colored).divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+                        } else if (product.getBicolor() == 1) {
+                            mc.totalColor = mc.totalColor.add(product.getQuantity().multiply(product.getSquare())
+                                    .multiply(mc.coloredBicolor).divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+                        }
+                        break;
+                    case 3:
+                        if (product.getBicolorWhiteOut() == 1) {
+                            mc.totalColor = mc.totalColor.add(product.getQuantity().multiply(product.getSquare())
+                                    .multiply(mc.colored).divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+                        } else if (product.getBicolor() == 1) {
+                            mc.totalColor = mc.totalColor.add(product.getQuantity().multiply(product.getSquare())
+                                    .multiply(mc.coloredBicolor).divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP);
+                        }
+                        break;
+                }
             }
-        }
-        mc.totalProfile = profile.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+*/
+        BigDecimal colProf = profile.stream().map(Product::getColorSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal colFurn = furniture.stream().map(Product::getColorSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        mc.totalColor = colProf.add(colFurn);
+
+        mc.totColor.setText(mc.totalColor.toString());
     }
 
-   /* public void countTotal() {
-        mc.totalProfile = profile.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        mc.totalAccessories = accessories.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        mc.totalSealant = sealant.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        mc.totalFurniture = furniture.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }*/
 
+    public void settingColorSum(int colorType) {
+        for (Product product : profile) {
+            if (product.getColor() == 1) {
+                switch (colorType) {
+                    case 0:
+                        product.setColorSum(BigDecimal.ZERO);
+                        break;
+                    case 1:
+                        product.setColorSum((product.getQuantity().multiply(product.getSquare().multiply(mc.colored))
+                                .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                                .setScale(2, BigDecimal.ROUND_HALF_UP));
+                        break;
+                    case 2:
+                        if (product.getBicolorWhiteIn() == 1) {
+                            product.setColorSum((product.getQuantity().multiply(product.getSquare().multiply(mc.colored))
+                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
+                        } else if (product.getBicolor() == 1) {
+                            product.setColorSum((product.getQuantity().multiply(product.getSquare().multiply(mc.coloredBicolor))
+                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
+                        } else {
+                            product.setColorSum(BigDecimal.ZERO);
+                        }
+                        break;
+                    case 3:
+                        if (product.getBicolorWhiteOut() == 1) {
+                            product.setColorSum((product.getQuantity().multiply(product.getSquare().multiply(mc.colored))
+                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
+                        } else if (product.getBicolor() == 1) {
+                            product.setColorSum((product.getQuantity().multiply(product.getSquare().multiply(mc.coloredBicolor))
+                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
+                        } else {
+                            product.setColorSum(BigDecimal.ZERO);
+                        }
+                        break;
+                }
+            }
+        }
 
+        for (Product product : furniture) {
+            if (product.getColor() == 1) {
+                product.setColorSum((product.getQuantity().multiply(InitParam.colorFurn)
+                        .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                        .setScale(2, BigDecimal.ROUND_HALF_UP));
+            }
+        }
+    }
 
-   public void countColor() {
+    public void removeColorSum() {
 
-   }
+    }
 
 
     public File getFile() {

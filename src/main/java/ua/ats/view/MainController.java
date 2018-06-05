@@ -1,14 +1,9 @@
 package ua.ats.view;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-import ua.ats.AtsApplication;
 import ua.ats.dao.ProductRepository;
 import ua.ats.entity.Product;
 import ua.ats.logic.Calculation;
@@ -34,6 +29,7 @@ public class MainController {
     public Label totSeal;
     public Label totFurnit;
     public Label totAll;
+    public Label totColor;
 
     public BigDecimal markupF50 = new BigDecimal("1.2");
     public BigDecimal markupW70 = new BigDecimal("1.2");
@@ -75,7 +71,7 @@ public class MainController {
     private int costTypeF50 = 1;
     private int costTypeW70 = 1;
     private int costTypeL45 = 1;
-    private int bicolorWhiteType = 0;
+    private int colorType = 0;        // 0 - none, 1 - color, bicolor: 2 - white in, 3 - white out, 4 - double
 
     @FXML
     private Label fileLbl;
@@ -97,7 +93,8 @@ public class MainController {
         initTotal();
         countAndWriteTotal();
         //listenMarkupF50();
-        listenMarkupW70();
+        //listenMarkupW70();
+        colorListener();
 
     }
 
@@ -312,48 +309,35 @@ public class MainController {
                 case "noRal":
                     colored = BigDecimal.ZERO;
                     coloredBicolor = BigDecimal.ZERO;
-                    bicolorWhiteType = 0;
+                    colorType = 0;
                     break;
                 case "ral":
                     colored = InitParam.color;
-                    bicolorWhiteType = 0;
+                    coloredBicolor = BigDecimal.ZERO;
+                    colorType = 1;
                     break;
                 case "ral9006":
                     colored = InitParam.color9006;
-                    bicolorWhiteType = 0;
+                    coloredBicolor = BigDecimal.ZERO;
+                    colorType = 1;
                     break;
                 case "biIn":
                     colored = InitParam.color;
                     coloredBicolor = InitParam.bicolor;
-                    bicolorWhiteType = 2;
+                    colorType = 2;
                     break;
                 case "biOut":
                     colored = InitParam.color;
                     coloredBicolor = InitParam.bicolor;
-                    bicolorWhiteType = 3;
+                    colorType = 3;
                     break;
                 case "dec":
-                    colored = InitParam.color;
-                    bicolorWhiteType = 0;
-                    break;
-
-
-            }
-
-            switch (costTypeW70) {
-                case 1:
-                    calc.rewriteW70ByPrice();
-                    countAndWriteTotal();
-                    break;
-                case 2:
-                    calc.rewriteW70ByWeight();
-                    countAndWriteTotal();
-                    break;
-                case 3:
-                    calc.rewriteW705ByCost();
-                    countAndWriteTotal();
+                    colored = InitParam.dekor;
+                    coloredBicolor = BigDecimal.ZERO;
+                    colorType = 1;
                     break;
             }
+            calc.rewriteColor(colorType);
         });
     }
 
