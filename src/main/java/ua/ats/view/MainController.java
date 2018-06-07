@@ -61,6 +61,7 @@ public class MainController {
     public BigDecimal totalProfile;
     public BigDecimal totalAll;
     public BigDecimal totalColor;
+    public CheckBox colorInCena;
 
 
     private List<Product> profileNew = new ArrayList<>();
@@ -87,6 +88,7 @@ public class MainController {
 
     @FXML
     private void initLbl() {
+        InitParam.initParam();
         //calc.getStartRow();
         calc.fillLists(productRepository);
         fileLbl.setText("Файл: " + calc.getFile().getName());
@@ -337,8 +339,27 @@ public class MainController {
                     colorType = 1;
                     break;
             }
-            calc.rewriteColor(colorType);
+            calc.settingColorSum(colorType);
+            calc.rewriteColorTotal();
+            addColorInCena();
         });
+    }
+
+    @FXML
+    private void addColorInCena() {
+        if (colorInCena.isSelected()) {
+            calc.settingColorSum(colorType);
+            calc.rewriteWithColor();
+            initTotal();
+            countAndWriteTotal();
+            totColor.setText("");
+        } else {
+            calc.removeColorSum();
+            calc.rewriteWithColor();
+            initTotal();
+            countAndWriteTotal();
+            totColor.setText(totalColor.toString());
+        }
     }
 
     private void countAndWriteTotal() {

@@ -292,6 +292,7 @@ public class Product {
                 ", quantity=" + quantity +
                 ", square=" + square +
                 ", cena=" + cena +
+                ", colorSum=" + colorSum +
                 '}';
     }
 }

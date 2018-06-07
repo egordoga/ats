@@ -1,5 +1,6 @@
 package ua.ats.logic;
 
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -66,7 +67,11 @@ public class Calculation {
 
                 if (row.getCell(NAME_CELL) != null && row.getCell(ARTICUL_CELL) != null) {
                     name = row.getCell(NAME_CELL).getStringCellValue();
-                    articul = row.getCell(ARTICUL_CELL).getStringCellValue();
+                    if (row.getCell(ARTICUL_CELL).getCellTypeEnum() == CellType.STRING) {
+                        articul = row.getCell(ARTICUL_CELL).getStringCellValue();
+                    } else {
+                        articul = String.valueOf((row.getCell(ARTICUL_CELL).getNumericCellValue()));
+                    }
                 } else {
                     continue;
                 }
@@ -85,8 +90,10 @@ public class Calculation {
                     product.setColumnNumberExel(i);
                     if (row.getCell(11) != null) {
                         product.setQuantity(new BigDecimal(row.getCell(11).getNumericCellValue()));
+                        product.setColorSum(BigDecimal.ZERO);
                     } else {
-                        product.setQuantity(new BigDecimal("0"));
+                        product.setQuantity(BigDecimal.ZERO);
+                        product.setColorSum(BigDecimal.ZERO);
                     }
 
 
@@ -186,7 +193,7 @@ public class Calculation {
     public void rewriteL45ByWeight() {
         for (Product product : profile) {
             if ("L45".equals(product.getGroupp().getName())) {
-                BigDecimal cost = product.getWeight().multiply(InitParam.costAlum);
+                BigDecimal cost = product.getWeight().multiply(InitParam.costAlumWhite);
                 product.setCena(cost.multiply(mc.markupL45).multiply(mc.discountProfile));
                 product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
             }
@@ -197,7 +204,7 @@ public class Calculation {
     public void rewriteF505ByWeight() {
         for (Product product : profile) {
             if ("F50".equals(product.getGroupp().getName())) {
-                BigDecimal cost = product.getWeight().multiply(InitParam.costAlum);
+                BigDecimal cost = product.getWeight().multiply(InitParam.costAlumWhite);
                 product.setCena(cost.multiply(mc.markupF50).multiply(mc.discountProfile));
                 product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
             }
@@ -208,7 +215,7 @@ public class Calculation {
     public void rewriteW70ByWeight() {
         for (Product product : profile) {
             if ("W70".equals(product.getGroupp().getName())) {
-                BigDecimal cost = product.getWeight().multiply(InitParam.costAlum);
+                BigDecimal cost = product.getWeight().multiply(InitParam.costAlumWhite);
                 product.setCena(cost.multiply(mc.markupW70).multiply(mc.discountProfile));
                 product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
             }
@@ -282,7 +289,7 @@ public class Calculation {
         mc.totalFurniture = furniture.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public void rewriteColor(int colorType) {
+    public void rewriteColorTotal() {
         mc.totalColor = BigDecimal.ZERO;
         /*for (Product product : profile) {
             if (product.getColor() == 1) {
@@ -324,7 +331,7 @@ public class Calculation {
         BigDecimal colFurn = furniture.stream().map(Product::getColorSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         mc.totalColor = colProf.add(colFurn);
 
-        mc.totColor.setText(mc.totalColor.toString());
+        //mc.totColor.setText(mc.totalColor.toString());
     }
 
 
@@ -380,7 +387,16 @@ public class Calculation {
     }
 
     public void removeColorSum() {
+        profile.forEach(p -> p.setSum(p.getSum().subtract(p.getColorSum())));
+        furniture.forEach(p -> p.setSum(p.getSum().subtract(p.getColorSum())));
+        profile.forEach(j -> j.setColorSum(BigDecimal.ZERO));
+        furniture.forEach(j -> j.setColorSum(BigDecimal.ZERO));
+        System.out.println(profile.get(0));
+    }
 
+    public void rewriteWithColor() {
+        profile.forEach(p -> p.setSum(p.getSum().add(p.getColorSum())));
+        furniture.forEach(p -> p.setSum(p.getSum().add(p.getColorSum())));
     }
 
 
