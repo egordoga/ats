@@ -2,6 +2,8 @@ package ua.ats.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.shape.Rectangle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ua.ats.dao.ProductRepository;
@@ -62,7 +64,21 @@ public class MainController {
     public BigDecimal totalAll;
     public BigDecimal totalColor;
     public CheckBox colorInCena;
+    public TextField eur;
+    public TextField usd;
+    public Label cross;
+    public TextField ralCena;
+    public TextField ral9006Cena;
+    public TextField ralBiWhiteCena;
+    public TextField decCena;
+    public TextField ralBi2Cena;
+    public TextField ralBiCena;
+    public TextField ralNumber;
 
+
+    public String ralNum;
+    public TextField ralBiNumber;
+    public TextField ralBi1Number;
 
     private List<Product> profileNew = new ArrayList<>();
     private List<Product> accessoriesNew = new ArrayList<>();
@@ -89,6 +105,9 @@ public class MainController {
     @FXML
     private void initLbl() {
         InitParam.initParam();
+        usd.setText(String.valueOf(InitParam.rateUsd));
+        eur.setText(String.valueOf(InitParam.rateEur));
+        cross.setText(String.valueOf(InitParam.crossRate));
         //calc.getStartRow();
         calc.fillLists(productRepository);
         fileLbl.setText("Файл: " + calc.getFile().getName());
@@ -97,6 +116,7 @@ public class MainController {
         //listenMarkupF50();
         //listenMarkupW70();
         colorListener();
+        textFieldsInitAndListener();
 
     }
 
@@ -360,6 +380,54 @@ public class MainController {
             countAndWriteTotal();
             totColor.setText(totalColor.toString());
         }
+    }
+
+
+    private void textFieldsInitAndListener() {
+        usd.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                InitParam.rateUsd = new BigDecimal(usd.getText());
+                InitParam.initCross();
+                cross.setText(InitParam.crossRate.toString());
+            }
+        });
+
+        ralNumber.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                ralNum = ralNumber.getText();
+            }
+        });
+
+        ralCena.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                InitParam.color = new BigDecimal(ralCena.getText());
+            }
+        });
+
+        eur.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                InitParam.rateEur = new BigDecimal(eur.getText());
+                InitParam.initCross();
+                cross.setText(InitParam.crossRate.toString());
+            }
+        });
+
+        eur.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                InitParam.rateEur = new BigDecimal(eur.getText());
+                InitParam.initCross();
+                cross.setText(InitParam.crossRate.toString());
+            }
+        });
+
+        eur.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                InitParam.rateEur = new BigDecimal(eur.getText());
+                InitParam.initCross();
+                cross.setText(InitParam.crossRate.toString());
+            }
+        });
+
     }
 
     private void countAndWriteTotal() {

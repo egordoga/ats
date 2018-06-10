@@ -21,7 +21,7 @@ public class Product {
     private Currency currency;
     private Groupp groupp;
     private Measure measure;
-    private Section section;
+    private Section sectionn;
 
 
     private Integer columnNumberExel;
@@ -42,7 +42,7 @@ public class Product {
         this.color = color;
         this.price = price;
         this.measure = measure;
-        this.section = section;
+        this.sectionn = section;
         this.currency = currency;
     }
 
@@ -245,12 +245,12 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "SECTION_ID")
-    public Section getSection() {
-        return section;
+    public Section getSectionn() {
+        return sectionn;
     }
 
-    public void setSection(Section section) {
-        this.section = section;
+    public void setSectionn(Section section) {
+        this.sectionn = section;
     }
 
     @Override
@@ -272,13 +272,13 @@ public class Product {
                 Objects.equals(currency, product.currency) &&
                 Objects.equals(groupp, product.groupp) &&
                 Objects.equals(measure, product.measure) &&
-                Objects.equals(section, product.section);
+                Objects.equals(sectionn, product.sectionn);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, ident, name, articul, color, bicolor, bicolorWhiteOut, price, cost, weight, square, currency, groupp, measure, section);
+        return Objects.hash(id, ident, name, articul, color, bicolor, bicolorWhiteOut, price, cost, weight, square, currency, groupp, measure, sectionn);
     }
 
     @Override

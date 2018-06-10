@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.ats.view.MainController">
+<VBox prefHeight="600.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.ats.view.MainController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -65,8 +65,8 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
-                        <TextField layoutX="153.0" layoutY="105.0" prefHeight="25.0" prefWidth="83.0" />
-                        <TextField layoutX="153.0" layoutY="139.0" prefHeight="25.0" prefWidth="83.0" />
+                        <TextField fx:id="usd" layoutX="153.0" layoutY="105.0" prefHeight="25.0" prefWidth="83.0" />
+                        <TextField fx:id="eur" layoutX="153.0" layoutY="139.0" prefHeight="25.0" prefWidth="83.0" />
                         <Label layoutX="67.0" layoutY="109.0" text="Курс USD " />
                         <Label layoutX="67.0" layoutY="143.0" text="Курс  Euro " />
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="200.0" layoutX="11.0" layoutY="264.0" stroke="BLACK" strokeType="INSIDE" width="235.0">
@@ -150,6 +150,8 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
+                        <Label layoutX="65.0" layoutY="179.0" text="Кросс" />
+                        <Label fx:id="cross" layoutX="155.0" layoutY="175.0" prefHeight="25.0" prefWidth="60.0" />
                      </children>
                   </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="449.0" prefWidth="528.0">
@@ -164,9 +166,9 @@
                               <ToggleGroup fx:id="color" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="ral9006" layoutX="115.0" layoutY="298.0" mnemonicParsing="false" text="9006" toggleGroup="$color" />
-                        <RadioButton fx:id="biOut" layoutX="461.0" layoutY="298.0" mnemonicParsing="false" text="BiOut" toggleGroup="$color" />
-                        <RadioButton fx:id="dec" layoutX="352.0" layoutY="298.0" mnemonicParsing="false" text="Decor" toggleGroup="$color" />
+                        <RadioButton fx:id="ral9006" layoutX="128.0" layoutY="298.0" mnemonicParsing="false" text="9006" toggleGroup="$color" />
+                        <RadioButton fx:id="biOut" layoutX="262.0" layoutY="298.0" mnemonicParsing="false" text="BiOut" toggleGroup="$color" />
+                        <RadioButton fx:id="dec" layoutX="510.0" layoutY="298.0" mnemonicParsing="false" text="Decor" toggleGroup="$color" />
                         <Label layoutX="28.0" layoutY="257.0" prefHeight="25.0" prefWidth="280.0" text="Покраска">
                            <font>
                               <Font name="System Bold" size="23.0" />
@@ -295,10 +297,10 @@
                         <TextField layoutX="182.0" layoutY="430.0" prefHeight="25.0" prefWidth="60.0" />
                         <TextField layoutX="182.0" layoutY="456.0" prefHeight="25.0" prefWidth="60.0" />
                         <TextField layoutX="182.0" layoutY="481.0" prefHeight="25.0" prefWidth="60.0" />
-                        <TextField layoutX="27.0" layoutY="322.0" prefHeight="25.0" prefWidth="47.0" />
-                        <TextField layoutX="114.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
-                        <TextField layoutX="176.0" layoutY="323.0" prefHeight="25.0" prefWidth="39.0" />
-                        <TextField layoutX="351.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
+                        <TextField fx:id="ralCena" layoutX="27.0" layoutY="322.0" prefHeight="25.0" prefWidth="47.0" />
+                        <TextField fx:id="ral9006Cena" layoutX="127.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
+                        <TextField fx:id="ralBiWhiteCena" layoutX="398.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
+                        <TextField fx:id="decCena" layoutX="512.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
                         <Label layoutX="158.0" layoutY="266.0" text="(цена в гривне)">
                            <font>
                               <Font size="14.0" />
@@ -306,18 +308,20 @@
                         </Label>
                         <CheckBox fx:id="colorInCena" layoutX="403.0" layoutY="268.0" mnemonicParsing="false" onAction="#addColorInCena" text="Включить в стоимость" />
                         <CheckBox layoutX="396.0" layoutY="375.0" mnemonicParsing="false" text="Без фурнитуры" />
-                        <RadioButton fx:id="bi2" layoutX="294.0" layoutY="298.0" mnemonicParsing="false" text="Bi2" toggleGroup="$color" />
-                        <TextField layoutX="293.0" layoutY="322.0" prefHeight="25.0" prefWidth="47.0" />
+                        <RadioButton fx:id="bi2" layoutX="377.0" layoutY="298.0" mnemonicParsing="false" text="Bi2" toggleGroup="$color" />
+                        <TextField fx:id="ralBi2Cena" layoutX="449.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
                         <RadioButton fx:id="noRal" layoutX="287.0" layoutY="268.0" mnemonicParsing="false" selected="true" text="Нет" toggleGroup="$color" />
                         <CheckBox layoutX="396.0" layoutY="402.0" mnemonicParsing="false" text="Счет" />
-                        <RadioButton fx:id="biIn" layoutX="188.0" layoutY="298.0" mnemonicParsing="false" text="BiIn" toggleGroup="$color" />
-                        <TextField layoutX="219.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
-                        <TextField layoutX="66.0" layoutY="294.0" prefHeight="25.0" prefWidth="42.0" />
-                        <Label layoutX="214.0" layoutY="326.0" prefHeight="20.0" prefWidth="10.0" text="/">
+                        <RadioButton fx:id="biIn" layoutX="206.0" layoutY="298.0" mnemonicParsing="false" text="BiIn" toggleGroup="$color" />
+                        <TextField fx:id="ralBiCena" layoutX="218.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
+                        <TextField fx:id="ralNumber" layoutX="66.0" layoutY="294.0" prefHeight="25.0" prefWidth="42.0" />
+                        <Label layoutX="440.0" layoutY="325.0" prefHeight="20.0" prefWidth="2.0" text="/">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
+                        <TextField fx:id="ralBiNumber" layoutX="423.0" layoutY="294.0" prefHeight="25.0" prefWidth="62.0" />
+                        <TextField fx:id="ralBi1Number" layoutX="321.0" layoutY="294.0" prefHeight="25.0" prefWidth="39.0" />
                      </children>
                   </AnchorPane>
               </items>

@@ -1,17 +1,18 @@
 package ua.ats.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public class Section {
     private int id;
     private String name;
+    private List<Product> products = new ArrayList<>();
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     public int getId() {
         return id;
@@ -25,6 +26,15 @@ public class Section {
     @Column(name = "NAME")
     public String getName() {
         return name;
+    }
+
+    @OneToMany(mappedBy = "sectionn", cascade = CascadeType.ALL)
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     public void setName(String name) {

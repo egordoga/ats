@@ -1,15 +1,14 @@
 package ua.ats.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public class Measure {
     private int id;
     private String name;
+    private List<Product> products;
 
     @Id
     @Column(name = "ID")
@@ -29,6 +28,15 @@ public class Measure {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @OneToMany(mappedBy = "measure")
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     @Override
