@@ -6,6 +6,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ua.ats.AtsApplication;
 import ua.ats.dao.ProductRepository;
 import ua.ats.entity.Product;
 import ua.ats.util.InitParam;
@@ -45,6 +46,9 @@ public class Calculation {
 
     @Autowired
     private MainController mc;
+
+    @Autowired
+    private AtsApplication ats;
 
 
     public void fillLists(ProductRepository productRepository) {

@@ -1,9 +1,12 @@
 package ua.ats.view;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ua.ats.dao.ProductRepository;
@@ -11,6 +14,7 @@ import ua.ats.entity.Product;
 import ua.ats.logic.Calculation;
 import ua.ats.util.InitParam;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -430,6 +434,17 @@ public class MainController {
 
     }
 
+
+
+    @FXML
+    private File opFile(Stage primaryStage) {
+        FileChooser fc = new FileChooser();
+        File file = fc.showOpenDialog(primaryStage);
+        System.out.println("FILE: " + file.getName());
+        return file;
+    }
+
+
     private void countAndWriteTotal() {
        totalAll = totalProfile.add(totalAccessories).add(totalSealant).add(totalFurniture);
         writeTotal();
@@ -451,4 +466,9 @@ public class MainController {
     }
 
 
+    public void openFile() {
+        FileChooser fc = new FileChooser();
+        File file = fc.showOpenDialog(null);
+        System.out.println("FILE: " + file.getName());
+    }
 }

@@ -1,9 +1,11 @@
 package ua.ats;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 //import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +14,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import ua.ats.dao.ProductRepository;
 import ua.ats.util.ParseExelForDB;
+
+import java.io.File;
 
 
 @SpringBootApplication
@@ -35,7 +39,7 @@ public class AtsApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Calculation");
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 900, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -44,6 +48,8 @@ public class AtsApplication extends Application {
     public void stop() throws Exception {
         springContext.stop();
     }
+
+
 
     public static void main(String[] args) {
         launch(AtsApplication.class, args);

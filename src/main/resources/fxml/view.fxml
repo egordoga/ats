@@ -326,7 +326,7 @@
                   </AnchorPane>
               </items>
             </SplitPane>
-            <Button layoutX="532.0" layoutY="536.0" mnemonicParsing="false" text="Расчитать">
+            <Button layoutX="532.0" layoutY="536.0" mnemonicParsing="false" onAction="#openFile" text="Расчитать">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
