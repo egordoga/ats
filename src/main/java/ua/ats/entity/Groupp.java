@@ -15,7 +15,7 @@ public class Groupp {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -34,7 +34,7 @@ public class Groupp {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "groupp")
+    @OneToMany(mappedBy = "groupp", cascade = CascadeType.ALL)
     public List<Product> getProducts() {
         return products;
     }

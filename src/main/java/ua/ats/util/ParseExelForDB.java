@@ -27,7 +27,7 @@ public class ParseExelForDB {
     public void parseExel(ProductRepository repository) {
         XSSFWorkbook book = null;
         try {
-            book = new XSSFWorkbook(new FileInputStream("d://1111.xlsx"));
+            book = new XSSFWorkbook(new FileInputStream("e://1111.xlsx"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -62,7 +62,7 @@ public class Currency {
                 '}';
     }
 
-    @OneToMany(mappedBy = "currency")
+    @OneToMany(mappedBy = "currency", cascade = CascadeType.ALL)
     public List<Product> getProducts() {
         return products;
     }

@@ -19,6 +19,7 @@ public class Measure {
 
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -37,7 +38,7 @@ public class Measure {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "measure")
+    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
     public List<Product> getProducts() {
         return products;
     }
