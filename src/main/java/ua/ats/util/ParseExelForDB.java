@@ -6,13 +6,19 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 import ua.ats.AtsApplication;
 import ua.ats.dao.ProductRepository;
+import ua.ats.entity.Currency;
+import ua.ats.entity.Measure;
 import ua.ats.entity.Product;
+import ua.ats.entity.Section;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 
+@Component
 public class ParseExelForDB {
 
     //private ConfigurableApplicationContext context = SpringApplication.run(AtsApplication.class);
@@ -30,7 +36,12 @@ public class ParseExelForDB {
 
 
         System.out.println("Start parsing");
+
+
+
         for (int i = 1; i < 16; i++) {
+
+            System.out.println(i);
 
             Row row = sheet.getRow(i);
 
@@ -45,11 +56,11 @@ public class ParseExelForDB {
             }
 
             String unitStr = null;
-            int unit = 0;
+            //int unit = 0;
             if (row.getCell(3) != null) {
                 unitStr = row.getCell(3).getStringCellValue();
 
-                switch (unitStr) {
+               /* switch (unitStr) {
                     case "м/п.":
                         unit = 1;
                         break;
@@ -59,15 +70,15 @@ public class ParseExelForDB {
                     case "компл.":
                         unit = 3;
                         break;
-                }
+                }*/
             }
 
             String currStr = null;
-            int curr = 0;
+            //int curr = 0;
             if (row.getCell(8) != null) {
                 currStr = row.getCell(8).getStringCellValue();
 
-                switch (currStr) {
+               /* switch (currStr) {
                     case "USD":
                         curr = 1;
                         break;
@@ -77,7 +88,7 @@ public class ParseExelForDB {
                     case "грн":
                         curr = 3;
                         break;
-                }
+                }*/
             }
 
             String articul = null;
@@ -99,12 +110,14 @@ public class ParseExelForDB {
                 color = 1;
             }
 
-            Integer price = null;
+            BigDecimal price = null;
             if (row.getCell(6) != null) {
-                price = (int) (row.getCell(6).getNumericCellValue() * 100);
+                price = new BigDecimal(String.valueOf(row.getCell(6).getNumericCellValue()));
             }
+
+
             String sectionStr = row.getCell(9).getStringCellValue();
-            int section = 0;
+            /*int section = 0;
             switch (sectionStr) {
                 case "профиль":
                     section = 1;
@@ -121,8 +134,12 @@ public class ParseExelForDB {
                 case "материалы для монтажа":
                     section = 5;
                     break;
-            }
-            //repository.save(new Product(ident, name, articul, color, price, unit, section, curr));
+            }*/
+            repository.save(new Product(ident, name, articul, null,null,null,null,
+                    price,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,new Currency(currStr),
+                    null,new Measure(unitStr),new Section(sectionStr)));
+
+            System.out.println("BB " + i);
         }
         System.out.println("END");
     }

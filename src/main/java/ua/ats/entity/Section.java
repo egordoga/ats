@@ -11,6 +11,13 @@ public class Section {
     private String name;
     private List<Product> products = new ArrayList<>();
 
+    public Section() {
+    }
+
+    public Section(String name) {
+        this.name = name;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
@@ -28,7 +35,7 @@ public class Section {
         return name;
     }
 
-    @OneToMany(mappedBy = "sectionn", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
     public List<Product> getProducts() {
         return products;
     }

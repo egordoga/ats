@@ -103,7 +103,7 @@ public class Calculation {
                     }
 
 
-                    switch (product.getSectionn().getName()) {
+                    switch (product.getSection().getName()) {
                         case "профиль":
                             profile.add(product);
                             break;
@@ -346,17 +346,17 @@ public class Calculation {
                         product.setColorSum(BigDecimal.ZERO);
                         break;
                     case 1:
-                        product.setColorSum((product.getQuantity().multiply(product.getSquare().multiply(mc.colored))
+                        product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.colored))
                                 .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
                                 .setScale(2, BigDecimal.ROUND_HALF_UP));
                         break;
                     case 2:
                         if (product.getBicolorWhiteIn() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getSquare().multiply(mc.colored))
+                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.colored))
                                     .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
                                     .setScale(2, BigDecimal.ROUND_HALF_UP));
                         } else if (product.getBicolor() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getSquare().multiply(mc.coloredBicolor))
+                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.coloredBicolor))
                                     .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
                                     .setScale(2, BigDecimal.ROUND_HALF_UP));
                         } else {
@@ -365,11 +365,11 @@ public class Calculation {
                         break;
                     case 3:
                         if (product.getBicolorWhiteOut() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getSquare().multiply(mc.colored))
+                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.colored))
                                     .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
                                     .setScale(2, BigDecimal.ROUND_HALF_UP));
                         } else if (product.getBicolor() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getSquare().multiply(mc.coloredBicolor))
+                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.coloredBicolor))
                                     .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
                                     .setScale(2, BigDecimal.ROUND_HALF_UP));
                         } else {

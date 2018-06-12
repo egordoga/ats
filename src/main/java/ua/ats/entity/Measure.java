@@ -10,6 +10,13 @@ public class Measure {
     private String name;
     private List<Product> products;
 
+    public Measure() {
+    }
+
+    public Measure(String name) {
+        this.name = name;
+    }
+
     @Id
     @Column(name = "ID")
     public int getId() {

@@ -17,11 +17,11 @@ public class Product {
     private BigDecimal price;
     private BigDecimal cost;
     private BigDecimal weight;
-    private BigDecimal square;
+    private BigDecimal perimeter;
     private Currency currency;
     private Groupp groupp;
     private Measure measure;
-    private Section sectionn;
+    private Section section;
 
 
     private Integer columnNumberExel;
@@ -35,7 +35,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(Integer ident, String name, String articul, Byte color, BigDecimal price, Measure measure, Section section, Currency currency) {
+   /* public Product(Integer ident, String name, String articul, Byte color, BigDecimal price, Measure measure, Section section, Currency currency) {
         this.ident = ident;
         this.name = name;
         this.articul = articul;
@@ -44,6 +44,26 @@ public class Product {
         this.measure = measure;
         this.sectionn = section;
         this.currency = currency;
+    }*/
+
+
+    public Product(Integer ident, String name, String articul, Byte color, Byte bicolor, Byte bicolorWhiteOut,
+                   Byte bicolorWhiteIn, BigDecimal price, BigDecimal cost, BigDecimal weight, BigDecimal perimeter, Currency currency, Groupp groupp, Measure measure, Section sectionn) {
+        this.ident = ident;
+        this.name = name;
+        this.articul = articul;
+        this.color = color;
+        this.bicolor = bicolor;
+        this.bicolorWhiteOut = bicolorWhiteOut;
+        this.bicolorWhiteIn = bicolorWhiteIn;
+        this.price = price;
+        this.cost = cost;
+        this.weight = weight;
+        this.perimeter = perimeter;
+        this.currency = currency;
+        this.groupp = groupp;
+        this.measure = measure;
+        this.section = sectionn;
     }
 
     @Id
@@ -159,12 +179,22 @@ public class Product {
 
     @Basic
     @Column(name = "SQUARE")
-    public BigDecimal getSquare() {
-        return square;
+    public BigDecimal getPerimeter() {
+        return perimeter;
     }
 
-    public void setSquare(BigDecimal square) {
-        this.square = square;
+    public void setPerimeter(BigDecimal square) {
+        this.perimeter = square;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "CURRENCY_ID")
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
 
@@ -213,15 +243,7 @@ public class Product {
         this.cena = cena;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "CURRENCY_ID")
-    public Currency getCurrency() {
-        return currency;
-    }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
 
     @ManyToOne
     @JoinColumn(name = "GROUP_ID")
@@ -245,12 +267,12 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "SECTION_ID")
-    public Section getSectionn() {
-        return sectionn;
+    public Section getSection() {
+        return section;
     }
 
-    public void setSectionn(Section section) {
-        this.sectionn = section;
+    public void setSection(Section section) {
+        this.section = section;
     }
 
     @Override
@@ -268,17 +290,17 @@ public class Product {
                 Objects.equals(price, product.price) &&
                 Objects.equals(cost, product.cost) &&
                 Objects.equals(weight, product.weight) &&
-                Objects.equals(square, product.square) &&
+                Objects.equals(perimeter, product.perimeter) &&
                 Objects.equals(currency, product.currency) &&
                 Objects.equals(groupp, product.groupp) &&
                 Objects.equals(measure, product.measure) &&
-                Objects.equals(sectionn, product.sectionn);
+                Objects.equals(section, product.section);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, ident, name, articul, color, bicolor, bicolorWhiteOut, price, cost, weight, square, currency, groupp, measure, sectionn);
+        return Objects.hash(id, ident, name, articul, color, bicolor, bicolorWhiteOut, price, cost, weight, perimeter, currency, groupp, measure, section);
     }
 
     @Override
@@ -290,7 +312,7 @@ public class Product {
                 ", cost=" + cost +
                 ", sum=" + sum +
                 ", quantity=" + quantity +
-                ", square=" + square +
+                ", square=" + perimeter +
                 ", cena=" + cena +
                 ", colorSum=" + colorSum +
                 '}';

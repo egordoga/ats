@@ -13,6 +13,7 @@ import ua.ats.dao.ProductRepository;
 import ua.ats.entity.Product;
 import ua.ats.logic.Calculation;
 import ua.ats.util.InitParam;
+import ua.ats.util.ParseExelForDB;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -94,6 +95,8 @@ public class MainController {
     private int costTypeL45 = 1;
     private int colorType = 0;        // 0 - none, 1 - color, bicolor: 2 - white in, 3 - white out, 4 - double
 
+    File file;
+
     @FXML
     private Label fileLbl;
 
@@ -105,6 +108,12 @@ public class MainController {
 
     @Autowired
     private Calculation calc;
+
+    @Autowired
+    private ParseExelForDB pe;
+
+    @Autowired
+    ProductRepository repository;
 
     @FXML
     private void initLbl() {
@@ -467,8 +476,8 @@ public class MainController {
 
 
     public void openFile() {
-        FileChooser fc = new FileChooser();
-        File file = fc.showOpenDialog(null);
-        System.out.println("FILE: " + file.getName());
+        /*FileChooser fc = new FileChooser();
+        file = fc.showOpenDialog(null);*/
+        pe.parseExel(repository);
     }
 }

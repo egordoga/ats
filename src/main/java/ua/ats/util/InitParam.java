@@ -25,7 +25,7 @@ public class InitParam {
     public static BigDecimal dekor;             // = new BigDecimal("630");
 
 
-    private static final Path PROP = Paths.get("e://alumotr/properties.txt");
+    private static final Path PROP = Paths.get("d://alumotr/properties.txt");
 
 
     public static void initParam() {
