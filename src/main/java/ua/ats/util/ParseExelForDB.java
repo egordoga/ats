@@ -4,15 +4,13 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 import ua.ats.AtsApplication;
-import ua.ats.dao.ProductRepository;
-import ua.ats.entity.Currency;
-import ua.ats.entity.Measure;
-import ua.ats.entity.Product;
-import ua.ats.entity.Section;
+import ua.ats.dao.*;
+import ua.ats.entity.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,7 +22,23 @@ public class ParseExelForDB {
     //private ConfigurableApplicationContext context = SpringApplication.run(AtsApplication.class);
     //private ProductRepository repository = context.getBean(ProductRepository.class);
 
-    public void parseExel(ProductRepository repository) {
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CurrencyRepository currencyRepository;
+
+    @Autowired
+    private GrouppRepository grouppRepository;
+
+    @Autowired
+    private MeasureRepository measureRepository;
+
+    @Autowired
+    private SectionRepository sectionRepository;
+
+
+    public void parseExel() {
         XSSFWorkbook book = null;
         try {
             book = new XSSFWorkbook(new FileInputStream("e://1111.xlsx"));
@@ -55,10 +69,15 @@ public class ParseExelForDB {
                 name = row.getCell(2).getStringCellValue();
             }
 
-            String unitStr = null;
-            //int unit = 0;
+            Measure measure = null;
             if (row.getCell(3) != null) {
-                unitStr = row.getCell(3).getStringCellValue();
+                String mesaureStr = row.getCell(3).getStringCellValue();
+                measure = measureRepository.findMeasureByName(mesaureStr);
+                if (measure == null) {
+                    measure = new Measure(mesaureStr);
+                    measureRepository.save(measure);
+                }
+
 
                /* switch (unitStr) {
                     case "м/п.":
@@ -73,10 +92,17 @@ public class ParseExelForDB {
                 }*/
             }
 
-            String currStr = null;
-            //int curr = 0;
+            Currency currency = null;
             if (row.getCell(8) != null) {
-                currStr = row.getCell(8).getStringCellValue();
+                String currStr = row.getCell(8).getStringCellValue();
+                currency = currencyRepository.findCurrencyByName(currStr);
+
+                if (currency == null) {
+                    currency = new Currency(currStr);
+                    currencyRepository.save(currency);
+                }
+                System.out.println(currency.toString());
+
 
                /* switch (currStr) {
                     case "USD":
@@ -116,7 +142,15 @@ public class ParseExelForDB {
             }
 
 
-            String sectionStr = row.getCell(9).getStringCellValue();
+            Section section = null;
+            if (row.getCell(9) != null) {
+                String sectionStr = row.getCell(9).getStringCellValue();
+                section = sectionRepository.findSectionByName(sectionStr);
+                if (section ==null) {
+                    section = new Section(sectionStr);
+                    sectionRepository.save(section);
+                }
+            }
             /*int section = 0;
             switch (sectionStr) {
                 case "профиль":
@@ -135,9 +169,9 @@ public class ParseExelForDB {
                     section = 5;
                     break;
             }*/
-            repository.save(new Product(ident, name, articul, null,null,null,null,
-                    price,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,new Currency(currStr),
-                    null,new Measure(unitStr),new Section(sectionStr)));
+            productRepository.save(new Product(ident, name, articul, null,null,null,null,
+                    price,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO, currency,
+                    null, measure, section));
 
             System.out.println("BB " + i);
         }

@@ -10,6 +10,8 @@ public class Currency {
     private int id;
     private String name;
 
+    private List<Product> products = new ArrayList<>();
+
     public Currency() {
     }
 
@@ -17,11 +19,9 @@ public class Currency {
         this.name = name;
     }
 
-    private List<Product> products = new ArrayList<>();
-
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }

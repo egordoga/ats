@@ -187,7 +187,7 @@ public class Product {
         this.perimeter = square;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(/*cascade = CascadeType.ALL*/)
     @JoinColumn(name = "CURRENCY_ID")
     public Currency getCurrency() {
         return currency;
@@ -245,7 +245,7 @@ public class Product {
 
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(/*cascade = CascadeType.ALL*/)
     @JoinColumn(name = "GROUP_ID")
     public Groupp getGroupp() {
         return groupp;
@@ -255,7 +255,7 @@ public class Product {
         this.groupp = groupp;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(/*cascade = CascadeType.ALL*/)
     @JoinColumn(name = "MEASURE_ID")
     public Measure getMeasure() {
         return measure;
@@ -265,7 +265,7 @@ public class Product {
         this.measure = measure;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(/*cascade = CascadeType.ALL*/)
     @JoinColumn(name = "SECTION_ID")
     public Section getSection() {
         return section;

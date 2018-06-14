@@ -478,6 +478,6 @@ public class MainController {
     public void openFile() {
         /*FileChooser fc = new FileChooser();
         file = fc.showOpenDialog(null);*/
-        pe.parseExel(repository);
+        pe.parseExel();
     }
 }
