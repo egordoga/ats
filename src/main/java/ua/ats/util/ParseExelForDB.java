@@ -41,7 +41,7 @@ public class ParseExelForDB {
     public void parseExel() {
         XSSFWorkbook book = null;
         try {
-            book = new XSSFWorkbook(new FileInputStream("e://1111.xlsx"));
+            book = new XSSFWorkbook(new FileInputStream("d://111.xlsx"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,7 +53,7 @@ public class ParseExelForDB {
 
 
 
-        for (int i = 1; i < 16; i++) {
+        for (int i = 1; i < 32; i++) {
 
             System.out.println(i);
 
@@ -132,7 +132,7 @@ public class ParseExelForDB {
             if (row.getCell(5) != null) {
                 colorStr = row.getCell(5).getStringCellValue();
             }
-            if ("RAL9016".equals(colorStr)) {
+            if ("RAL".equals(colorStr.substring(0,3))) {
                 color = 1;
             }
 
@@ -169,7 +169,7 @@ public class ParseExelForDB {
                     section = 5;
                     break;
             }*/
-            productRepository.save(new Product(ident, name, articul, null,null,null,null,
+            productRepository.save(new Product(ident, name, articul, color,null,null,null,
                     price,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO, currency,
                     null, measure, section));
 
