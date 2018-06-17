@@ -1,6 +1,8 @@
 package ua.ats.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ua.ats.view.MainController;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -25,7 +27,10 @@ public class InitParam {
     public static BigDecimal dekor;             // = new BigDecimal("630");
 
 
-    private static final Path PROP = Paths.get("d://alumotr/properties.txt");
+    private static final Path PROP = Paths.get("e://alumotr/properties.txt");
+
+    @Autowired
+    private static MainController mc;
 
 
     public static void initParam() {
@@ -38,9 +43,10 @@ public class InitParam {
             rateEur = new BigDecimal(list.get(7));
             color = new BigDecimal(list.get(9));
             color9006 = new BigDecimal(list.get(11));
-            bicolor = new BigDecimal(list.get(13));
-            dekor = new BigDecimal(list.get(15));
-            colorFurn = new BigDecimal(list.get(17));
+            bicolorWithWhite = new BigDecimal(list.get(13));
+            bicolor = new BigDecimal(list.get(15));
+            dekor = new BigDecimal(list.get(17));
+            colorFurn = new BigDecimal(list.get(19));
 //            costAlum = new BigDecimal(list.get(1));
 //            costAlum = new BigDecimal(list.get(1));
 //            costAlum = new BigDecimal(list.get(1));

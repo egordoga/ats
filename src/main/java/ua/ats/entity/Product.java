@@ -35,20 +35,11 @@ public class Product {
     public Product() {
     }
 
-   /* public Product(Integer ident, String name, String articul, Byte color, BigDecimal price, Measure measure, Section section, Currency currency) {
-        this.ident = ident;
-        this.name = name;
-        this.articul = articul;
-        this.color = color;
-        this.price = price;
-        this.measure = measure;
-        this.sectionn = section;
-        this.currency = currency;
-    }*/
 
 
     public Product(Integer ident, String name, String articul, Byte color, Byte bicolor, Byte bicolorWhiteOut,
-                   Byte bicolorWhiteIn, BigDecimal price, BigDecimal cost, BigDecimal weight, BigDecimal perimeter, Currency currency, Groupp groupp, Measure measure, Section sectionn) {
+                   Byte bicolorWhiteIn, BigDecimal price, BigDecimal cost, BigDecimal weight, BigDecimal perimeter,
+                   Currency currency, Groupp groupp, Measure measure, Section sectionn) {
         this.ident = ident;
         this.name = name;
         this.articul = articul;
@@ -67,7 +58,7 @@ public class Product {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     public int getId() {
         return id;

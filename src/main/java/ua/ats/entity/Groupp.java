@@ -10,12 +10,18 @@ public class Groupp {
     private int id;
     private String name;
 
-
     private List<Product> products = new ArrayList<>();
+
+    public Groupp() {
+    }
+
+    public Groupp(String name) {
+        this.name = name;
+    }
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }

@@ -1,12 +1,9 @@
 package ua.ats.view;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ua.ats.dao.ProductRepository;
@@ -17,11 +14,12 @@ import ua.ats.util.ParseExelForDB;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Controller
 public class MainController {
+
+    private final static BigDecimal HUNDRED = new BigDecimal("100");
 
     public ToggleGroup color;
     public ToggleGroup w70markup;
@@ -74,33 +72,33 @@ public class MainController {
     public Label cross;
     public TextField ralCena;
     public TextField ral9006Cena;
-    public TextField ralBiWhiteCena;
+    public TextField ralBiOneCena;
     public TextField decCena;
     public TextField ralBi2Cena;
-    public TextField ralBiCena;
+    public TextField ralBiWhiteCena;
     public TextField ralNumber;
+    public TextField ralBiNumber;
+    public TextField ralBi1Number;
+    public TextField discProfile;
+    public TextField discAccess;
+    public TextField discSeal;
+    public TextField discFurn;
 
 
     public String ralNum;
-    public TextField ralBiNumber;
-    public TextField ralBi1Number;
-
-    private List<Product> profileNew = new ArrayList<>();
-    private List<Product> accessoriesNew = new ArrayList<>();
-    private List<Product> sealantNew = new ArrayList<>();
-    private List<Product> furnitureNew = new ArrayList<>();
+    public String ralBiNum;
+    public String ralBi1Num;
+    public TextField ralBiWhiteOneCena;
 
     private int costTypeF50 = 1;
     private int costTypeW70 = 1;
     private int costTypeL45 = 1;
     private int colorType = 0;        // 0 - none, 1 - color, bicolor: 2 - white in, 3 - white out, 4 - double
 
-    File file;
+    public File file;
 
     @FXML
     private Label fileLbl;
-
-    //private Calculation calc = new Calculation();
 
 
     @Autowired
@@ -117,17 +115,16 @@ public class MainController {
 
     @FXML
     private void initLbl() {
+        openFile();
         InitParam.initParam();
         usd.setText(String.valueOf(InitParam.rateUsd));
         eur.setText(String.valueOf(InitParam.rateEur));
         cross.setText(String.valueOf(InitParam.crossRate));
-        //calc.getStartRow();
         calc.fillLists(productRepository);
-        fileLbl.setText("Файл: " + calc.getFile().getName());
-        initTotal();
+        fileLbl.setText("Файл: " + file.getName());
         countAndWriteTotal();
-        //listenMarkupF50();
-        //listenMarkupW70();
+        listenMarkupF50();
+        listenMarkupW70();
         colorListener();
         textFieldsInitAndListener();
 
@@ -159,15 +156,15 @@ public class MainController {
 
             switch (costTypeF50) {
                 case 1:
-                    calc.rewriteF50ByPrice();
+                    calc.rewriteByPrice("F50", markupF50);
                     countAndWriteTotal();
                     break;
                 case 2:
-                    calc.rewriteF505ByWeight();
+                    calc.rewriteByWeight("F50", markupF50);
                     countAndWriteTotal();
                     break;
                 case 3:
-                    calc.rewriteF505ByCost();
+                    calc.rewriteByCost("F50", markupF50);
                     countAndWriteTotal();
                     break;
             }
@@ -201,15 +198,15 @@ public class MainController {
 
             switch (costTypeW70) {
                 case 1:
-                    calc.rewriteW70ByPrice();
+                    calc.rewriteByPrice("W70", markupW70);
                     countAndWriteTotal();
                     break;
                 case 2:
-                    calc.rewriteW70ByWeight();
+                    calc.rewriteByWeight("W70", markupW70);
                     countAndWriteTotal();
                     break;
                 case 3:
-                    calc.rewriteW705ByCost();
+                    calc.rewriteByCost("W70", markupW70);
                     countAndWriteTotal();
                     break;
             }
@@ -243,15 +240,15 @@ public class MainController {
 
             switch (costTypeL45) {
                 case 1:
-                    calc.rewriteL45ByPrice();
+                    calc.rewriteByPrice("L45", markupL45);
                     countAndWriteTotal();
                     break;
                 case 2:
-                    calc.rewriteL45ByWeight();
+                    calc.rewriteByWeight("L45", markupL45);
                     countAndWriteTotal();
                     break;
                 case 3:
-                    calc.rewriteL455ByCost();
+                    calc.rewriteByCost("L45", markupL45);
                     countAndWriteTotal();
                     break;
             }
@@ -266,17 +263,17 @@ public class MainController {
             switch (chk.getId()) {
                 case "w70price":
                     costTypeW70 = 1;
-                    calc.rewriteW70ByPrice();
+                    calc.rewriteByPrice("W70", markupW70);
                     countAndWriteTotal();
                     break;
-                case "w70weight":
+               /* case "w70weight":
                     costTypeW70 = 2;
-                    calc.rewriteW70ByWeight();
+                    calc.rewriteByWeight("W70", markupW70);
                     countAndWriteTotal();
-                    break;
+                    break;*/
                 case "w70cost":
                     costTypeW70 = 3;
-                    calc.rewriteW705ByCost();
+                    calc.rewriteByCost("W70", markupW70);
                     countAndWriteTotal();
                     break;
 
@@ -291,17 +288,17 @@ public class MainController {
             switch (chk.getId()) {
                 case "f50price":
                     costTypeF50 = 1;
-                    calc.rewriteF50ByPrice();
+                    calc.rewriteByPrice("F50", markupF50);
                     countAndWriteTotal();
                     break;
                 case "f50weight":
                     costTypeF50 = 2;
-                    calc.rewriteF505ByWeight();
+                    calc.rewriteByWeight("F50", markupF50);
                     countAndWriteTotal();
                     break;
                 case "f50cost":
                     costTypeF50 = 3;
-                    calc.rewriteF505ByCost();
+                    calc.rewriteByCost("F50", markupF50);
                     countAndWriteTotal();
                     break;
 
@@ -316,17 +313,17 @@ public class MainController {
             switch (chk.getId()) {
                 case "l45price":
                     costTypeL45 = 1;
-                    calc.rewriteL45ByPrice();
+                    calc.rewriteByPrice("L45", markupL45);
                     countAndWriteTotal();
                     break;
                 case "l45weight":
                     costTypeL45 = 2;
-                    calc.rewriteL45ByWeight();
+                    calc.rewriteByWeight("L45", markupL45);
                     countAndWriteTotal();
                     break;
                 case "l45cost":
                     costTypeL45 = 3;
-                    calc.rewriteL455ByCost();
+                    calc.rewriteByCost("L45", markupL45);
                     countAndWriteTotal();
                     break;
 
@@ -344,12 +341,21 @@ public class MainController {
                 case "noRal":
                     colored = BigDecimal.ZERO;
                     coloredBicolor = BigDecimal.ZERO;
-                    colorType = 0;
+                    //colorType = 0;
+                    calc.removeColorSum();
+
+                   /* calc.getProfile().forEach(System.out::println);
+                    calc.getFurniture().forEach(System.out::println);*/
+
                     break;
                 case "ral":
                     colored = InitParam.color;
                     coloredBicolor = BigDecimal.ZERO;
                     colorType = 1;
+
+                    /*calc.getProfile().forEach(System.out::println);
+                    calc.getFurniture().forEach(System.out::println);*/
+
                     break;
                 case "ral9006":
                     colored = InitParam.color9006;
@@ -374,7 +380,7 @@ public class MainController {
             }
             calc.settingColorSum(colorType);
             calc.rewriteColorTotal();
-            addColorInCena();
+            //addColorInCena();
         });
     }
 
@@ -382,14 +388,12 @@ public class MainController {
     private void addColorInCena() {
         if (colorInCena.isSelected()) {
             calc.settingColorSum(colorType);
-            calc.rewriteWithColor();
-            initTotal();
+            calc.addColorSum();
             countAndWriteTotal();
             totColor.setText("");
         } else {
             calc.removeColorSum();
-            calc.rewriteWithColor();
-            initTotal();
+            //calc.addColorSum();
             countAndWriteTotal();
             totColor.setText(totalColor.toString());
         }
@@ -397,9 +401,28 @@ public class MainController {
 
 
     private void textFieldsInitAndListener() {
+
+        usd.setText(InitParam.rateUsd.toString());
+        eur.setText(InitParam.rateEur.toString());
+        ralCena.setText(InitParam.color.toString());
+        ralBiOneCena.setText(InitParam.color.toString());
+        ralBi2Cena.setText(InitParam.bicolor.toString());
+        ral9006Cena.setText(InitParam.color9006.toString());
+        ralBiWhiteCena.setText(InitParam.bicolorWithWhite.toString());
+        ralBiWhiteOneCena.setText(InitParam.color.toString());
+        decCena.setText(InitParam.dekor.toString());
+
         usd.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 InitParam.rateUsd = new BigDecimal(usd.getText());
+                InitParam.initCross();
+                cross.setText(InitParam.crossRate.toString());
+            }
+        });
+
+        eur.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                InitParam.rateEur = new BigDecimal(eur.getText());
                 InitParam.initCross();
                 cross.setText(InitParam.crossRate.toString());
             }
@@ -417,27 +440,65 @@ public class MainController {
             }
         });
 
-        eur.setOnKeyPressed(event -> {
+
+
+        ral9006Cena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.rateEur = new BigDecimal(eur.getText());
-                InitParam.initCross();
-                cross.setText(InitParam.crossRate.toString());
+                InitParam.color9006 = new BigDecimal(ral9006Cena.getText());
             }
         });
 
-        eur.setOnKeyPressed(event -> {
+        ralBiWhiteCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.rateEur = new BigDecimal(eur.getText());
-                InitParam.initCross();
-                cross.setText(InitParam.crossRate.toString());
+                InitParam.bicolor = new BigDecimal(ralBiWhiteCena.getText());
             }
         });
 
-        eur.setOnKeyPressed(event -> {
+        ralBiWhiteOneCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.rateEur = new BigDecimal(eur.getText());
-                InitParam.initCross();
-                cross.setText(InitParam.crossRate.toString());
+                InitParam.color = new BigDecimal(ralBiWhiteOneCena.getText());
+            }
+        });
+
+        ralBiNumber.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                ralBiNum = ralBiNumber.getText();
+            }
+        });
+
+        ralBi1Number.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                ralBi1Num = ralBi1Number.getText();
+            }
+        });
+
+        decCena.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                InitParam.dekor = new BigDecimal(decCena.getText());
+            }
+        });
+
+        ralBiOneCena.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                InitParam.color = new BigDecimal(ralBiOneCena.getText());
+            }
+        });
+
+        ralBi2Cena.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                InitParam.bicolor = new BigDecimal(ralBi2Cena.getText());
+            }
+        });
+
+        discProfile.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                if ("-".equals(discProfile.getText())) {
+                    discountProfile = new BigDecimal(discProfile.getText()).add(HUNDRED)
+                            .divide(HUNDRED, 2, BigDecimal.ROUND_HALF_UP);
+                } else {
+                    discountProfile = HUNDRED.subtract(new BigDecimal(discProfile.getText()))
+                            .divide(HUNDRED, 2, BigDecimal.ROUND_HALF_UP);
+                }
             }
         });
 
@@ -445,26 +506,30 @@ public class MainController {
 
 
 
-    @FXML
+ /*   @FXML
     private File opFile(Stage primaryStage) {
         FileChooser fc = new FileChooser();
         File file = fc.showOpenDialog(primaryStage);
         System.out.println("FILE: " + file.getName());
         return file;
     }
-
+*/
 
     private void countAndWriteTotal() {
-       totalAll = totalProfile.add(totalAccessories).add(totalSealant).add(totalFurniture);
-        writeTotal();
-    }
-
-    private void initTotal() {
         totalProfile = calc.getProfile().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         totalAccessories = calc.getAccessories().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         totalSealant = calc.getSealant().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         totalFurniture = calc.getFurniture().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+       totalAll = totalProfile.add(totalAccessories).add(totalSealant).add(totalFurniture);
+        writeTotal();
     }
+
+   /* private void initTotal() {
+        totalProfile = calc.getProfile().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        totalAccessories = calc.getAccessories().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        totalSealant = calc.getSealant().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        totalFurniture = calc.getFurniture().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }*/
 
     private void writeTotal() {
         totProf.setText(totalProfile.toString());
@@ -476,8 +541,8 @@ public class MainController {
 
 
     public void openFile() {
-        /*FileChooser fc = new FileChooser();
-        file = fc.showOpenDialog(null);*/
-        pe.parseExel();
+        FileChooser fc = new FileChooser();
+        file = fc.showOpenDialog(null);
+       // pe.parseExel();
     }
 }

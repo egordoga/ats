@@ -19,9 +19,6 @@ import java.math.BigDecimal;
 @Component
 public class ParseExelForDB {
 
-    //private ConfigurableApplicationContext context = SpringApplication.run(AtsApplication.class);
-    //private ProductRepository repository = context.getBean(ProductRepository.class);
-
     @Autowired
     private ProductRepository productRepository;
 
@@ -41,7 +38,7 @@ public class ParseExelForDB {
     public void parseExel() {
         XSSFWorkbook book = null;
         try {
-            book = new XSSFWorkbook(new FileInputStream("d://111.xlsx"));
+            book = new XSSFWorkbook(new FileInputStream("e://1.xlsx"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,8 +49,7 @@ public class ParseExelForDB {
         System.out.println("Start parsing");
 
 
-
-        for (int i = 1; i < 32; i++) {
+        for (int i = 1; i < 492; i++) {
 
             System.out.println(i);
 
@@ -77,44 +73,6 @@ public class ParseExelForDB {
                     measure = new Measure(mesaureStr);
                     measureRepository.save(measure);
                 }
-
-
-               /* switch (unitStr) {
-                    case "м/п.":
-                        unit = 1;
-                        break;
-                    case "шт.":
-                        unit = 2;
-                        break;
-                    case "компл.":
-                        unit = 3;
-                        break;
-                }*/
-            }
-
-            Currency currency = null;
-            if (row.getCell(8) != null) {
-                String currStr = row.getCell(8).getStringCellValue();
-                currency = currencyRepository.findCurrencyByName(currStr);
-
-                if (currency == null) {
-                    currency = new Currency(currStr);
-                    currencyRepository.save(currency);
-                }
-                System.out.println(currency.toString());
-
-
-               /* switch (currStr) {
-                    case "USD":
-                        curr = 1;
-                        break;
-                    case "EUR":
-                        curr = 2;
-                        break;
-                    case "грн":
-                        curr = 3;
-                        break;
-                }*/
             }
 
             String articul = null;
@@ -130,10 +88,12 @@ public class ParseExelForDB {
             String colorStr = null;
             byte color = 0;
             if (row.getCell(5) != null) {
-                colorStr = row.getCell(5).getStringCellValue();
-            }
-            if ("RAL".equals(colorStr.substring(0,3))) {
-                color = 1;
+                colorStr = row.getCell(5).getStringCellValue().substring(0, 3);
+
+                if ("RAL".equals(colorStr) || "SIL".equals(colorStr)) {
+                    color = 1;
+                }
+
             }
 
             BigDecimal price = null;
@@ -141,40 +101,82 @@ public class ParseExelForDB {
                 price = new BigDecimal(String.valueOf(row.getCell(6).getNumericCellValue()));
             }
 
+            Currency currency = null;
+            if (row.getCell(8) != null) {
+                String currStr = row.getCell(8).getStringCellValue();
+                currency = currencyRepository.findCurrencyByName(currStr);
+
+                if (currency == null) {
+                    currency = new Currency(currStr);
+                    currencyRepository.save(currency);
+                }
+
+            }
 
             Section section = null;
             if (row.getCell(9) != null) {
                 String sectionStr = row.getCell(9).getStringCellValue();
                 section = sectionRepository.findSectionByName(sectionStr);
-                if (section ==null) {
+                if (section == null) {
                     section = new Section(sectionStr);
                     sectionRepository.save(section);
                 }
             }
-            /*int section = 0;
-            switch (sectionStr) {
-                case "профиль":
-                    section = 1;
-                    break;
-                case "комплектующие":
-                    section = 2;
-                    break;
-                case "уплотнители":
-                    section = 3;
-                    break;
-                case "фурнитура":
-                    section = 4;
-                    break;
-                case "материалы для монтажа":
-                    section = 5;
-                    break;
-            }*/
-            productRepository.save(new Product(ident, name, articul, color,null,null,null,
-                    price,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO, currency,
-                    null, measure, section));
+
+            Groupp groupp = null;
+            if (row.getCell(10) != null) {
+                String groupStr = row.getCell(10).getStringCellValue();
+                groupp = grouppRepository.findGrouppByName(groupStr);
+                if (groupp == null) {
+                    groupp = new Groupp(groupStr);
+                    grouppRepository.save(groupp);
+                }
+            }
+
+            BigDecimal weight = null;
+            if (row.getCell(18) != null) {
+                weight = new BigDecimal(row.getCell(18).getNumericCellValue());
+            }
+
+            BigDecimal perimeter = null;
+            if (row.getCell(19) != null) {
+                perimeter = new BigDecimal(row.getCell(19).getNumericCellValue());
+            }
+
+            Byte bi = 0;
+            if (row.getCell(20) != null) {
+                if ((int) row.getCell(20).getNumericCellValue() == 1) {
+                    bi = 1;
+                }
+            }
+
+            Byte biWI = 0;
+            if (row.getCell(21) != null) {
+                if ((int) row.getCell(21).getNumericCellValue() == 1) {
+                    biWI = 1;
+                }
+            }
+
+            Byte biWO = 0;
+                if (row.getCell(22) != null) {
+                    if (row.getCell(22).getCellTypeEnum() == CellType.NUMERIC) {
+                        if ((int) row.getCell(22).getNumericCellValue() == 1) {
+                            biWO = 1;
+                        }
+                    } else {
+                        if (row.getCell(22).getStringCellValue().equals("1")) {
+                            biWO = 1;
+                        }
+                    }
+                }
+
+
+            productRepository.save(new Product(ident, name, articul, color, bi, biWO, biWI,
+                    price, BigDecimal.ZERO, weight, perimeter, currency,
+                    groupp, measure, section));
 
             System.out.println("BB " + i);
         }
-        System.out.println("END");
+        System.out.println("THE END");
     }
 }

@@ -289,17 +289,17 @@
                         <Label layoutX="251.0" layoutY="434.0" text="\%" />
                         <Label layoutX="251.0" layoutY="460.0" text="\%" />
                         <Label layoutX="251.0" layoutY="485.0" text="\%" />
-                        <TextField layoutX="182.0" layoutY="406.0" prefHeight="25.0" prefWidth="60.0">
+                        <TextField fx:id="discProfile" layoutX="182.0" layoutY="406.0" prefHeight="25.0" prefWidth="60.0">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
                         </TextField>
-                        <TextField layoutX="182.0" layoutY="430.0" prefHeight="25.0" prefWidth="60.0" />
-                        <TextField layoutX="182.0" layoutY="456.0" prefHeight="25.0" prefWidth="60.0" />
-                        <TextField layoutX="182.0" layoutY="481.0" prefHeight="25.0" prefWidth="60.0" />
+                        <TextField fx:id="discAccess" layoutX="182.0" layoutY="430.0" prefHeight="25.0" prefWidth="60.0" />
+                        <TextField fx:id="discSeal" layoutX="182.0" layoutY="456.0" prefHeight="25.0" prefWidth="60.0" />
+                        <TextField fx:id="discFurn" layoutX="182.0" layoutY="481.0" prefHeight="25.0" prefWidth="60.0" />
                         <TextField fx:id="ralCena" layoutX="27.0" layoutY="322.0" prefHeight="25.0" prefWidth="47.0" />
                         <TextField fx:id="ral9006Cena" layoutX="127.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
-                        <TextField fx:id="ralBiWhiteCena" layoutX="398.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
+                        <TextField fx:id="ralBiOneCena" layoutX="398.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
                         <TextField fx:id="decCena" layoutX="512.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
                         <Label layoutX="158.0" layoutY="266.0" text="(цена в гривне)">
                            <font>
@@ -313,7 +313,7 @@
                         <RadioButton fx:id="noRal" layoutX="287.0" layoutY="268.0" mnemonicParsing="false" selected="true" text="Нет" toggleGroup="$color" />
                         <CheckBox layoutX="396.0" layoutY="402.0" mnemonicParsing="false" text="Счет" />
                         <RadioButton fx:id="biIn" layoutX="206.0" layoutY="298.0" mnemonicParsing="false" text="BiIn" toggleGroup="$color" />
-                        <TextField fx:id="ralBiCena" layoutX="218.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
+                        <TextField fx:id="ralBiWhiteOneCena" layoutX="218.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
                         <TextField fx:id="ralNumber" layoutX="66.0" layoutY="294.0" prefHeight="25.0" prefWidth="42.0" />
                         <Label layoutX="440.0" layoutY="325.0" prefHeight="20.0" prefWidth="2.0" text="/">
                            <font>
@@ -322,6 +322,12 @@
                         </Label>
                         <TextField fx:id="ralBiNumber" layoutX="423.0" layoutY="294.0" prefHeight="25.0" prefWidth="62.0" />
                         <TextField fx:id="ralBi1Number" layoutX="321.0" layoutY="294.0" prefHeight="25.0" prefWidth="39.0" />
+                        <Label layoutX="259.0" layoutY="325.0" prefHeight="20.0" prefWidth="2.0" text="/">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="ralBiWhiteCena" layoutX="268.0" layoutY="323.0" prefHeight="25.0" prefWidth="39.0" />
                      </children>
                   </AnchorPane>
               </items>
