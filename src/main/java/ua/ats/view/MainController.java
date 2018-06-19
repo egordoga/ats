@@ -352,7 +352,7 @@ public class MainController {
                     colored = InitParam.color;
                     coloredBicolor = BigDecimal.ZERO;
                     colorType = 1;
-
+                    calc.settingColorSum(colorType);
                     /*calc.getProfile().forEach(System.out::println);
                     calc.getFurniture().forEach(System.out::println);*/
 
@@ -361,16 +361,19 @@ public class MainController {
                     colored = InitParam.color9006;
                     coloredBicolor = BigDecimal.ZERO;
                     colorType = 1;
+                    calc.settingColorSum(colorType);
                     break;
                 case "biIn":
                     colored = InitParam.color;
                     coloredBicolor = InitParam.bicolor;
                     colorType = 2;
+                    calc.settingColorSum(colorType);
                     break;
                 case "biOut":
                     colored = InitParam.color;
                     coloredBicolor = InitParam.bicolor;
                     colorType = 3;
+                    calc.settingColorSum(colorType);
                     break;
                 case "dec":
                     colored = InitParam.dekor;
@@ -378,7 +381,7 @@ public class MainController {
                     colorType = 1;
                     break;
             }
-            calc.settingColorSum(colorType);
+            //calc.settingColorSum(colorType);
             calc.rewriteColorTotal();
             //addColorInCena();
         });

@@ -169,7 +169,7 @@ public class Product {
     }
 
     @Basic
-    @Column(name = "SQUARE")
+    @Column(name = "PERIMETER")
     public BigDecimal getPerimeter() {
         return perimeter;
     }
