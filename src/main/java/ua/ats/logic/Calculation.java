@@ -82,16 +82,22 @@ public class Calculation {
                     continue;
                 }
 
-                Product product = null;
+                //Product product;
                 if (row.getCell(ARTICUL_CELL) == null) {
                     continue;
                 }
-                product = productRepository.findProductByArticul(articul);
+                Product product = productRepository.findProductByArticul(articul);
+
+
+                if (product == null) {
+                    System.out.println("Такой херни; " + name + "  не найдено в базе");
+                }
+
 
                 if (!(product == null)) {
                     product.setColumnNumberExel(i);
                     if (row.getCell(11) != null) {
-                        product.setQuantity(new BigDecimal(row.getCell(11).getNumericCellValue()));
+                        product.setQuantity(new BigDecimal(String.valueOf(row.getCell(11).getNumericCellValue())));
                         product.setColorSum(BigDecimal.ZERO);
                     } else {
                         product.setQuantity(BigDecimal.ZERO);
@@ -143,6 +149,8 @@ public class Calculation {
             }
             product.setSum(product.getCena().multiply(product.getQuantity()).setScale(2, BigDecimal.ROUND_HALF_UP));
         }
+
+        //furniture.forEach(System.out::println);
     }
 
     public void rewriteByPrice(String group, BigDecimal markup) {
@@ -364,8 +372,8 @@ public class Calculation {
 
         mc.totColor.setText(mc.totalColor.toString());
 
-        profile.forEach(System.out::println);
-        furniture.forEach(System.out::println);
+       /* profile.forEach(System.out::println);
+        furniture.forEach(System.out::println);*/
     }
 
 
@@ -429,6 +437,7 @@ public class Calculation {
                 product.setColorSum((product.getQuantity().multiply(InitParam.colorFurn)
                         .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
                         .setScale(2, BigDecimal.ROUND_HALF_UP));
+                System.out.println(product);
             }
         }
     }

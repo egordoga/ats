@@ -365,13 +365,13 @@ public class MainController {
                     break;
                 case "biIn":
                     colored = InitParam.color;
-                    coloredBicolor = InitParam.bicolor;
+                    coloredBicolor = InitParam.bicolorWithWhite;
                     colorType = 2;
                     calc.settingColorSum(colorType);
                     break;
                 case "biOut":
                     colored = InitParam.color;
-                    coloredBicolor = InitParam.bicolor;
+                    coloredBicolor = InitParam.bicolorWithWhite;
                     colorType = 3;
                     calc.settingColorSum(colorType);
                     break;
@@ -379,6 +379,7 @@ public class MainController {
                     colored = InitParam.dekor;
                     coloredBicolor = BigDecimal.ZERO;
                     colorType = 1;
+                    calc.settingColorSum(colorType);
                     break;
             }
             //calc.settingColorSum(colorType);
