@@ -27,11 +27,11 @@ import java.util.List;
 @Component
 public class Calculation {
 
-   // private static final Path DIR = Paths.get("e://alumotr");
+    // private static final Path DIR = Paths.get("e://alumotr");
     private final static int START_ROW = 11;
     private final static int NAME_CELL = 7;
     private final static int ARTICUL_CELL = 4;
-   // private File file;
+    // private File file;
 
     private List<Product> profile = new ArrayList<>();
     private List<Product> accessories = new ArrayList<>();
@@ -47,7 +47,7 @@ public class Calculation {
     @Autowired
     private MainController mc;
 
-      public void fillLists(ProductRepository productRepository) {
+    public void fillLists(ProductRepository productRepository) {
 
         int i = START_ROW - 1;
         Row row;
@@ -89,9 +89,9 @@ public class Calculation {
                 Product product = productRepository.findProductByArticul(articul);
 
 
-                if (product == null) {
+               /* if (product == null) {
                     System.out.println("Такой херни; " + name + "  не найдено в базе");
-                }
+                }*/
 
 
                 if (!(product == null)) {
@@ -168,11 +168,20 @@ public class Calculation {
     public void rewriteByWeight(String group, BigDecimal markup) {
         for (Product product : profile) {
             if (group.equals(product.getGroupp().getName())) {
-                BigDecimal cost = product.getWeight().multiply(InitParam.costAlumWhite);
+                BigDecimal cost;
+                if (product.getColor() == 1) {
+                    cost = product.getWeight().multiply(InitParam.costAlumWhite).multiply(new BigDecimal("1.01")
+                            .setScale(2, BigDecimal.ROUND_HALF_UP));
+                } else {
+                    cost = product.getWeight().multiply(InitParam.costAlum).multiply(new BigDecimal("1.01"))
+                            .setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
                 product.setCena(cost.multiply(markup).multiply(mc.discountProfile));
                 product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
             }
             mc.totalProfile = profile.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            //profile.forEach(System.out::println);
         }
     }
 
@@ -443,18 +452,22 @@ public class Calculation {
     }
 
     public void removeColorSum() {
-        profile.forEach(p -> p.setSum(p.getSum().subtract(p.getColorSum())));
-        furniture.forEach(p -> p.setSum(p.getSum().subtract(p.getColorSum())));
-        profile.forEach(j -> j.setColorSum(BigDecimal.ZERO));
-        furniture.forEach(j -> j.setColorSum(BigDecimal.ZERO));
+        profile.forEach(p -> {
+            p.setSum(p.getSum().subtract(p.getColorSum()));
+            p.setColorSum(BigDecimal.ZERO);
+        });
+        furniture.forEach(p -> {
+            p.setSum(p.getSum().subtract(p.getColorSum()));
+            p.setColorSum(BigDecimal.ZERO);
+        });
+        /*profile.forEach(j -> j.setColorSum(BigDecimal.ZERO));
+        furniture.forEach(j -> j.setColorSum(BigDecimal.ZERO));*/
     }
 
     public void addColorSum() {
         profile.forEach(p -> p.setSum(p.getSum().add(p.getColorSum())));
         furniture.forEach(p -> p.setSum(p.getSum().add(p.getColorSum())));
     }
-
-
 
 
     public List<Product> getProfile() {

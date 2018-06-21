@@ -15,6 +15,7 @@ import java.util.List;
 public class InitParam {
 
     public static BigDecimal costAlumWhite;     // = new BigDecimal("3.97");
+    public static BigDecimal costAlumWhithoutColor;     // = new BigDecimal("3.97");
     public static BigDecimal costAlum;          // = new BigDecimal("3.97");
     public static BigDecimal rateEur;           // = new BigDecimal("1.172");
     public static BigDecimal rateUsd;           // = new BigDecimal("27.1");

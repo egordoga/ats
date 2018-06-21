@@ -125,6 +125,10 @@ public class MainController {
         countAndWriteTotal();
         listenMarkupF50();
         listenMarkupW70();
+        listenMarkupL45();
+        listenTypeF50();
+        listenTypeW70();
+        listenTypeL45();
         colorListener();
         textFieldsInitAndListener();
 
@@ -361,25 +365,37 @@ public class MainController {
                     colored = InitParam.color9006;
                     coloredBicolor = BigDecimal.ZERO;
                     colorType = 1;
-                    calc.settingColorSum(colorType);
+                    //calc.settingColorSum(colorType);
+                    addColorInCena();
                     break;
                 case "biIn":
                     colored = InitParam.color;
                     coloredBicolor = InitParam.bicolorWithWhite;
                     colorType = 2;
-                    calc.settingColorSum(colorType);
+                    //calc.settingColorSum(colorType);
+                    addColorInCena();
                     break;
                 case "biOut":
                     colored = InitParam.color;
                     coloredBicolor = InitParam.bicolorWithWhite;
                     colorType = 3;
-                    calc.settingColorSum(colorType);
+                    //calc.settingColorSum(colorType);
+                    addColorInCena();
                     break;
                 case "dec":
                     colored = InitParam.dekor;
                     coloredBicolor = BigDecimal.ZERO;
                     colorType = 1;
-                    calc.settingColorSum(colorType);
+                    //calc.settingColorSum(colorType);
+                    addColorInCena();
+                    break;
+
+                case "bi2":
+                    colored = InitParam.color;
+                    coloredBicolor = InitParam.bicolor;
+                    colorType = 4;
+                    addColorInCena();
+                    //calc.settingColorSum(colorType);
                     break;
             }
             //calc.settingColorSum(colorType);
@@ -397,6 +413,7 @@ public class MainController {
             totColor.setText("");
         } else {
             calc.removeColorSum();
+            calc.settingColorSum(colorType);
             //calc.addColorSum();
             countAndWriteTotal();
             totColor.setText(totalColor.toString());
@@ -524,7 +541,7 @@ public class MainController {
         totalAccessories = calc.getAccessories().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         totalSealant = calc.getSealant().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         totalFurniture = calc.getFurniture().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-       totalAll = totalProfile.add(totalAccessories).add(totalSealant).add(totalFurniture);
+        totalAll = totalProfile.add(totalAccessories).add(totalSealant).add(totalFurniture);
         writeTotal();
     }
 
