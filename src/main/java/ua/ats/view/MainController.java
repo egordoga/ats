@@ -89,10 +89,17 @@ public class MainController {
     public String ralBiNum;
     public String ralBi1Num;
     public TextField ralBiWhiteOneCena;
+    public RadioButton ral;
+    public RadioButton ral9006;
+    public RadioButton biIn;
+    public RadioButton biOut;
+    public RadioButton dec;
+    public RadioButton bi2;
 
     private int costTypeF50 = 1;
     private int costTypeW70 = 1;
     private int costTypeL45 = 1;
+    public boolean checkColorInCena = false;
     private int colorType = 0;        // 0 - none, 1 - color, bicolor: 2 - white in, 3 - white out, 4 - double
 
     public File file;
@@ -130,6 +137,7 @@ public class MainController {
         listenTypeW70();
         listenTypeL45();
         colorListener();
+        chkColorInCena();
         textFieldsInitAndListener();
 
     }
@@ -345,78 +353,63 @@ public class MainController {
                 case "noRal":
                     colored = BigDecimal.ZERO;
                     coloredBicolor = BigDecimal.ZERO;
-                    //colorType = 0;
+                    colorType = 0;
+                    if (colorInCena.isSelected()) {
+                        calc.removeColorFromCena();
+                    }
                     calc.removeColorSum();
-
-                   /* calc.getProfile().forEach(System.out::println);
-                    calc.getFurniture().forEach(System.out::println);*/
-
                     break;
                 case "ral":
-                    colored = InitParam.color;
-                    coloredBicolor = BigDecimal.ZERO;
-                    colorType = 1;
-                    calc.settingColorSum(colorType);
-                    /*calc.getProfile().forEach(System.out::println);
-                    calc.getFurniture().forEach(System.out::println);*/
-
+                    initColor(InitParam.color, BigDecimal.ZERO, 1);
                     break;
                 case "ral9006":
-                    colored = InitParam.color9006;
-                    coloredBicolor = BigDecimal.ZERO;
-                    colorType = 1;
-                    //calc.settingColorSum(colorType);
-                    addColorInCena();
+                    initColor(InitParam.color9006, BigDecimal.ZERO, 1);
                     break;
                 case "biIn":
-                    colored = InitParam.color;
-                    coloredBicolor = InitParam.bicolorWithWhite;
-                    colorType = 2;
-                    //calc.settingColorSum(colorType);
-                    addColorInCena();
+                    initColor(InitParam.color, InitParam.bicolorWithWhite, 2);
                     break;
                 case "biOut":
-                    colored = InitParam.color;
-                    coloredBicolor = InitParam.bicolorWithWhite;
-                    colorType = 3;
-                    //calc.settingColorSum(colorType);
-                    addColorInCena();
+                    initColor(InitParam.color, InitParam.bicolorWithWhite, 3);
                     break;
                 case "dec":
-                    colored = InitParam.dekor;
-                    coloredBicolor = BigDecimal.ZERO;
-                    colorType = 1;
-                    //calc.settingColorSum(colorType);
-                    addColorInCena();
+                    initColor(InitParam.dekor, BigDecimal.ZERO, 1);
                     break;
-
                 case "bi2":
-                    colored = InitParam.color;
-                    coloredBicolor = InitParam.bicolor;
-                    colorType = 4;
-                    addColorInCena();
-                    //calc.settingColorSum(colorType);
+                    initColor(InitParam.color, InitParam.bicolor, 4);
                     break;
             }
-            //calc.settingColorSum(colorType);
             calc.rewriteColorTotal();
-            //addColorInCena();
         });
     }
 
-    @FXML
+    private void initColor(BigDecimal color, BigDecimal colorBi, int i) {
+        colored = color;
+        coloredBicolor = colorBi;
+        colorType = i;
+        addColorInCena();
+        calc.rewriteColorTotal();
+    }
+
+    private void chkColorInCena() {
+       colorInCena.selectedProperty().addListener((ov, t, t1) -> {
+            addColorInCena();
+       });
+    }
+
     private void addColorInCena() {
         if (colorInCena.isSelected()) {
+            if (checkColorInCena) {
+                calc.removeColorFromCena();
+            }
             calc.settingColorSum(colorType);
-            calc.addColorSum();
+            calc.addColorInCena();
             countAndWriteTotal();
-            totColor.setText("");
         } else {
-            calc.removeColorSum();
+            if (checkColorInCena) {
+                calc.removeColorFromCena();
+            }
             calc.settingColorSum(colorType);
-            //calc.addColorSum();
             countAndWriteTotal();
-            totColor.setText(totalColor.toString());
         }
     }
 
@@ -437,6 +430,9 @@ public class MainController {
             if (event.getCode() == KeyCode.ENTER) {
                 InitParam.rateUsd = new BigDecimal(usd.getText());
                 InitParam.initCross();
+                calc.rewriteFurniture();
+                countAndWriteTotal();
+                usd.selectAll();
                 cross.setText(InitParam.crossRate.toString());
             }
         });
@@ -445,6 +441,9 @@ public class MainController {
             if (event.getCode() == KeyCode.ENTER) {
                 InitParam.rateEur = new BigDecimal(eur.getText());
                 InitParam.initCross();
+                calc.rewriteFurniture();
+                countAndWriteTotal();
+                eur.selectAll();
                 cross.setText(InitParam.crossRate.toString());
             }
         });
@@ -452,12 +451,18 @@ public class MainController {
         ralNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 ralNum = ralNumber.getText();
+                ralNumber.selectAll();
             }
         });
 
         ralCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 InitParam.color = new BigDecimal(ralCena.getText());
+                if (ral.isSelected()) {
+                    initColor(InitParam.color, BigDecimal.ZERO, 1);
+                    calc.rewriteColorTotal();
+                }
+                ralCena.selectAll();
             }
         });
 
@@ -466,54 +471,99 @@ public class MainController {
         ral9006Cena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 InitParam.color9006 = new BigDecimal(ral9006Cena.getText());
-            }
-        });
-
-        ralBiWhiteCena.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                InitParam.bicolor = new BigDecimal(ralBiWhiteCena.getText());
+                if (ral9006.isSelected()) {
+                    initColor(InitParam.color9006, BigDecimal.ZERO, 1);
+                    calc.rewriteColorTotal();
+                }
+                ral9006Cena.selectAll();
             }
         });
 
         ralBiWhiteOneCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 InitParam.color = new BigDecimal(ralBiWhiteOneCena.getText());
+                if (biIn.isSelected()) {
+                    initColor(InitParam.color, InitParam.bicolorWithWhite, 2);
+                    calc.rewriteColorTotal();
+                }
+
+                if (biOut.isSelected()) {
+                    initColor(InitParam.color, InitParam.bicolorWithWhite, 3);
+                    calc.rewriteColorTotal();
+                }
+                ralBiWhiteOneCena.selectAll();
             }
         });
+
+        ralBiWhiteCena.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                InitParam.bicolorWithWhite = new BigDecimal(ralBiWhiteCena.getText());
+                if (biIn.isSelected()) {
+                    initColor(InitParam.color, InitParam.bicolorWithWhite, 2);
+                    calc.rewriteColorTotal();
+                }
+
+                if (biOut.isSelected()) {
+                    initColor(InitParam.color, InitParam.bicolorWithWhite, 3);
+                    calc.rewriteColorTotal();
+                }
+                ralBiWhiteCena.selectAll();
+            }
+        });
+
 
         ralBiNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 ralBiNum = ralBiNumber.getText();
+                ralBiNumber.selectAll();
             }
         });
 
-        ralBi1Number.setOnKeyPressed(event -> {
+        /*ralBi1Number.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 ralBi1Num = ralBi1Number.getText();
             }
-        });
+        });*/
 
-        decCena.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                InitParam.dekor = new BigDecimal(decCena.getText());
-            }
-        });
 
         ralBiOneCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 InitParam.color = new BigDecimal(ralBiOneCena.getText());
+                if (bi2.isSelected()) {
+                    initColor(InitParam.color, InitParam.bicolor, 4);
+                    calc.rewriteColorTotal();
+                }
+                ralBiOneCena.selectAll();
             }
         });
 
         ralBi2Cena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 InitParam.bicolor = new BigDecimal(ralBi2Cena.getText());
+                if (bi2.isSelected()) {
+                    initColor(InitParam.color, InitParam.bicolor, 4);
+                    calc.rewriteColorTotal();
+                }
+                ralBi2Cena.selectAll();
             }
         });
 
+        decCena.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                InitParam.dekor = new BigDecimal(decCena.getText());
+                if (dec.isSelected()) {
+                    initColor(InitParam.dekor, BigDecimal.ZERO, 1);
+                    calc.rewriteColorTotal();
+                }
+                decCena.selectAll();
+            }
+        });
+
+
+
         discProfile.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                if ("-".equals(discProfile.getText())) {
+                if ('-' == (discProfile.getText().charAt(0))) {
                     discountProfile = new BigDecimal(discProfile.getText()).add(HUNDRED)
                             .divide(HUNDRED, 2, BigDecimal.ROUND_HALF_UP);
                 } else {
@@ -526,16 +576,6 @@ public class MainController {
     }
 
 
-
- /*   @FXML
-    private File opFile(Stage primaryStage) {
-        FileChooser fc = new FileChooser();
-        File file = fc.showOpenDialog(primaryStage);
-        System.out.println("FILE: " + file.getName());
-        return file;
-    }
-*/
-
     private void countAndWriteTotal() {
         totalProfile = calc.getProfile().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         totalAccessories = calc.getAccessories().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -545,12 +585,6 @@ public class MainController {
         writeTotal();
     }
 
-   /* private void initTotal() {
-        totalProfile = calc.getProfile().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        totalAccessories = calc.getAccessories().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        totalSealant = calc.getSealant().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        totalFurniture = calc.getFurniture().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }*/
 
     private void writeTotal() {
         totProf.setText(totalProfile.toString());

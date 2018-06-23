@@ -294,27 +294,22 @@ public class Calculation {
 
     public void rewriteProfile() {
         for (Product product : profile) {
-            //BigDecimal cost = product.getPrice().divide(new BigDecimal("1.2"), 3, BigDecimal.ROUND_HALF_UP);
             product.setCena(product.getCena().multiply(mc.discountProfile));
             product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
-
         }
         mc.totalAccessories = accessories.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void rewriteAccessories() {
         for (Product product : accessories) {
-            //BigDecimal cost = product.getPrice().divide(new BigDecimal("1.2"), 3, BigDecimal.ROUND_HALF_UP);
             product.setCena(product.getCena().multiply(mc.discountAccessories));
             product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
-
         }
         mc.totalAccessories = accessories.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void rewriteSealant() {
         for (Product product : sealant) {
-            //BigDecimal cost = product.getPrice().divide(new BigDecimal("1.2"), 3, BigDecimal.ROUND_HALF_UP);
             product.setCena(product.getCena().multiply(mc.discountSealant));
             product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
 
@@ -326,65 +321,26 @@ public class Calculation {
         for (Product product : furniture) {
             BigDecimal cost;
             if ("EUR".equals(product.getCurrency().getName())) {
-                cost = product.getPrice().multiply(InitParam.rateEur);
+                cost = product.getPrice().multiply(InitParam.crossRate);
             } else {
                 cost = product.getPrice();
             }
             product.setCena(cost.multiply(mc.discountFurniture));
-            product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
-
+            product.setSum((product.getCena().multiply(product.getQuantity()))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP));
         }
-        mc.totalFurniture = furniture.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        //mc.totalFurniture = furniture.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void rewriteColorTotal() {
         mc.totalColor = BigDecimal.ZERO;
-        /*for (Product product : profile) {
-            if (product.getColor() == 1) {
 
-                switch (colorType) {
-                    case 0:
-                        mc.totalColor = BigDecimal.ZERO;
-                    case 1:
-                        mc.totalColor = mc.totalColor.add(product.getQuantity().multiply(product.getSquare())
-                                .multiply(mc.colored).divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                .setScale(2, BigDecimal.ROUND_HALF_UP);
-                        break;
-                    case 2:
-                        if (product.getBicolorWhiteIn() == 1) {
-                            mc.totalColor = mc.totalColor.add(product.getQuantity().multiply(product.getSquare())
-                                    .multiply(mc.colored).divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP);
-                        } else if (product.getBicolor() == 1) {
-                            mc.totalColor = mc.totalColor.add(product.getQuantity().multiply(product.getSquare())
-                                    .multiply(mc.coloredBicolor).divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP);
-                        }
-                        break;
-                    case 3:
-                        if (product.getBicolorWhiteOut() == 1) {
-                            mc.totalColor = mc.totalColor.add(product.getQuantity().multiply(product.getSquare())
-                                    .multiply(mc.colored).divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP);
-                        } else if (product.getBicolor() == 1) {
-                            mc.totalColor = mc.totalColor.add(product.getQuantity().multiply(product.getSquare())
-                                    .multiply(mc.coloredBicolor).divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP);
-                        }
-                        break;
-                }
-            }
-*/
         BigDecimal colProf = profile.stream().map(Product::getColorSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal colFurn = furniture.stream().map(Product::getColorSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         mc.totalColor = colProf.add(colFurn);
 
         mc.totColor.setText(mc.totalColor.toString());
-
-       /* profile.forEach(System.out::println);
-        furniture.forEach(System.out::println);*/
     }
-
 
     public void settingColorSum(int colorType) {
         for (Product product : profile) {
@@ -441,32 +397,35 @@ public class Calculation {
             }
         }
 
-        for (Product product : furniture) {
-            if (product.getColor() == 1) {
-                product.setColorSum((product.getQuantity().multiply(InitParam.colorFurn)
-                        .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                        .setScale(2, BigDecimal.ROUND_HALF_UP));
-                System.out.println(product);
+        if (colorType != 0) {
+            for (Product product : furniture) {
+                if (product.getColor() == 1) {
+                    product.setColorSum((product.getQuantity().multiply(InitParam.colorFurn)
+                            .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                            .setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
             }
+        } else {
+            furniture.stream().filter(product -> product.getColor() == 1)
+                    .forEach(product -> product.setColorSum(BigDecimal.ZERO));
         }
     }
 
     public void removeColorSum() {
-        profile.forEach(p -> {
-            p.setSum(p.getSum().subtract(p.getColorSum()));
-            p.setColorSum(BigDecimal.ZERO);
-        });
-        furniture.forEach(p -> {
-            p.setSum(p.getSum().subtract(p.getColorSum()));
-            p.setColorSum(BigDecimal.ZERO);
-        });
-        /*profile.forEach(j -> j.setColorSum(BigDecimal.ZERO));
-        furniture.forEach(j -> j.setColorSum(BigDecimal.ZERO));*/
+        profile.forEach(j -> j.setColorSum(BigDecimal.ZERO));
+        furniture.forEach(j -> j.setColorSum(BigDecimal.ZERO));
     }
 
-    public void addColorSum() {
+    public void removeColorFromCena() {
+        profile.forEach(p -> p.setSum(p.getSum().subtract(p.getColorSum())));
+        furniture.forEach(p -> p.setSum(p.getSum().subtract(p.getColorSum())));
+        mc.checkColorInCena = false;
+    }
+
+    public void addColorInCena() {
         profile.forEach(p -> p.setSum(p.getSum().add(p.getColorSum())));
         furniture.forEach(p -> p.setSum(p.getSum().add(p.getColorSum())));
+        mc.checkColorInCena = true;
     }
 
 
