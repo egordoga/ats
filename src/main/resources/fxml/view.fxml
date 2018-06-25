@@ -307,11 +307,11 @@
                            </font>
                         </Label>
                         <CheckBox fx:id="colorInCena" layoutX="403.0" layoutY="268.0" mnemonicParsing="false" text="Включить в стоимость" />
-                        <CheckBox layoutX="396.0" layoutY="375.0" mnemonicParsing="false" text="Без фурнитуры" />
+                        <CheckBox fx:id="withoutFurn" layoutX="396.0" layoutY="375.0" mnemonicParsing="false" text="Без фурнитуры" />
                         <RadioButton fx:id="bi2" layoutX="377.0" layoutY="298.0" mnemonicParsing="false" text="Bi2" toggleGroup="$color" />
                         <TextField fx:id="ralBi2Cena" layoutX="449.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
                         <RadioButton fx:id="noRal" layoutX="287.0" layoutY="268.0" mnemonicParsing="false" selected="true" text="Нет" toggleGroup="$color" />
-                        <CheckBox layoutX="396.0" layoutY="402.0" mnemonicParsing="false" text="Счет" />
+                        <CheckBox fx:id="invoice" layoutX="396.0" layoutY="402.0" mnemonicParsing="false" text="Счет" />
                         <RadioButton fx:id="biIn" layoutX="206.0" layoutY="298.0" mnemonicParsing="false" text="BiIn" toggleGroup="$color" />
                         <TextField fx:id="ralBiWhiteOneCena" layoutX="218.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
                         <TextField fx:id="ralNumber" layoutX="66.0" layoutY="294.0" prefHeight="25.0" prefWidth="42.0" />

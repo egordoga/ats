@@ -29,6 +29,8 @@ public class Product {
     private BigDecimal colorSum;
     private BigDecimal quantity;
     private BigDecimal cena;
+    private BigDecimal discountSum;
+    private BigDecimal previousCena;
 
 
 
@@ -234,7 +236,23 @@ public class Product {
         this.cena = cena;
     }
 
+    @Transient
+    public BigDecimal getDiscountSum() {
+        return discountSum;
+    }
 
+    public void setDiscountSum(BigDecimal discountSum) {
+        this.discountSum = discountSum;
+    }
+
+    @Transient
+    public BigDecimal getPreviousCena() {
+        return previousCena;
+    }
+
+    public void setPreviousCena(BigDecimal previousCena) {
+        this.previousCena = previousCena;
+    }
 
     @ManyToOne(/*cascade = CascadeType.ALL*/)
     @JoinColumn(name = "GROUP_ID")

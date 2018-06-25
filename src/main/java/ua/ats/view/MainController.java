@@ -39,9 +39,9 @@ public class MainController {
     public BigDecimal markupF50 = new BigDecimal("1.2");
     public BigDecimal markupW70 = new BigDecimal("1.2");
     public BigDecimal markupL45 = new BigDecimal("1.2");
-    public BigDecimal discountF50;
+    /*public BigDecimal discountF50;
     public BigDecimal discountW70;
-    public BigDecimal discountL45;
+    public BigDecimal discountL45;*/
     public BigDecimal discountProfile = new BigDecimal("1");
     public BigDecimal discountAccessories = new BigDecimal("1");
     public BigDecimal discountSealant = new BigDecimal("1");
@@ -50,7 +50,7 @@ public class MainController {
     public BigDecimal colored = BigDecimal.ZERO;
     public BigDecimal coloredBicolor = BigDecimal.ZERO;
 
-    public BigDecimal cenaW70;
+    /*public BigDecimal cenaW70;
     public BigDecimal cenaF50;
     public BigDecimal cenaL45;
     public BigDecimal costW70;
@@ -58,7 +58,7 @@ public class MainController {
     public BigDecimal costL45;
     public BigDecimal cenaAccessories;
     public BigDecimal cenaSealant;
-    public BigDecimal cenaFurniture;
+    public BigDecimal cenaFurniture;*/
 
     public BigDecimal totalAccessories;
     public BigDecimal totalSealant;
@@ -95,6 +95,8 @@ public class MainController {
     public RadioButton biOut;
     public RadioButton dec;
     public RadioButton bi2;
+    public CheckBox withoutFurn;
+    public CheckBox invoice;
 
     private int costTypeF50 = 1;
     private int costTypeW70 = 1;
@@ -129,7 +131,7 @@ public class MainController {
         cross.setText(String.valueOf(InitParam.crossRate));
         calc.fillLists(productRepository);
         fileLbl.setText("Файл: " + file.getName());
-        countAndWriteTotal();
+        countAndWriteTotal(!withoutFurn.isSelected());
         listenMarkupF50();
         listenMarkupW70();
         listenMarkupL45();
@@ -138,6 +140,7 @@ public class MainController {
         listenTypeL45();
         colorListener();
         chkColorInCena();
+        chkNeedFurnListener();
         textFieldsInitAndListener();
 
     }
@@ -169,15 +172,15 @@ public class MainController {
             switch (costTypeF50) {
                 case 1:
                     calc.rewriteByPrice("F50", markupF50);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
                 case 2:
                     calc.rewriteByWeight("F50", markupF50);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
                 case 3:
                     calc.rewriteByCost("F50", markupF50);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
             }
         });
@@ -211,15 +214,15 @@ public class MainController {
             switch (costTypeW70) {
                 case 1:
                     calc.rewriteByPrice("W70", markupW70);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
                 case 2:
                     calc.rewriteByWeight("W70", markupW70);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
                 case 3:
                     calc.rewriteByCost("W70", markupW70);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
             }
         });
@@ -253,15 +256,15 @@ public class MainController {
             switch (costTypeL45) {
                 case 1:
                     calc.rewriteByPrice("L45", markupL45);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
                 case 2:
                     calc.rewriteByWeight("L45", markupL45);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
                 case 3:
                     calc.rewriteByCost("L45", markupL45);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
             }
         });
@@ -276,7 +279,7 @@ public class MainController {
                 case "w70price":
                     costTypeW70 = 1;
                     calc.rewriteByPrice("W70", markupW70);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
                /* case "w70weight":
                     costTypeW70 = 2;
@@ -286,7 +289,7 @@ public class MainController {
                 case "w70cost":
                     costTypeW70 = 3;
                     calc.rewriteByCost("W70", markupW70);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
 
             }
@@ -301,17 +304,17 @@ public class MainController {
                 case "f50price":
                     costTypeF50 = 1;
                     calc.rewriteByPrice("F50", markupF50);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
                 case "f50weight":
                     costTypeF50 = 2;
                     calc.rewriteByWeight("F50", markupF50);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
                 case "f50cost":
                     costTypeF50 = 3;
                     calc.rewriteByCost("F50", markupF50);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
 
             }
@@ -326,17 +329,17 @@ public class MainController {
                 case "l45price":
                     costTypeL45 = 1;
                     calc.rewriteByPrice("L45", markupL45);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
                 case "l45weight":
                     costTypeL45 = 2;
                     calc.rewriteByWeight("L45", markupL45);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
                 case "l45cost":
                     costTypeL45 = 3;
                     calc.rewriteByCost("L45", markupL45);
-                    countAndWriteTotal();
+                    countAndWriteTotal(!withoutFurn.isSelected());
                     break;
 
             }
@@ -391,9 +394,7 @@ public class MainController {
     }
 
     private void chkColorInCena() {
-       colorInCena.selectedProperty().addListener((ov, t, t1) -> {
-            addColorInCena();
-       });
+       colorInCena.selectedProperty().addListener((ov, t, t1) -> addColorInCena());
     }
 
     private void addColorInCena() {
@@ -403,13 +404,13 @@ public class MainController {
             }
             calc.settingColorSum(colorType);
             calc.addColorInCena();
-            countAndWriteTotal();
+            countAndWriteTotal(!withoutFurn.isSelected());
         } else {
             if (checkColorInCena) {
                 calc.removeColorFromCena();
             }
             calc.settingColorSum(colorType);
-            countAndWriteTotal();
+            countAndWriteTotal(!withoutFurn.isSelected());
         }
     }
 
@@ -431,7 +432,7 @@ public class MainController {
                 InitParam.rateUsd = new BigDecimal(usd.getText());
                 InitParam.initCross();
                 calc.rewriteFurniture();
-                countAndWriteTotal();
+                countAndWriteTotal(!withoutFurn.isSelected());
                 usd.selectAll();
                 cross.setText(InitParam.crossRate.toString());
             }
@@ -442,7 +443,7 @@ public class MainController {
                 InitParam.rateEur = new BigDecimal(eur.getText());
                 InitParam.initCross();
                 calc.rewriteFurniture();
-                countAndWriteTotal();
+                countAndWriteTotal(!withoutFurn.isSelected());
                 eur.selectAll();
                 cross.setText(InitParam.crossRate.toString());
             }
@@ -519,13 +520,6 @@ public class MainController {
             }
         });
 
-        /*ralBi1Number.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                ralBi1Num = ralBi1Number.getText();
-            }
-        });*/
-
-
         ralBiOneCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 InitParam.color = new BigDecimal(ralBiOneCena.getText());
@@ -563,25 +557,73 @@ public class MainController {
 
         discProfile.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                if ('-' == (discProfile.getText().charAt(0))) {
-                    discountProfile = new BigDecimal(discProfile.getText()).add(HUNDRED)
-                            .divide(HUNDRED, 2, BigDecimal.ROUND_HALF_UP);
-                } else {
-                    discountProfile = HUNDRED.subtract(new BigDecimal(discProfile.getText()))
-                            .divide(HUNDRED, 2, BigDecimal.ROUND_HALF_UP);
-                }
+                discountProfile = settingDiscount(discProfile);
+                calc.rewriteProfile();
+                countAndWriteTotal(!withoutFurn.isSelected());
+            }
+        });
+
+        discAccess.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                discountAccessories = settingDiscount(discAccess);
+                calc.rewriteAccessories();
+                countAndWriteTotal(!withoutFurn.isSelected());
+            }
+        });
+
+        discSeal.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                discountSealant = settingDiscount(discSeal);
+                calc.rewriteSealant();
+                countAndWriteTotal(!withoutFurn.isSelected());
+            }
+        });
+
+        discFurn.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                discountFurniture = settingDiscount(discFurn);
+                calc.rewriteFurniture();
+                countAndWriteTotal(!withoutFurn.isSelected());
             }
         });
 
     }
 
+    private BigDecimal settingDiscount(TextField textField) {
+        BigDecimal discount;
+        if ("".equals(textField.getText()) || "0".equals(textField.getText())) {
+            discount = BigDecimal.ONE;
+        } else {
+            if ('-' == (textField.getText().charAt(0))) {
+                discount = (HUNDRED.add(new BigDecimal(textField.getText().substring(1))))
+                        .divide(HUNDRED, 2, BigDecimal.ROUND_HALF_UP);
+            } else {
+                discount = HUNDRED.subtract(new BigDecimal(textField.getText()))
+                        .divide(HUNDRED, 2, BigDecimal.ROUND_HALF_UP);
+            }
+        }
+        textField.selectAll();
+        return discount;
+    }
 
-    private void countAndWriteTotal() {
+
+    private void chkNeedFurnListener() {
+        withoutFurn.selectedProperty().addListener((ov, t, t1) -> {
+            countAndWriteTotal(!t1);
+        });
+    }
+
+
+    private void countAndWriteTotal(boolean furn) {
         totalProfile = calc.getProfile().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         totalAccessories = calc.getAccessories().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         totalSealant = calc.getSealant().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         totalFurniture = calc.getFurniture().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        totalAll = totalProfile.add(totalAccessories).add(totalSealant).add(totalFurniture);
+        if (furn) {
+            totalAll = totalProfile.add(totalAccessories).add(totalSealant).add(totalFurniture);
+        } else {
+            totalAll = totalProfile.add(totalAccessories).add(totalSealant);
+        }
         writeTotal();
     }
 
