@@ -70,17 +70,23 @@ public class Calculation {
             //s.setFillBackgroundColor();
 
 
-
-            while (!("ИТОГО".equals(row.getCell(NAME_CELL).getStringCellValue()))) {
+            while (true) {
                 i++;
                 row = sheet.getRow(i);
+                if (row.getCell(NAME_CELL) == null) {
+                    continue;
+                }
+                if (("ИТОГО".equals(row.getCell(NAME_CELL).getStringCellValue()))) {
+                    break;
+                }
+
 
                 if (row.getCell(NAME_CELL) != null && row.getCell(ARTICUL_CELL) != null) {
                     name = row.getCell(NAME_CELL).getStringCellValue();
                     if (row.getCell(ARTICUL_CELL).getCellTypeEnum() == CellType.STRING) {
                         articul = row.getCell(ARTICUL_CELL).getStringCellValue();
                     } else {
-                        articul = String.valueOf((row.getCell(ARTICUL_CELL).getNumericCellValue()));
+                        articul = String.valueOf((int) (row.getCell(ARTICUL_CELL).getNumericCellValue()));
                     }
                 } else {
                     continue;
@@ -97,9 +103,11 @@ public class Calculation {
                 Product product = productRepository.findProductByArticul(articul);
 
 
-               /* if (product == null) {
+                System.out.println(product);
+
+                if (product == null) {
                     System.out.println("Такой херни; " + name + "  не найдено в базе");
-                }*/
+                }
 
 
                 if (!(product == null)) {
