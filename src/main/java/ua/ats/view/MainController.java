@@ -391,6 +391,10 @@ public class MainController {
         colorType = i;
         addColorInCena();
         calc.rewriteColorTotal();
+
+
+        //calc.getProfile().forEach(System.out::println);
+
     }
 
     private void chkColorInCena() {
@@ -641,5 +645,13 @@ public class MainController {
         FileChooser fc = new FileChooser();
         file = fc.showOpenDialog(null);
        // pe.parseExel();
+    }
+
+    public void showNoFind(String s) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Не найдено в базе");
+        alert.setHeaderText(null);
+        alert.setContentText(s);
+        alert.showAndWait();
     }
 }

@@ -255,7 +255,7 @@
                         </RadioButton>
                         <RadioButton fx:id="l45weight" layoutX="396.0" layoutY="198.0" mnemonicParsing="false" onAction="#listenTypeL45" toggleGroup="$l45markupType" />
                         <RadioButton fx:id="l45cost" layoutX="464.0" layoutY="198.0" mnemonicParsing="false" onAction="#listenTypeL45" toggleGroup="$l45markupType" />
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff02" height="148.0" layoutX="12.0" layoutY="368.0" stroke="BLACK" strokeType="INSIDE" width="322.0">
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff02" height="148.0" layoutX="12.0" layoutY="368.0" stroke="BLACK" strokeType="INSIDE" width="341.0">
                            <effect>
                               <Shadow height="6.17" radius="2.585" width="6.17" />
                            </effect>
@@ -328,6 +328,7 @@
                            </font>
                         </Label>
                         <TextField fx:id="ralBiWhiteCena" layoutX="268.0" layoutY="323.0" prefHeight="25.0" prefWidth="39.0" />
+                        <Label layoutX="118.0" layoutY="375.0" text="/может быть отрицательной (наценка)/" />
                      </children>
                   </AnchorPane>
               </items>

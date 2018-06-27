@@ -45,6 +45,8 @@ public class Calculation {
     private List<String> noNeed = Arrays.asList("Профиль", "Итого по разделу", "Комплектующие",
             "Уплотнители", "Остекление (панели)", "Фурнитура", "Материалы для монтажа");
 
+    private StringBuilder noFind = new StringBuilder();
+
 
     @Autowired
     private MainController mc;
@@ -103,9 +105,11 @@ public class Calculation {
                 Product product = productRepository.findProductByArticul(articul);
 
 
-                System.out.println(product);
+               // System.out.println(product);
 
                 if (product == null) {
+                    noFind.append(name).append("\n");
+
                     System.out.println("Такой херни; " + name + "  не найдено в базе");
                 }
 
@@ -148,9 +152,16 @@ public class Calculation {
                             break;
                     }
                 }
+
+                //System.out.println(product);
+
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if (noFind.length() != 0) {
+            mc.showNoFind(noFind.toString());
         }
 
 
@@ -193,6 +204,8 @@ public class Calculation {
                 product.setCena(cost.multiply(markup).multiply(mc.discountProfile));
                 product.setSum((product.getCena().multiply(product.getQuantity()).add(product.getColorSum()))
                         .setScale(2, BigDecimal.ROUND_HALF_UP));
+
+                //System.out.println(product);
             }
         }
         mc.totalProfile = profile.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
