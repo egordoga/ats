@@ -11,8 +11,11 @@ import ua.ats.entity.Product;
 import ua.ats.logic.Calculation;
 import ua.ats.util.InitParam;
 import ua.ats.util.ParseExelForDB;
+import ua.ats.util.WriteResult;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 
 
@@ -121,6 +124,9 @@ public class MainController {
 
     @Autowired
     ProductRepository repository;
+
+    @Autowired
+    private WriteResult writeResult;
 
     @FXML
     private void initLbl() {
@@ -347,7 +353,6 @@ public class MainController {
     }
 
 
-
     private void colorListener() {
         color.selectedToggleProperty().addListener((ov, t, t1) -> {
             RadioButton chk = (RadioButton) t1.getToggleGroup().getSelectedToggle();
@@ -391,14 +396,10 @@ public class MainController {
         colorType = i;
         addColorInCena();
         calc.rewriteColorTotal();
-
-
-        //calc.getProfile().forEach(System.out::println);
-
     }
 
     private void chkColorInCena() {
-       colorInCena.selectedProperty().addListener((ov, t, t1) -> addColorInCena());
+        colorInCena.selectedProperty().addListener((ov, t, t1) -> addColorInCena());
     }
 
     private void addColorInCena() {
@@ -433,7 +434,11 @@ public class MainController {
 
         usd.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.rateUsd = new BigDecimal(usd.getText());
+                try {
+                    InitParam.rateUsd = new BigDecimal(usd.getText());
+                } catch (NumberFormatException e) {
+                    alertNoNumber();
+                }
                 InitParam.initCross();
                 calc.rewriteFurniture();
                 countAndWriteTotal(!withoutFurn.isSelected());
@@ -444,7 +449,11 @@ public class MainController {
 
         eur.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.rateEur = new BigDecimal(eur.getText());
+                try {
+                    InitParam.rateEur = new BigDecimal(eur.getText());
+                } catch (NumberFormatException e) {
+                    alertNoNumber();
+                }
                 InitParam.initCross();
                 calc.rewriteFurniture();
                 countAndWriteTotal(!withoutFurn.isSelected());
@@ -455,14 +464,18 @@ public class MainController {
 
         ralNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                ralNum = ralNumber.getText();
+                    ralNum = ralNumber.getText();
                 ralNumber.selectAll();
             }
         });
 
         ralCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.color = new BigDecimal(ralCena.getText());
+                try {
+                    InitParam.color = new BigDecimal(ralCena.getText());
+                } catch (NumberFormatException e) {
+                    alertNoNumber();
+                }
                 if (ral.isSelected()) {
                     initColor(InitParam.color, BigDecimal.ZERO, 1);
                     calc.rewriteColorTotal();
@@ -472,10 +485,13 @@ public class MainController {
         });
 
 
-
         ral9006Cena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.color9006 = new BigDecimal(ral9006Cena.getText());
+                try {
+                    InitParam.color9006 = new BigDecimal(ral9006Cena.getText());
+                } catch (NumberFormatException e) {
+                    alertNoNumber();
+                }
                 if (ral9006.isSelected()) {
                     initColor(InitParam.color9006, BigDecimal.ZERO, 1);
                     calc.rewriteColorTotal();
@@ -486,7 +502,11 @@ public class MainController {
 
         ralBiWhiteOneCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.color = new BigDecimal(ralBiWhiteOneCena.getText());
+                try {
+                    InitParam.color = new BigDecimal(ralBiWhiteOneCena.getText());
+                } catch (NumberFormatException e) {
+                    alertNoNumber();
+                }
                 if (biIn.isSelected()) {
                     initColor(InitParam.color, InitParam.bicolorWithWhite, 2);
                     calc.rewriteColorTotal();
@@ -502,7 +522,11 @@ public class MainController {
 
         ralBiWhiteCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.bicolorWithWhite = new BigDecimal(ralBiWhiteCena.getText());
+                try {
+                    InitParam.bicolorWithWhite = new BigDecimal(ralBiWhiteCena.getText());
+                } catch (NumberFormatException e) {
+                    alertNoNumber();
+                }
                 if (biIn.isSelected()) {
                     initColor(InitParam.color, InitParam.bicolorWithWhite, 2);
                     calc.rewriteColorTotal();
@@ -526,7 +550,11 @@ public class MainController {
 
         ralBiOneCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.color = new BigDecimal(ralBiOneCena.getText());
+                try {
+                    InitParam.color = new BigDecimal(ralBiOneCena.getText());
+                } catch (NumberFormatException e) {
+                    alertNoNumber();
+                }
                 if (bi2.isSelected()) {
                     initColor(InitParam.color, InitParam.bicolor, 4);
                     calc.rewriteColorTotal();
@@ -537,7 +565,11 @@ public class MainController {
 
         ralBi2Cena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.bicolor = new BigDecimal(ralBi2Cena.getText());
+                try {
+                    InitParam.bicolor = new BigDecimal(ralBi2Cena.getText());
+                } catch (NumberFormatException e) {
+                    alertNoNumber();
+                }
                 if (bi2.isSelected()) {
                     initColor(InitParam.color, InitParam.bicolor, 4);
                     calc.rewriteColorTotal();
@@ -548,7 +580,11 @@ public class MainController {
 
         decCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                InitParam.dekor = new BigDecimal(decCena.getText());
+                try {
+                    InitParam.dekor = new BigDecimal(decCena.getText());
+                } catch (NumberFormatException e) {
+                    alertNoNumber();
+                }
                 if (dec.isSelected()) {
                     initColor(InitParam.dekor, BigDecimal.ZERO, 1);
                     calc.rewriteColorTotal();
@@ -556,7 +592,6 @@ public class MainController {
                 decCena.selectAll();
             }
         });
-
 
 
         discProfile.setOnKeyPressed(event -> {
@@ -590,20 +625,25 @@ public class MainController {
                 countAndWriteTotal(!withoutFurn.isSelected());
             }
         });
-
     }
 
+
+
     private BigDecimal settingDiscount(TextField textField) {
-        BigDecimal discount;
+        BigDecimal discount = BigDecimal.ONE;
         if ("".equals(textField.getText()) || "0".equals(textField.getText())) {
-            discount = BigDecimal.ONE;
+            return discount;
         } else {
-            if ('-' == (textField.getText().charAt(0))) {
-                discount = (HUNDRED.add(new BigDecimal(textField.getText().substring(1))))
-                        .divide(HUNDRED, 2, BigDecimal.ROUND_HALF_UP);
-            } else {
-                discount = HUNDRED.subtract(new BigDecimal(textField.getText()))
-                        .divide(HUNDRED, 2, BigDecimal.ROUND_HALF_UP);
+            try {
+                if ('-' == (textField.getText().charAt(0))) {
+                    discount = (HUNDRED.add(new BigDecimal(textField.getText().substring(1))))
+                            .divide(HUNDRED, 2, BigDecimal.ROUND_HALF_UP);
+                } else {
+                    discount = HUNDRED.subtract(new BigDecimal(textField.getText()))
+                            .divide(HUNDRED, 2, BigDecimal.ROUND_HALF_UP);
+                }
+            } catch (NumberFormatException e) {
+                alertNoNumber();
             }
         }
         textField.selectAll();
@@ -653,5 +693,29 @@ public class MainController {
         alert.setHeaderText(null);
         alert.setContentText(s);
         alert.showAndWait();
+    }
+
+    public void alertNoNumber() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Не цифра");
+        alert.setHeaderText(null);
+        alert.setContentText("Введите цифровое выражение");
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void saveExel() {
+        writeResult.writeExel(calc.getProfile());
+        writeResult.writeExel(calc.getAccessories());
+        writeResult.writeExel(calc.getSealant());
+        writeResult.writeExel(calc.getFurniture());
+        writeResult.decorateExel();
+        try {
+            FileOutputStream outFile = new FileOutputStream(file);
+            calc.book.write(outFile);
+            calc.book.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

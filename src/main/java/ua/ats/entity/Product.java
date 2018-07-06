@@ -31,6 +31,8 @@ public class Product {
     private BigDecimal cena;
     private BigDecimal discountSum;
     private BigDecimal previousCena;
+    private BigDecimal colored;
+    private BigDecimal discount;
 
 
 
@@ -252,6 +254,24 @@ public class Product {
 
     public void setPreviousCena(BigDecimal previousCena) {
         this.previousCena = previousCena;
+    }
+
+    @Transient
+    public BigDecimal getColored() {
+        return colored;
+    }
+
+    public void setColored(BigDecimal colored) {
+        this.colored = colored;
+    }
+
+    @Transient
+    public BigDecimal getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
     }
 
     @ManyToOne(/*cascade = CascadeType.ALL*/)
