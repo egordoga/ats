@@ -46,6 +46,13 @@ public class WriteResult {
         cell = calc.sheet.getRow(colNum).getCell(SUMM_CELL);
         cell.setCellType(CellType.FORMULA);
         cell.setCellFormula("SUM(N" + startSummCell + ":N" + colNum + ")");
+
+        cell = calc.sheet.getRow(calc.lastRowNum ).getCell(SUMM_CELL);
+        cell.setCellType(CellType.FORMULA);
+        cell.setCellFormula("N" + (calc.getProfile().get(calc.getProfile().size() - 1).getColumnNumberExel() + 2) + "+" +
+                "N" + (calc.getAccessories().get(calc.getAccessories().size() - 1).getColumnNumberExel() + 2) + "+" +
+                "N" + (calc.getSealant().get(calc.getSealant().size() - 1).getColumnNumberExel() + 2) + "+" +
+                "N" + (calc.getFurniture().get(calc.getFurniture().size() - 1).getColumnNumberExel() + 2));
     }
 
     public void decorateExel() {
@@ -86,14 +93,14 @@ public class WriteResult {
             }
         }*/
 
-        int s = calc.rowsForDel.size();
+       /* int s = calc.rowsForDel.size();
         int rowEnd;
         if (s > 0) {
             for (Integer rowDel : calc.rowsForDel) {
                 System.out.println("rowDel " + rowDel);
                 calc.sheet.shiftRows(rowDel + 1, end + 2, -1);
                // end--;
-            }
+            }*/
            /* for (int j = 0; j < s; j++) {
                 if (j > s - 1) {
                     rowEnd = calc.rowsForDel.get(j + 1);
@@ -103,23 +110,27 @@ public class WriteResult {
                 calc.sheet.shiftRows(calc.rowsForDel.get(j + 1), rowEnd, -1);
                 i--;
             }*/
-        }
+        //}
 
         calc.sheet.addMergedRegion(new CellRangeAddress(end + 5, end + 5, 6, 10));
         Row row = calc.sheet.createRow(end + 5);
         cellColor = row.createCell(6);
 
-        XSSFCellStyle style = calc.book.createCellStyle();
-        style.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        if (mc.totalColor != null && !(mc.totalColor.compareTo(BigDecimal.ZERO) == 0) || mc.totalColor != null || !mc.colorInCena.isSelected()) {
+            XSSFCellStyle style = calc.book.createCellStyle();
+            style.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         /*style.setBorderBottom(BorderStyle.THICK);
         style.setBorderLeft(BorderStyle.THICK);
         style.setBorderTop(BorderStyle.THICK);
         style.setBorderRight(BorderStyle.THICK);*/
-        style.setAlignment(HorizontalAlignment.CENTER);
-        style.setFont(font);
-        cellColor.setCellStyle(style);
-        cellColor.setCellType(CellType.STRING);
-        cellColor.setCellValue("Покраска в RAL составляет ");
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setFont(font);
+            cellColor.setCellStyle(style);
+            cellColor.setCellType(CellType.STRING);
+            cellColor.setCellValue("Покраска в RAL составляет " + mc.totalColor + " USD");
+        }
+        calc.sheet.getRow(end + 2).getCell(3).setCellValue("");
+        calc.sheet.getRow(end + 2).getCell(6).setCellValue("");
     }
 }
