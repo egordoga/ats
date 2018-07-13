@@ -39,19 +39,19 @@ public class MainController {
     public Label totAll;
     public Label totColor;
 
-    public BigDecimal markupF50 = new BigDecimal("1.2");
-    public BigDecimal markupW70 = new BigDecimal("1.2");
-    public BigDecimal markupL45 = new BigDecimal("1.2");
+    public BigDecimal markupF50;
+    public BigDecimal markupW70;
+    public BigDecimal markupL45;
     /*public BigDecimal discountF50;
     public BigDecimal discountW70;
     public BigDecimal discountL45;*/
-    public BigDecimal discountProfile = new BigDecimal("1");
-    public BigDecimal discountAccessories = new BigDecimal("1");
-    public BigDecimal discountSealant = new BigDecimal("1");
-    public BigDecimal discountFurniture = new BigDecimal("1");
+    public BigDecimal discountProfile;
+    public BigDecimal discountAccessories;
+    public BigDecimal discountSealant;
+    public BigDecimal discountFurniture;
 
-    public BigDecimal colored = BigDecimal.ZERO;
-    public BigDecimal coloredBicolor = BigDecimal.ZERO;
+    public BigDecimal colored;
+    public BigDecimal coloredBicolor;
 
     /*public BigDecimal cenaW70;
     public BigDecimal cenaF50;
@@ -101,10 +101,10 @@ public class MainController {
     public CheckBox withoutFurn;
     public CheckBox invoice;
 
-    private int costTypeF50 = 1;
-    private int costTypeW70 = 1;
-    private int costTypeL45 = 1;
-    public boolean checkColorInCena = false;
+    public int costTypeF50;
+    public int costTypeW70;
+    public int costTypeL45;
+    public boolean checkColorInCena;
     private int colorType = 0;        // 0 - none, 1 - color, bicolor: 2 - white in, 3 - white out, 4 - double
 
     public File file;
@@ -128,6 +128,9 @@ public class MainController {
     @Autowired
     private WriteResult writeResult;
 
+    @Autowired
+    private InitParam ip;
+
     @FXML
     private void initLbl() {
         openFile();
@@ -135,7 +138,7 @@ public class MainController {
         usd.setText(String.valueOf(InitParam.rateUsd));
         eur.setText(String.valueOf(InitParam.rateEur));
         cross.setText(String.valueOf(InitParam.crossRate));
-        calc.fillLists(productRepository);
+        ip.fillLists(productRepository);
         fileLbl.setText("Файл: " + file.getName());
         countAndWriteTotal(!withoutFurn.isSelected());
         listenMarkupF50();
@@ -705,17 +708,27 @@ public class MainController {
 
     @FXML
     private void saveExel() {
-        writeResult.writeExel(calc.getProfile());
-        writeResult.writeExel(calc.getAccessories());
-        writeResult.writeExel(calc.getSealant());
-        writeResult.writeExel(calc.getFurniture());
-        writeResult.decorateExel();
-        try {
-            FileOutputStream outFile = new FileOutputStream(file);
-            calc.book.write(outFile);
-            calc.book.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (file != null) {
+            writeResult.writeExel(calc.getProfile());
+            writeResult.writeExel(calc.getAccessories());
+            writeResult.writeExel(calc.getSealant());
+            writeResult.writeExel(calc.getFurniture());
+            writeResult.decorateExel();
+            try {
+                FileOutputStream outFile = new FileOutputStream(file);
+                ip.book.write(outFile);
+                ip.book.close();
+                outFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Запись файла");
+            alert.setHeaderText(null);
+            alert.setContentText("Файл уже записан.");
+            alert.showAndWait();
         }
+        file = null;
     }
 }

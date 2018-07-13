@@ -19,11 +19,19 @@ public class WriteResult {
     private static final int SUMM_CELL = 13;
     private final static int HEADER_ROW = 8;
 
+   /* public XSSFWorkbook book;
+    public XSSFSheet sheet;*/
+
+    int temp = 0;
+
     @Autowired
     private MainController mc;
 
     @Autowired
     private Calculation calc;
+
+    @Autowired
+    private InitParam ip;
 
     public void writeExel(List<Product> list) {
 
@@ -34,20 +42,20 @@ public class WriteResult {
         for (Product product : list) {
             colNum = product.getColumnNumberExel() + 1;
             cena = product.getCena().multiply(product.getDiscount()).add(product.getColored());
-            cell = calc.sheet.getRow(product.getColumnNumberExel()).getCell(PRICE_CELL);
+            cell = ip.sheet.getRow(product.getColumnNumberExel()).getCell(PRICE_CELL);
             cell.setCellType(CellType.NUMERIC);
             cell.setCellValue(cena.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-            cell = calc.sheet.getRow(product.getColumnNumberExel()).getCell(SUMM_CELL);
+            cell = ip.sheet.getRow(product.getColumnNumberExel()).getCell(SUMM_CELL);
             String formula = "ROUND(L" + colNum + "*M" + colNum + ",2)";
             cell.setCellType(CellType.FORMULA);
             cell.setCellFormula(formula);
         }
 
-        cell = calc.sheet.getRow(colNum).getCell(SUMM_CELL);
+        cell = ip.sheet.getRow(colNum).getCell(SUMM_CELL);
         cell.setCellType(CellType.FORMULA);
         cell.setCellFormula("SUM(N" + startSummCell + ":N" + colNum + ")");
 
-        cell = calc.sheet.getRow(calc.lastRowNum ).getCell(SUMM_CELL);
+        cell = ip.sheet.getRow(ip.lastRowNum ).getCell(SUMM_CELL);
         cell.setCellType(CellType.FORMULA);
         cell.setCellFormula("N" + (calc.getProfile().get(calc.getProfile().size() - 1).getColumnNumberExel() + 2) + "+" +
                 "N" + (calc.getAccessories().get(calc.getAccessories().size() - 1).getColumnNumberExel() + 2) + "+" +
@@ -57,10 +65,10 @@ public class WriteResult {
 
     public void decorateExel() {
         Cell cellColor;
-        Font font = calc.book.createFont();
+        Font font = ip.book.createFont();
         font.setBold(true);
 
-        XSSFCellStyle styleTop = calc.book.createCellStyle();
+        XSSFCellStyle styleTop = ip.book.createCellStyle();
         styleTop.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
         styleTop.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         styleTop.setBorderTop(BorderStyle.THICK);
@@ -68,10 +76,10 @@ public class WriteResult {
         styleTop.setAlignment(HorizontalAlignment.CENTER);
         styleTop.setFont(font);
 
-        calc.sheet.getRow(HEADER_ROW).getCell(PRICE_CELL).setCellStyle(styleTop);
-        calc.sheet.getRow(HEADER_ROW).getCell(SUMM_CELL).setCellStyle(styleTop);
+        ip.sheet.getRow(HEADER_ROW).getCell(PRICE_CELL).setCellStyle(styleTop);
+        ip.sheet.getRow(HEADER_ROW).getCell(SUMM_CELL).setCellStyle(styleTop);
 
-        XSSFCellStyle styleBottom = calc.book.createCellStyle();
+        XSSFCellStyle styleBottom = ip.book.createCellStyle();
         styleBottom.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
         styleBottom.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         styleBottom.setBorderBottom(BorderStyle.THICK);
@@ -79,11 +87,11 @@ public class WriteResult {
         styleBottom.setAlignment(HorizontalAlignment.CENTER);
         styleBottom.setFont(font);
 
-        calc.sheet.getRow((HEADER_ROW + 1)).getCell(PRICE_CELL).setCellStyle(styleBottom);
-        calc.sheet.getRow((HEADER_ROW + 1)).getCell(SUMM_CELL).setCellStyle(styleBottom);
+        ip.sheet.getRow((HEADER_ROW + 1)).getCell(PRICE_CELL).setCellStyle(styleBottom);
+        ip.sheet.getRow((HEADER_ROW + 1)).getCell(SUMM_CELL).setCellStyle(styleBottom);
 
 
-        int end = calc.lastRowNum;
+        int end = ip.lastRowNum;
 
 
         /*for (int j = 11; j < i; j++) {
@@ -112,12 +120,17 @@ public class WriteResult {
             }*/
         //}
 
-        calc.sheet.addMergedRegion(new CellRangeAddress(end + 5, end + 5, 6, 10));
-        Row row = calc.sheet.createRow(end + 5);
+
+        if (temp > 0) {
+            ip.sheet.addMergedRegion(new CellRangeAddress(end + 5, end + 5, 6, 10));
+        }
+        temp++;
+        Row row = ip.sheet.createRow(end + 5);
         cellColor = row.createCell(6);
 
-        if (mc.totalColor != null && !(mc.totalColor.compareTo(BigDecimal.ZERO) == 0) || mc.totalColor != null || !mc.colorInCena.isSelected()) {
-            XSSFCellStyle style = calc.book.createCellStyle();
+        if (mc.totalColor != null && !(mc.totalColor.compareTo(BigDecimal.ZERO) == 0) || mc.totalColor != null
+                || (mc.totalColor != null && !mc.colorInCena.isSelected() && mc.totalColor.compareTo(BigDecimal.ZERO) > 0)) {
+            XSSFCellStyle style = ip.book.createCellStyle();
             style.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
             style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         /*style.setBorderBottom(BorderStyle.THICK);
@@ -130,7 +143,11 @@ public class WriteResult {
             cellColor.setCellType(CellType.STRING);
             cellColor.setCellValue("Покраска в RAL составляет " + mc.totalColor + " USD");
         }
-        calc.sheet.getRow(end + 2).getCell(3).setCellValue("");
-        calc.sheet.getRow(end + 2).getCell(6).setCellValue("");
+        else {
+            cellColor.setCellType(CellType.STRING);
+            cellColor.setCellValue("");
+        }
+        ip.sheet.getRow(end + 2).getCell(3).setCellValue("");
+        ip.sheet.getRow(end + 2).getCell(6).setCellValue("");
     }
 }
