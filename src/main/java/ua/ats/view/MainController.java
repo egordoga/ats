@@ -39,19 +39,19 @@ public class MainController {
     public Label totAll;
     public Label totColor;
 
-    public BigDecimal markupF50;
-    public BigDecimal markupW70;
-    public BigDecimal markupL45;
+    public BigDecimal markupF50 = new BigDecimal("1.2");
+    public BigDecimal markupW70 = new BigDecimal("1.2");
+    public BigDecimal markupL45 = new BigDecimal("1.2");
     /*public BigDecimal discountF50;
     public BigDecimal discountW70;
     public BigDecimal discountL45;*/
-    public BigDecimal discountProfile;
-    public BigDecimal discountAccessories;
-    public BigDecimal discountSealant;
-    public BigDecimal discountFurniture;
+    public BigDecimal discountProfile = new BigDecimal("1");
+    public BigDecimal discountAccessories = new BigDecimal("1");
+    public BigDecimal discountSealant = new BigDecimal("1");
+    public BigDecimal discountFurniture = new BigDecimal("1");
 
-    public BigDecimal colored;
-    public BigDecimal coloredBicolor;
+    public BigDecimal colored = BigDecimal.ZERO;
+    public BigDecimal coloredBicolor = BigDecimal.ZERO;
 
     /*public BigDecimal cenaW70;
     public BigDecimal cenaF50;
@@ -105,6 +105,13 @@ public class MainController {
     public int costTypeW70;
     public int costTypeL45;
     public boolean checkColorInCena;
+    public RadioButton f5020;
+    public RadioButton w7020;
+    public RadioButton l4520;
+    public RadioButton f50price;
+    public RadioButton w70price;
+    public RadioButton l45price;
+    public RadioButton noRal;
     private int colorType = 0;        // 0 - none, 1 - color, bicolor: 2 - white in, 3 - white out, 4 - double
 
     public File file;
@@ -112,6 +119,8 @@ public class MainController {
     @FXML
     private Label fileLbl;
 
+    public MainController() {
+    }
 
     @Autowired
     private ProductRepository productRepository;
@@ -138,7 +147,7 @@ public class MainController {
         usd.setText(String.valueOf(InitParam.rateUsd));
         eur.setText(String.valueOf(InitParam.rateEur));
         cross.setText(String.valueOf(InitParam.crossRate));
-        ip.fillLists(productRepository);
+        calc.fillLists(productRepository);
         fileLbl.setText("Файл: " + file.getName());
         countAndWriteTotal(!withoutFurn.isSelected());
         listenMarkupF50();
@@ -151,6 +160,53 @@ public class MainController {
         chkColorInCena();
         chkNeedFurnListener();
         textFieldsInitAndListener();
+
+    }
+
+    private void rollBack() {
+
+        markupF50 = new BigDecimal("1.2");
+        markupW70 = new BigDecimal("1.2");
+        markupL45 = new BigDecimal("1.2");
+        f5020.setSelected(true);
+        w7020.setSelected(true);
+        l4520.setSelected(true);
+
+        colored = BigDecimal.ZERO;
+        coloredBicolor = BigDecimal.ZERO;
+        colorType = 0;
+        noRal.setSelected(true);
+
+
+        discountProfile = new BigDecimal("1");
+        discountAccessories = new BigDecimal("1");
+        discountSealant = new BigDecimal("1");
+        discountFurniture = new BigDecimal("1");
+        colored = BigDecimal.ZERO;
+        coloredBicolor = BigDecimal.ZERO;
+
+
+        costTypeF50 = 1;
+        costTypeW70 = 1;
+        costTypeL45 = 1;
+        f50price.setSelected(true);
+        w70price.setSelected(true);
+        l45price.setSelected(true);
+
+        checkColorInCena = false;
+        colorInCena.setSelected(false);
+
+        totProf.setText("");
+        totAccess.setText("");
+        totSeal.setText("");
+        totFurnit.setText("");
+        totAll.setText("");
+        totColor.setText("");
+        totalAccessories = BigDecimal.ZERO;
+        totalSealant = BigDecimal.ZERO;
+        totalFurniture = BigDecimal.ZERO;
+        totalProfile = BigDecimal.ZERO;
+        totalAll = BigDecimal.ZERO;
 
     }
 
@@ -716,8 +772,8 @@ public class MainController {
             writeResult.decorateExel();
             try {
                 FileOutputStream outFile = new FileOutputStream(file);
-                ip.book.write(outFile);
-                ip.book.close();
+                calc.book.write(outFile);
+                calc.book.close();
                 outFile.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -730,5 +786,8 @@ public class MainController {
             alert.showAndWait();
         }
         file = null;
+        rollBack();
     }
+
+
 }

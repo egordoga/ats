@@ -11,9 +11,11 @@ import ua.ats.entity.Product;
 import ua.ats.util.InitParam;
 import ua.ats.view.MainController;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +36,25 @@ public class Calculation {
 
 
 
+
+    public XSSFWorkbook book;
+    public XSSFSheet sheet;
+
+    private final static int START_ROW = 11;
+    private final static int NAME_CELL = 7;
+    private final static int ARTICUL_CELL = 4;
+
+    private List<String> noNeed = Arrays.asList("Профиль", "Итого по разделу", "Комплектующие",
+            "Уплотнители", "Остекление (панели)", "Фурнитура", "Материалы для монтажа");
+    private List<Integer> rowsForDel = new ArrayList<>();
+
+    private StringBuilder noFind = new StringBuilder();
+    public int lastRowNum;
+
+
+
+
+
     //private BigDecimal koef = new BigDecimal("120");
 
 
@@ -41,6 +62,133 @@ public class Calculation {
 
     @Autowired
     private MainController mc;
+
+
+
+
+
+
+
+    public void fillLists(ProductRepository productRepository) {
+
+        int i = START_ROW - 1;
+        Row row;
+        String name;
+        String articul;
+        try {
+
+
+            File file = mc.file;
+
+            book = new XSSFWorkbook(new FileInputStream(file));
+            sheet = book.getSheetAt(0);
+            //row = sheet.getRow(START_ROW);
+
+            while (true) {
+                i++;
+                row = sheet.getRow(i);
+                if (row.getCell(NAME_CELL) == null) {
+                    //sheet.removeRow(row);
+                    //i--;
+                  /*  sheet.shiftRows(i, i + 1, -1);
+                    try {
+                        FileOutputStream outFile = new FileOutputStream(mc.file);
+                        book.write(outFile);
+                        outFile.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }*/
+                    rowsForDel.add(i);
+                    continue;
+                }
+                if (("ИТОГО".equals(row.getCell(NAME_CELL).getStringCellValue()))) {
+                    break;
+                }
+
+
+                if (row.getCell(NAME_CELL) != null && row.getCell(ARTICUL_CELL) != null) {
+                    name = row.getCell(NAME_CELL).getStringCellValue();
+                    if (row.getCell(ARTICUL_CELL).getCellTypeEnum() == CellType.STRING) {
+                        articul = row.getCell(ARTICUL_CELL).getStringCellValue();
+                    } else {
+                        articul = String.valueOf((int) (row.getCell(ARTICUL_CELL).getNumericCellValue()));
+                    }
+                } else {
+                    continue;
+                }
+
+                if (noNeed.contains(name)) {
+                    continue;
+                }
+
+                if (row.getCell(ARTICUL_CELL) == null) {
+                    continue;
+                }
+                Product product = productRepository.findProductByArticul(articul);
+
+                if (product == null) {
+                    noFind.append(name).append("\n");
+                }
+
+
+                if (!(product == null)) {
+                    product.setColumnNumberExel(i);
+                    product.setColorSum(BigDecimal.ZERO);
+                    product.setPreviousCena(BigDecimal.ZERO);
+                    product.setColored(BigDecimal.ZERO);
+                    product.setDiscount(BigDecimal.ONE);
+                    if (row.getCell(11) != null) {
+                        product.setQuantity(new BigDecimal(String.valueOf(row.getCell(11).getNumericCellValue())));
+                        product.setColorSum(BigDecimal.ZERO);
+                    } else {
+                        product.setQuantity(BigDecimal.ZERO);
+                        product.setColorSum(BigDecimal.ZERO);
+                    }
+
+
+                    switch (product.getSection().getName()) {
+                        case "профиль":
+                            getProfile().add(product);
+                            initSumms(product);
+                            break;
+                        case "комплектующие":
+                            getAccessories().add(product);
+                            initSumms(product);
+                            break;
+                        case "уплотнители":
+                            getSealant().add(product);
+                            initSumms(product);
+                            break;
+                        case "фурнитура":
+                            getFurniture().add(product);
+                            if ("EUR".equals(product.getCurrency().getName())) {
+                                product.setCena(product.getPrice().multiply(InitParam.crossRate));
+                            } else {
+                                product.setCena(product.getPrice());
+                            }
+                            product.setSum(product.getCena().multiply(product.getQuantity()).setScale(2, BigDecimal.ROUND_HALF_UP));
+                            break;
+                    }
+                }
+            }
+            lastRowNum = i;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (noFind.length() != 0) {
+            mc.showNoFind(noFind.toString());
+        }
+    }
+
+    private void initSumms(Product product) {
+        product.setCena(product.getPrice());
+        product.setSum(product.getCena().multiply(product.getQuantity()).setScale(2, BigDecimal.ROUND_HALF_UP));
+        product.setDiscountSum(BigDecimal.ZERO);
+        product.setColorSum(BigDecimal.ZERO);
+        product.setPreviousCena(BigDecimal.ZERO);
+    }
 
 
 

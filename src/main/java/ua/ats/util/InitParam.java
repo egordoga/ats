@@ -11,6 +11,7 @@ import ua.ats.entity.Product;
 import ua.ats.logic.Calculation;
 import ua.ats.view.MainController;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -37,7 +38,7 @@ public class InitParam {
     public static BigDecimal bicolorWithWhite;  // = new BigDecimal("380");
     public static BigDecimal dekor;             // = new BigDecimal("630");
 
-    public XSSFWorkbook book;
+    /*public XSSFWorkbook book;
     public XSSFSheet sheet;
 
     private final static int START_ROW = 11;
@@ -49,7 +50,7 @@ public class InitParam {
     private List<Integer> rowsForDel = new ArrayList<>();
 
     private StringBuilder noFind = new StringBuilder();
-    public int lastRowNum;
+    public int lastRowNum;*/
 
 
     private static final Path PROP = Paths.get("d://alumotr/properties.txt");
@@ -78,19 +79,6 @@ public class InitParam {
 
             initCross();
 
-            mc.markupF50 = new BigDecimal("1.2");
-            mc.markupW70 = new BigDecimal("1.2");
-            mc.markupL45 = new BigDecimal("1.2");
-            mc.discountProfile = new BigDecimal("1");
-            mc.discountAccessories = new BigDecimal("1");
-            mc.discountSealant = new BigDecimal("1");
-            mc.discountFurniture = new BigDecimal("1");
-            mc.colored = BigDecimal.ZERO;
-            mc.coloredBicolor = BigDecimal.ZERO;
-            mc.costTypeF50 = 1;
-            mc.costTypeW70 = 1;
-            mc.costTypeL45 = 1;
-            mc.checkColorInCena = false;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,7 +89,7 @@ public class InitParam {
         crossRate = rateEur.divide(rateUsd, 3, BigDecimal.ROUND_HALF_UP);
     }
 
-    public void fillLists(ProductRepository productRepository) {
+    /*public void fillLists(ProductRepository productRepository) {
 
         int i = START_ROW - 1;
         Row row;
@@ -109,7 +97,10 @@ public class InitParam {
         String articul;
         try {
 
-            book = new XSSFWorkbook(new FileInputStream(mc.file));
+
+            File file = mc.file;
+
+            book = new XSSFWorkbook(new FileInputStream(file));
             sheet = book.getSheetAt(0);
             //row = sheet.getRow(START_ROW);
 
@@ -119,14 +110,14 @@ public class InitParam {
                 if (row.getCell(NAME_CELL) == null) {
                     //sheet.removeRow(row);
                     //i--;
-                  /*  sheet.shiftRows(i, i + 1, -1);
+                  *//*  sheet.shiftRows(i, i + 1, -1);
                     try {
                         FileOutputStream outFile = new FileOutputStream(mc.file);
                         book.write(outFile);
                         outFile.close();
                     } catch (IOException e) {
                         e.printStackTrace();
-                    }*/
+                    }*//*
                     rowsForDel.add(i);
                     continue;
                 }
@@ -217,9 +208,9 @@ public class InitParam {
         product.setDiscountSum(BigDecimal.ZERO);
         product.setColorSum(BigDecimal.ZERO);
         product.setPreviousCena(BigDecimal.ZERO);
-    }
+    }*/
 
-    public void deleteEmptyRow() {
+   /* public void deleteEmptyRow() {
         try {
             book = new XSSFWorkbook(new FileInputStream(mc.file));
         } catch (IOException e) {
@@ -230,9 +221,6 @@ public class InitParam {
         int i = START_ROW;
 
         //while (ca)
-    }
+    }*/
 
-    public void rallBack() {
-
-    }
 }
