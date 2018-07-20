@@ -320,7 +320,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="ralBiNumber" layoutX="423.0" layoutY="294.0" prefHeight="25.0" prefWidth="62.0" />
+                        <TextField fx:id="ralBiOutNumber" layoutX="421.0" layoutY="294.0" prefHeight="25.0" prefWidth="33.0" />
                         <TextField fx:id="ralBi1Number" layoutX="321.0" layoutY="294.0" prefHeight="25.0" prefWidth="39.0" />
                         <Label layoutX="259.0" layoutY="325.0" prefHeight="20.0" prefWidth="2.0" text="/">
                            <font>
@@ -329,6 +329,12 @@
                         </Label>
                         <TextField fx:id="ralBiWhiteCena" layoutX="268.0" layoutY="323.0" prefHeight="25.0" prefWidth="39.0" />
                         <Label layoutX="118.0" layoutY="375.0" text="/может быть отрицательной (наценка)/" />
+                        <Label layoutX="461.0" layoutY="297.0" prefHeight="20.0" prefWidth="2.0" text="/">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="ralBiInNumber" layoutX="469.0" layoutY="294.0" prefHeight="25.0" prefWidth="33.0" />
                      </children>
                   </AnchorPane>
               </items>

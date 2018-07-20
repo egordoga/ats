@@ -13,6 +13,7 @@ import ua.ats.view.MainController;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -48,7 +49,7 @@ public class Calculation {
             "Уплотнители", "Остекление (панели)", "Фурнитура", "Материалы для монтажа");
     private List<Integer> rowsForDel = new ArrayList<>();
 
-    private StringBuilder noFind = new StringBuilder();
+    public StringBuilder noFind = new StringBuilder();
     public int lastRowNum;
 
 
@@ -63,8 +64,9 @@ public class Calculation {
     @Autowired
     private MainController mc;
 
-
-
+   /* @Autowired
+    private InitParam ip;
+*/
 
 
 
@@ -75,13 +77,17 @@ public class Calculation {
         Row row;
         String name;
         String articul;
-        try {
 
+            //prepareExcel();
 
             File file = mc.file;
 
+        try {
             book = new XSSFWorkbook(new FileInputStream(file));
-            sheet = book.getSheetAt(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        sheet = book.getSheetAt(0);
             //row = sheet.getRow(START_ROW);
 
             while (true) {
@@ -98,7 +104,7 @@ public class Calculation {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }*/
-                    rowsForDel.add(i);
+                    //rowsForDel.add(i);
                     continue;
                 }
                 if (("ИТОГО".equals(row.getCell(NAME_CELL).getStringCellValue()))) {
@@ -173,9 +179,9 @@ public class Calculation {
             }
             lastRowNum = i;
 
-        } catch (IOException e) {
+        /*} catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         if (noFind.length() != 0) {
             mc.showNoFind(noFind.toString());
@@ -379,82 +385,61 @@ public class Calculation {
     }
 
     public void addColorInCena() {
-       /* for (Product product : profile) {
-            if (product.getColor() == 1) {
-                switch (colorType) {
-                    case 0:
-                        product.setColorSum(BigDecimal.ZERO);
-                        break;
-                    case 1:
-                        product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.colored))
-                                .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                .setScale(2, BigDecimal.ROUND_HALF_UP));
-                        break;
-                    case 2:
-                        if (product.getBicolorWhiteIn() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.colored))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
-                        } else if (product.getBicolor() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.coloredBicolor))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
-                        } else {
-                            product.setColorSum(BigDecimal.ZERO);
-                        }
-                        break;
-                    case 3:
-                        if (product.getBicolorWhiteOut() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.colored))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
-                        } else if (product.getBicolor() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.coloredBicolor))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
-                        } else {
-                            product.setColorSum(BigDecimal.ZERO);
-                        }
-                        break;
-                    case 4:
-                        if (product.getBicolorWhiteOut() == 1 || product.getBicolorWhiteIn() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.colored))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
-                        } else if (product.getBicolor() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.coloredBicolor))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
-                        } else {
-                            product.setColorSum(BigDecimal.ZERO);
-                        }
-                        break;
-                }
-            }
-        }
-
-        if (colorType != 0) {
-            for (Product product : furniture) {
-                if (product.getColor() == 1) {
-                    product.setColorSum((product.getQuantity().multiply(InitParam.colorFurn)
-                            .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                            .setScale(2, BigDecimal.ROUND_HALF_UP));
-                }
-            }
-        } else {
-            furniture.stream().filter(product -> product.getColor() == 1)
-                    .forEach(product -> product.setColorSum(BigDecimal.ZERO));
-        }
-*/
-
-
-
-
-
-
         profile.forEach(p -> p.setSum(p.getSum().add(p.getColorSum())));
         furniture.forEach(p -> p.setSum(p.getSum().add(p.getColorSum())));
         mc.checkColorInCena = true;
+    }
+
+    public void prepareExcel() {
+        try {
+            book = new XSSFWorkbook(new FileInputStream(mc.file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        sheet = book.getSheetAt(0);
+
+        System.out.println("OOOOOOOOOOOOOOO");
+
+        int i = START_ROW - 1;
+        List<Integer> rowsForDel = new ArrayList<>();
+        Row row;
+
+        while (true) {
+            i++;
+            row = sheet.getRow(i);
+            System.out.println(i);
+            if (row.getCell(NAME_CELL) == null) {
+                rowsForDel.add(i);
+                System.out.println(i + " EEE");
+                continue;
+            }
+
+            if ("ИТОГО".equals(row.getCell(NAME_CELL).getStringCellValue())) {
+                break;
+            }
+
+        }
+        sheet.getRow(i + 2).getCell(3).setCellValue("");
+        sheet.getRow(i + 2).getCell(6).setCellValue("");
+
+        System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHH");
+
+        rowsForDel.forEach(System.out::println);
+
+        if (!rowsForDel.isEmpty()) {
+            for (int j = 0; j < rowsForDel.size(); j++) {
+                sheet.shiftRows(rowsForDel.get(j) + 1, i, -1);
+                i--;
+            }
+        }
+
+        try {
+            FileOutputStream outFile = new FileOutputStream(mc.file);
+            book.write(outFile);
+            outFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

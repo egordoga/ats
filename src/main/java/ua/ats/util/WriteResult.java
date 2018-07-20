@@ -1,5 +1,6 @@
 package ua.ats.util;
 
+import javafx.scene.control.RadioButton;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
@@ -17,7 +18,11 @@ public class WriteResult {
 
     private static final int PRICE_CELL = 12;
     private static final int SUMM_CELL = 13;
+    private static final int COLOR_CELL = 10;
     private final static int HEADER_ROW = 8;
+
+    private String strColor;
+    private String strColorSecond;
 
    /* public XSSFWorkbook book;
     public XSSFSheet sheet;*/
@@ -55,7 +60,7 @@ public class WriteResult {
         cell.setCellType(CellType.FORMULA);
         cell.setCellFormula("SUM(N" + startSummCell + ":N" + colNum + ")");
 
-        cell = calc.sheet.getRow(calc.lastRowNum ).getCell(SUMM_CELL);
+        cell = calc.sheet.getRow(calc.lastRowNum).getCell(SUMM_CELL);
         cell.setCellType(CellType.FORMULA);
         cell.setCellFormula("N" + (calc.getProfile().get(calc.getProfile().size() - 1).getColumnNumberExel() + 2) + "+" +
                 "N" + (calc.getAccessories().get(calc.getAccessories().size() - 1).getColumnNumberExel() + 2) + "+" +
@@ -92,6 +97,9 @@ public class WriteResult {
 
 
         int end = calc.lastRowNum;
+        calc.sheet.getRow(end + 2).getCell(3).setCellValue("");
+        calc.sheet.getRow(end + 2).getCell(6).setCellValue("");
+
 
 
         /*for (int j = 11; j < i; j++) {
@@ -121,33 +129,146 @@ public class WriteResult {
         //}
 
 
-        if (temp > 0) {
+       /* if (temp > 0) {
             calc.sheet.addMergedRegion(new CellRangeAddress(end + 5, end + 5, 6, 10));
         }
-        temp++;
+        temp++;*/
+        Font fontColor = calc.book.createFont();
+        fontColor.setBold(true);
+        fontColor.setColor(IndexedColors.RED.getIndex());
         Row row = calc.sheet.createRow(end + 5);
         cellColor = row.createCell(6);
 
         if (mc.totalColor != null && !(mc.totalColor.compareTo(BigDecimal.ZERO) == 0) || mc.totalColor != null
                 || (mc.totalColor != null && !mc.colorInCena.isSelected() && mc.totalColor.compareTo(BigDecimal.ZERO) > 0)) {
             XSSFCellStyle style = calc.book.createCellStyle();
-            style.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
-            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            /*style.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);*/
+
         /*style.setBorderBottom(BorderStyle.THICK);
         style.setBorderLeft(BorderStyle.THICK);
         style.setBorderTop(BorderStyle.THICK);
         style.setBorderRight(BorderStyle.THICK);*/
-            style.setAlignment(HorizontalAlignment.CENTER);
-            style.setFont(font);
+            //style.setAlignment(HorizontalAlignment.CENTER);
+            style.setFont(fontColor);
             cellColor.setCellStyle(style);
             cellColor.setCellType(CellType.STRING);
             cellColor.setCellValue("Покраска в RAL составляет " + mc.totalColor + " USD");
-        }
-        else {
+        } else {
             cellColor.setCellType(CellType.STRING);
             cellColor.setCellValue("");
         }
-        calc.sheet.getRow(end + 2).getCell(3).setCellValue("");
-        calc.sheet.getRow(end + 2).getCell(6).setCellValue("");
+
+    }
+
+    public void changeColorColumn() {
+
+        if (mc.noRal.isSelected() || !mc.colorInCena.isSelected()) {
+            return;
+        }
+
+        Row row;
+        switch (((RadioButton) mc.color.getSelectedToggle()).getId()) {
+            case "ral":
+                if (!(mc.ralNumber == null || "".equals(mc.ralNumber.getText()))) {
+                   // strColor = "RAL" + mc.ralNumber.getText();
+                    for (Product product : calc.getProfile()) {
+                        if (product.getColor() == 1) {
+                            calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL).setCellValue("RAL" + mc.ralNumber.getText());
+                        }
+                    }
+                    for (Product product : calc.getFurniture()) {
+                        if (product.getColor() == 1) {
+                            calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL).setCellValue("RAL" + mc.ralNumber.getText());
+                        }
+                    }
+                } else return;
+                break;
+            case "ral9006":
+                //strColor = "RAL9006";
+                for (Product product : calc.getProfile()) {
+                    if (product.getColor() == 1) {
+                        calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL).setCellValue("RAL9006");
+                    }
+                }
+                for (Product product : calc.getFurniture()) {
+                    if (product.getColor() == 1) {
+                        calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL).setCellValue("RAL9006");
+                    }
+                }
+                break;
+            case "biIn":
+                if (!(mc.ralBi1Number == null || "".equals(mc.ralBi1Number.getText()))) {
+                    //strColor = "RAL" + mc.ralNumber.getText();
+                    for (Product product : calc.getProfile()) {
+                        if (product.getColor() == 1) {
+                            if (product.getBicolor() == 1) {
+                                calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
+                                        .setCellValue("RAL" + mc.ralBi1Number.getText() + "/9016");
+                            } else if (product.getBicolorWhiteIn() == 1){
+                                calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
+                                        .setCellValue("RAL" + mc.ralBi1Number.getText());
+                            }
+                        }
+                    }
+                    for (Product product : calc.getFurniture()) {
+                        if (product.getColor() == 1) {
+                            calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
+                                    .setCellValue("RAL" + mc.ralBi1Number.getText());
+                        }
+                    }
+                } else return;
+                break;
+
+            case "biOut":
+                if (!(mc.ralBi1Number == null || "".equals(mc.ralBi1Number.getText()))) {
+                    //strColor = "RAL" + mc.ralNumber.getText();
+                    for (Product product : calc.getProfile()) {
+                        if (product.getColor() == 1) {
+                            if (product.getBicolor() == 1) {
+                                calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
+                                        .setCellValue("RAL9016/" + mc.ralBi1Number.getText());
+                            } else if (product.getBicolorWhiteOut() == 1){
+                                calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
+                                        .setCellValue("RAL" + mc.ralBi1Number.getText());
+                            }
+                        }
+                    }
+                    for (Product product : calc.getFurniture()) {
+                        if (product.getColor() == 1) {
+                            calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
+                                    .setCellValue("RAL" + mc.ralBi1Number.getText());
+                        }
+                    }
+                } else return;
+                break;
+
+            case "bi2":
+                if (!(mc.ralBiInNumber == null || "".equals(mc.ralBiInNumber.getText()))) {
+                    //strColor = "RAL" + mc.ralNumber.getText();
+                    for (Product product : calc.getProfile()) {
+                        if (product.getColor() == 1) {
+                            if (product.getBicolor() == 1) {
+                                calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
+                                        .setCellValue("RAL" + mc.ralBiOutNumber.getText() + "/" + mc.ralBiOutNumber.getText());
+                            } else if (product.getBicolorWhiteOut() == 1){
+                                calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
+                                        .setCellValue("RAL" + mc.ralBiInNumber.getText());
+                            } else if (product.getBicolorWhiteIn() == 1){
+                                calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
+                                        .setCellValue("RAL" + mc.ralBiOutNumber.getText());
+                            }
+                        }
+                    }
+                    for (Product product : calc.getFurniture()) {
+                        if (product.getColor() == 1) {
+                            calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
+                                    .setCellValue("RAL" + mc.ralBiOutNumber.getText() + "/" + mc.ralBiOutNumber.getText());
+                        }
+                    }
+                } else return;
+                break;
+        }
+
     }
 }

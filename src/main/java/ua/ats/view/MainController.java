@@ -80,7 +80,8 @@ public class MainController {
     public TextField ralBi2Cena;
     public TextField ralBiWhiteCena;
     public TextField ralNumber;
-    public TextField ralBiNumber;
+    public TextField ralBiInNumber;
+    public TextField ralBiOutNumber;
     public TextField ralBi1Number;
     public TextField discProfile;
     public TextField discAccess;
@@ -91,6 +92,8 @@ public class MainController {
     public String ralNum;
     public String ralBiNum;
     public String ralBi1Num;
+    public String strColor;
+
     public TextField ralBiWhiteOneCena;
     public RadioButton ral;
     public RadioButton ral9006;
@@ -101,9 +104,9 @@ public class MainController {
     public CheckBox withoutFurn;
     public CheckBox invoice;
 
-    public int costTypeF50;
-    public int costTypeW70;
-    public int costTypeL45;
+    public int costTypeF50 = 1;
+    public int costTypeW70 = 1;
+    public int costTypeL45 = 1;
     public boolean checkColorInCena;
     public RadioButton f5020;
     public RadioButton w7020;
@@ -182,8 +185,10 @@ public class MainController {
         discountAccessories = new BigDecimal("1");
         discountSealant = new BigDecimal("1");
         discountFurniture = new BigDecimal("1");
-        colored = BigDecimal.ZERO;
-        coloredBicolor = BigDecimal.ZERO;
+        discProfile.setText("");
+        discAccess.setText("");
+        discSeal.setText("");
+        discFurn.setText("");
 
 
         costTypeF50 = 1;
@@ -196,17 +201,37 @@ public class MainController {
         checkColorInCena = false;
         colorInCena.setSelected(false);
 
+        totalAccessories = BigDecimal.ZERO;
+        totalSealant = BigDecimal.ZERO;
+        totalFurniture = BigDecimal.ZERO;
+        totalProfile = BigDecimal.ZERO;
+        totalAll = BigDecimal.ZERO;
         totProf.setText("");
         totAccess.setText("");
         totSeal.setText("");
         totFurnit.setText("");
         totAll.setText("");
         totColor.setText("");
-        totalAccessories = BigDecimal.ZERO;
-        totalSealant = BigDecimal.ZERO;
-        totalFurniture = BigDecimal.ZERO;
-        totalProfile = BigDecimal.ZERO;
-        totalAll = BigDecimal.ZERO;
+
+        withoutFurn.setSelected(false);
+        invoice.setSelected(false);
+
+        ralCena.setText("");
+        ral9006Cena.setText("");
+        ralBiOneCena.setText("");
+        decCena.setText("");
+        ralBi2Cena.setText("");
+        ralBiWhiteCena.setText("");
+        ralNumber.setText("");
+        ralBiInNumber.setText("");
+        ralBiOutNumber.setText("");
+        ralBi1Number.setText("");
+
+        calc.getProfile().clear();
+        calc.getAccessories().clear();
+        calc.getSealant().clear();
+        calc.getFurniture().clear();
+        calc.noFind.setLength(0);
 
     }
 
@@ -600,10 +625,17 @@ public class MainController {
         });
 
 
-        ralBiNumber.setOnKeyPressed(event -> {
+        ralBiInNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                ralBiNum = ralBiNumber.getText();
-                ralBiNumber.selectAll();
+                //ralBiNum = ralBiInNumber.getText();
+                ralBiInNumber.selectAll();
+            }
+        });
+
+        ralBiOutNumber.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                //ralBiNum = ralBiInNumber.getText();
+                ralBiInNumber.selectAll();
             }
         });
 
@@ -770,6 +802,7 @@ public class MainController {
             writeResult.writeExel(calc.getSealant());
             writeResult.writeExel(calc.getFurniture());
             writeResult.decorateExel();
+            writeResult.changeColorColumn();
             try {
                 FileOutputStream outFile = new FileOutputStream(file);
                 calc.book.write(outFile);

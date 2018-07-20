@@ -13,6 +13,7 @@ import ua.ats.view.MainController;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -37,6 +38,9 @@ public class InitParam {
     public static BigDecimal bicolor;           // = new BigDecimal("190");
     public static BigDecimal bicolorWithWhite;  // = new BigDecimal("380");
     public static BigDecimal dekor;             // = new BigDecimal("630");
+
+    private final static int START_ROW = 11;
+    private final static int NAME_CELL = 7;
 
     /*public XSSFWorkbook book;
     public XSSFSheet sheet;
@@ -210,17 +214,6 @@ public class InitParam {
         product.setPreviousCena(BigDecimal.ZERO);
     }*/
 
-   /* public void deleteEmptyRow() {
-        try {
-            book = new XSSFWorkbook(new FileInputStream(mc.file));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        sheet = book.getSheetAt(0);
 
-        int i = START_ROW;
-
-        //while (ca)
-    }*/
 
 }
