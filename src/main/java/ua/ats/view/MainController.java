@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 public class MainController {
 
     private final static BigDecimal HUNDRED = new BigDecimal("100");
+    private final static File FILE_CHK = new File("C:\\Program Files\\Common Files\\Ats");
 
     public ToggleGroup color;
     public ToggleGroup w70markup;
@@ -34,8 +35,10 @@ public class MainController {
 
     public Label totProf;
     public Label totAccess;
+    public Label cross;
     public Label totSeal;
     public Label totFurnit;
+    public Label lblNoFurn;
     public Label totAll;
     public Label totColor;
 
@@ -53,26 +56,15 @@ public class MainController {
     public BigDecimal colored = BigDecimal.ZERO;
     public BigDecimal coloredBicolor = BigDecimal.ZERO;
 
-    /*public BigDecimal cenaW70;
-    public BigDecimal cenaF50;
-    public BigDecimal cenaL45;
-    public BigDecimal costW70;
-    public BigDecimal costF50;
-    public BigDecimal costL45;
-    public BigDecimal cenaAccessories;
-    public BigDecimal cenaSealant;
-    public BigDecimal cenaFurniture;*/
-
     public BigDecimal totalAccessories;
     public BigDecimal totalSealant;
     public BigDecimal totalFurniture;
     public BigDecimal totalProfile;
     public BigDecimal totalAll;
     public BigDecimal totalColor;
-    public CheckBox colorInCena;
+
     public TextField eur;
     public TextField usd;
-    public Label cross;
     public TextField ralCena;
     public TextField ral9006Cena;
     public TextField ralBiOneCena;
@@ -87,6 +79,7 @@ public class MainController {
     public TextField discAccess;
     public TextField discSeal;
     public TextField discFurn;
+    public TextField ralBiWhiteOneCena;
 
 
     public String ralNum;
@@ -94,20 +87,12 @@ public class MainController {
     public String ralBi1Num;
     public String strColor;
 
-    public TextField ralBiWhiteOneCena;
     public RadioButton ral;
     public RadioButton ral9006;
     public RadioButton biIn;
     public RadioButton biOut;
     public RadioButton dec;
     public RadioButton bi2;
-    public CheckBox withoutFurn;
-    public CheckBox invoice;
-
-    public int costTypeF50 = 1;
-    public int costTypeW70 = 1;
-    public int costTypeL45 = 1;
-    public boolean checkColorInCena;
     public RadioButton f5020;
     public RadioButton w7020;
     public RadioButton l4520;
@@ -115,7 +100,16 @@ public class MainController {
     public RadioButton w70price;
     public RadioButton l45price;
     public RadioButton noRal;
+
+    public CheckBox colorInCena;
+    public CheckBox withoutFurn;
+    public CheckBox invoice;
+
     private int colorType = 0;        // 0 - none, 1 - color, bicolor: 2 - white in, 3 - white out, 4 - double
+    public int costTypeF50 = 1;
+    public int costTypeW70 = 1;
+    public int costTypeL45 = 1;
+    public boolean checkColorInCena;
 
     public File file;
 
@@ -132,10 +126,7 @@ public class MainController {
     private Calculation calc;
 
     @Autowired
-    private ParseExelForDB pe;
-
-    @Autowired
-    ProductRepository repository;
+    private ProductRepository repository;
 
     @Autowired
     private WriteResult writeResult;
@@ -145,6 +136,10 @@ public class MainController {
 
     @FXML
     private void initLbl() {
+        if (!FILE_CHK.exists()) {
+            alertNoLicense();
+            return;
+        }
         openFile();
         InitParam.initParam();
         usd.setText(String.valueOf(InitParam.rateUsd));
@@ -475,8 +470,8 @@ public class MainController {
     }
 
     private void initColor(BigDecimal color, BigDecimal colorBi, int i) {
-        colored = color;
-        coloredBicolor = colorBi;
+        colored = color.divide(InitParam.rateUsd, 2, BigDecimal.ROUND_HALF_UP);
+        coloredBicolor = colorBi.divide(InitParam.rateUsd, 2, BigDecimal.ROUND_HALF_UP);
         colorType = i;
         addColorInCena();
         calc.rewriteColorTotal();
@@ -548,7 +543,7 @@ public class MainController {
 
         ralNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                    ralNum = ralNumber.getText();
+                ralNum = ralNumber.getText();
                 ralNumber.selectAll();
             }
         });
@@ -627,14 +622,12 @@ public class MainController {
 
         ralBiInNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                //ralBiNum = ralBiInNumber.getText();
                 ralBiInNumber.selectAll();
             }
         });
 
         ralBiOutNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                //ralBiNum = ralBiInNumber.getText();
                 ralBiInNumber.selectAll();
             }
         });
@@ -719,7 +712,6 @@ public class MainController {
     }
 
 
-
     private BigDecimal settingDiscount(TextField textField) {
         BigDecimal discount = BigDecimal.ONE;
         if ("".equals(textField.getText()) || "0".equals(textField.getText())) {
@@ -769,13 +761,18 @@ public class MainController {
         totSeal.setText(totalSealant.toString());
         totFurnit.setText(totalFurniture.toString());
         totAll.setText(totalAll.toString());
+        if (withoutFurn.isSelected()) {
+            lblNoFurn.setText("/В общей сумме не учитывается/");
+        } else {
+            lblNoFurn.setText("");
+        }
     }
 
 
-    public void openFile() {
+    private void openFile() {
         FileChooser fc = new FileChooser();
         file = fc.showOpenDialog(null);
-       // pe.parseExel();
+        // pe.parseExel();
     }
 
     public void showNoFind(String s) {
@@ -786,7 +783,7 @@ public class MainController {
         alert.showAndWait();
     }
 
-    public void alertNoNumber() {
+    private void alertNoNumber() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Не цифра");
         alert.setHeaderText(null);
@@ -794,14 +791,27 @@ public class MainController {
         alert.showAndWait();
     }
 
+    private void alertNoLicense() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Не твоё");
+        alert.setHeaderText(null);
+        alert.setContentText("Паленная версия");
+        alert.showAndWait();
+    }
+
     @FXML
-    private void saveExel() {
+    private void saveExcel() {
         if (file != null) {
-            writeResult.writeExel(calc.getProfile());
-            writeResult.writeExel(calc.getAccessories());
-            writeResult.writeExel(calc.getSealant());
-            writeResult.writeExel(calc.getFurniture());
-            writeResult.decorateExel();
+            writeResult.writeExcel(calc.getProfile());
+            writeResult.writeExcel(calc.getAccessories());
+            writeResult.writeExcel(calc.getSealant());
+            if (!withoutFurn.isSelected()) {
+                writeResult.writeExcel(calc.getFurniture());
+            } else {
+                writeResult.writeExcelFurnZero();
+            }
+            writeResult.writeExcelAllSum();
+            writeResult.decorateExcel();
             writeResult.changeColorColumn();
             try {
                 FileOutputStream outFile = new FileOutputStream(file);
@@ -815,7 +825,7 @@ public class MainController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Запись файла");
             alert.setHeaderText(null);
-            alert.setContentText("Файл уже записан.");
+            alert.setContentText("Файл не открыт или уже записан.");
             alert.showAndWait();
         }
         file = null;

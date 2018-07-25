@@ -182,7 +182,7 @@ public class Product {
         this.perimeter = square;
     }
 
-    @ManyToOne(/*cascade = CascadeType.ALL*/)
+    @ManyToOne()
     @JoinColumn(name = "CURRENCY_ID")
     public Currency getCurrency() {
         return currency;
@@ -274,7 +274,7 @@ public class Product {
         this.discount = discount;
     }
 
-    @ManyToOne(/*cascade = CascadeType.ALL*/)
+    @ManyToOne()
     @JoinColumn(name = "GROUP_ID")
     public Groupp getGroupp() {
         return groupp;
@@ -284,7 +284,7 @@ public class Product {
         this.groupp = groupp;
     }
 
-    @ManyToOne(/*cascade = CascadeType.ALL*/)
+    @ManyToOne()
     @JoinColumn(name = "MEASURE_ID")
     public Measure getMeasure() {
         return measure;
@@ -294,7 +294,7 @@ public class Product {
         this.measure = measure;
     }
 
-    @ManyToOne(/*cascade = CascadeType.ALL*/)
+    @ManyToOne()
     @JoinColumn(name = "SECTION_ID")
     public Section getSection() {
         return section;
@@ -335,15 +335,31 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "name='" + name + '\'' +
+                //"id=" + id +
+                //", ident=" + ident +
+                ", name='" + name + '\'' +
                 ", articul='" + articul + '\'' +
+                ", color=" + color +
+                ", bicolor=" + bicolor +
+                ", bicolorWhiteOut=" + bicolorWhiteOut +
+                ", bicolorWhiteIn=" + bicolorWhiteIn +
                 ", price=" + price +
-                ", cost=" + cost +
+                //", cost=" + cost +
+                //", weight=" + weight +
+                ", perimeter=" + perimeter +
+                //", currency=" + currency +
+                //", groupp=" + groupp +
+                //", measure=" + measure +
+                //", section=" + section +
+                //", columnNumberExel=" + columnNumberExel +
                 ", sum=" + sum +
-                ", quantity=" + quantity +
-                ", square=" + perimeter +
-                ", cena=" + cena +
                 ", colorSum=" + colorSum +
+                ", quantity=" + quantity +
+                ", cena=" + cena +
+                //", discountSum=" + discountSum +
+                //", previousCena=" + previousCena +
+                ", colored=" + colored +
+                //", discount=" + discount +
                 '}';
     }
 }

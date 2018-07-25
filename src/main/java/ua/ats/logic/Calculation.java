@@ -13,10 +13,8 @@ import ua.ats.view.MainController;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,18 +22,10 @@ import java.util.List;
 @Component
 public class Calculation {
 
-    // private static final Path DIR = Paths.get("e://alumotr");
-
-    // private File file;
-
     private List<Product> profile = new ArrayList<>();
     private List<Product> accessories = new ArrayList<>();
     private List<Product> sealant = new ArrayList<>();
     private List<Product> furniture = new ArrayList<>();
-
-
-
-
 
 
     public XSSFWorkbook book;
@@ -52,24 +42,8 @@ public class Calculation {
     public StringBuilder noFind = new StringBuilder();
     public int lastRowNum;
 
-
-
-
-
-    //private BigDecimal koef = new BigDecimal("120");
-
-
-
-
     @Autowired
     private MainController mc;
-
-   /* @Autowired
-    private InitParam ip;
-*/
-
-
-
 
     public void fillLists(ProductRepository productRepository) {
 
@@ -77,10 +51,7 @@ public class Calculation {
         Row row;
         String name;
         String articul;
-
-            //prepareExcel();
-
-            File file = mc.file;
+        File file = mc.file;
 
         try {
             book = new XSSFWorkbook(new FileInputStream(file));
@@ -88,100 +59,84 @@ public class Calculation {
             e.printStackTrace();
         }
         sheet = book.getSheetAt(0);
-            //row = sheet.getRow(START_ROW);
 
-            while (true) {
-                i++;
-                row = sheet.getRow(i);
-                if (row.getCell(NAME_CELL) == null) {
-                    //sheet.removeRow(row);
-                    //i--;
-                  /*  sheet.shiftRows(i, i + 1, -1);
-                    try {
-                        FileOutputStream outFile = new FileOutputStream(mc.file);
-                        book.write(outFile);
-                        outFile.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }*/
-                    //rowsForDel.add(i);
-                    continue;
-                }
-                if (("ИТОГО".equals(row.getCell(NAME_CELL).getStringCellValue()))) {
-                    break;
-                }
+        while (true) {
+            i++;
+            row = sheet.getRow(i);
+            if (row.getCell(NAME_CELL) == null) {
+                continue;
+            }
+            if (("ИТОГО".equals(row.getCell(NAME_CELL).getStringCellValue()))) {
+                break;
+            }
 
 
-                if (row.getCell(NAME_CELL) != null && row.getCell(ARTICUL_CELL) != null) {
-                    name = row.getCell(NAME_CELL).getStringCellValue();
-                    if (row.getCell(ARTICUL_CELL).getCellTypeEnum() == CellType.STRING) {
-                        articul = row.getCell(ARTICUL_CELL).getStringCellValue();
-                    } else {
-                        articul = String.valueOf((int) (row.getCell(ARTICUL_CELL).getNumericCellValue()));
-                    }
+            if (row.getCell(NAME_CELL) != null && row.getCell(ARTICUL_CELL) != null) {
+                name = row.getCell(NAME_CELL).getStringCellValue();
+                if (row.getCell(ARTICUL_CELL).getCellTypeEnum() == CellType.STRING) {
+                    articul = row.getCell(ARTICUL_CELL).getStringCellValue();
                 } else {
-                    continue;
+                    articul = String.valueOf((int) (row.getCell(ARTICUL_CELL).getNumericCellValue()));
                 }
+            } else {
+                continue;
+            }
 
-                if (noNeed.contains(name)) {
-                    continue;
-                }
+            if (noNeed.contains(name)) {
+                continue;
+            }
 
-                if (row.getCell(ARTICUL_CELL) == null) {
-                    continue;
-                }
-                Product product = productRepository.findProductByArticul(articul);
+            if (row.getCell(ARTICUL_CELL) == null) {
+                continue;
+            }
+            Product product = productRepository.findProductByArticul(articul);
 
-                if (product == null) {
-                    noFind.append(name).append("\n");
-                }
+            if (product == null) {
+                noFind.append(name).append("\n");
+            }
 
 
-                if (!(product == null)) {
-                    product.setColumnNumberExel(i);
+            if (!(product == null)) {
+                product.setColumnNumberExel(i);
+                product.setColorSum(BigDecimal.ZERO);
+                product.setPreviousCena(BigDecimal.ZERO);
+                product.setColored(BigDecimal.ZERO);
+                product.setDiscount(BigDecimal.ONE);
+                if (row.getCell(11) != null) {
+                    product.setQuantity(new BigDecimal(String.valueOf(row.getCell(11).getNumericCellValue())));
                     product.setColorSum(BigDecimal.ZERO);
-                    product.setPreviousCena(BigDecimal.ZERO);
-                    product.setColored(BigDecimal.ZERO);
-                    product.setDiscount(BigDecimal.ONE);
-                    if (row.getCell(11) != null) {
-                        product.setQuantity(new BigDecimal(String.valueOf(row.getCell(11).getNumericCellValue())));
-                        product.setColorSum(BigDecimal.ZERO);
-                    } else {
-                        product.setQuantity(BigDecimal.ZERO);
-                        product.setColorSum(BigDecimal.ZERO);
-                    }
+                } else {
+                    product.setQuantity(BigDecimal.ZERO);
+                    product.setColorSum(BigDecimal.ZERO);
+                }
 
 
-                    switch (product.getSection().getName()) {
-                        case "профиль":
-                            getProfile().add(product);
-                            initSumms(product);
-                            break;
-                        case "комплектующие":
-                            getAccessories().add(product);
-                            initSumms(product);
-                            break;
-                        case "уплотнители":
-                            getSealant().add(product);
-                            initSumms(product);
-                            break;
-                        case "фурнитура":
-                            getFurniture().add(product);
-                            if ("EUR".equals(product.getCurrency().getName())) {
-                                product.setCena(product.getPrice().multiply(InitParam.crossRate));
-                            } else {
-                                product.setCena(product.getPrice());
-                            }
-                            product.setSum(product.getCena().multiply(product.getQuantity()).setScale(2, BigDecimal.ROUND_HALF_UP));
-                            break;
-                    }
+                switch (product.getSection().getName()) {
+                    case "профиль":
+                        getProfile().add(product);
+                        initSumms(product);
+                        break;
+                    case "комплектующие":
+                        getAccessories().add(product);
+                        initSumms(product);
+                        break;
+                    case "уплотнители":
+                        getSealant().add(product);
+                        initSumms(product);
+                        break;
+                    case "фурнитура":
+                        getFurniture().add(product);
+                        if ("EUR".equals(product.getCurrency().getName())) {
+                            product.setCena(product.getPrice().multiply(InitParam.crossRate));
+                        } else {
+                            product.setCena(product.getPrice());
+                        }
+                        product.setSum(product.getCena().multiply(product.getQuantity()).setScale(2, BigDecimal.ROUND_HALF_UP));
+                        break;
                 }
             }
-            lastRowNum = i;
-
-        /*} catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        }
+        lastRowNum = i;
 
         if (noFind.length() != 0) {
             mc.showNoFind(noFind.toString());
@@ -197,16 +152,18 @@ public class Calculation {
     }
 
 
-
-
-
     public void rewriteByPrice(String group, BigDecimal markup) {
         for (Product product : profile) {
             if (group.equals(product.getGroupp().getName())) {
                 BigDecimal cost = product.getPrice().divide(new BigDecimal("1.2"), 3, BigDecimal.ROUND_HALF_UP);
                 product.setCena(cost.multiply(markup).multiply(mc.discountProfile));
-                product.setSum((product.getCena().multiply(product.getQuantity()).add(product.getColorSum()))
-                        .setScale(2, BigDecimal.ROUND_HALF_UP));
+                if (mc.colorInCena.isSelected()) {
+                    product.setSum((product.getCena().multiply(product.getQuantity()).add(product.getColorSum()))
+                            .setScale(2, BigDecimal.ROUND_HALF_UP));
+                } else {
+                    product.setSum((product.getCena().multiply(product.getQuantity()))
+                            .setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
             }
         }
         mc.totalProfile = profile.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -224,7 +181,14 @@ public class Calculation {
                             .setScale(2, BigDecimal.ROUND_HALF_UP);
                 }
                 product.setCena(cost.multiply(markup).multiply(mc.discountProfile));
-                product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
+                if (mc.colorInCena.isSelected()) {
+                    product.setSum((product.getCena().multiply(product.getQuantity()).add(product.getColorSum()))
+                            .setScale(2, BigDecimal.ROUND_HALF_UP));
+                } else {
+                    product.setSum((product.getCena().multiply(product.getQuantity()))
+                            .setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
+                ;
             }
             mc.totalProfile = profile.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         }
@@ -234,18 +198,23 @@ public class Calculation {
         for (Product product : profile) {
             if (group.equals(product.getGroupp().getName())) {
                 product.setCena(product.getCost().multiply(markup).multiply(mc.discountProfile));
-                product.setSum((product.getCena().multiply(product.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP));
+                if (mc.colorInCena.isSelected()) {
+                    product.setSum((product.getCena().multiply(product.getQuantity()).add(product.getColorSum()))
+                            .setScale(2, BigDecimal.ROUND_HALF_UP));
+                } else {
+                    product.setSum((product.getCena().multiply(product.getQuantity()))
+                            .setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
             }
         }
         mc.totalProfile = profile.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 
-
     public void rewriteProfile() {
         for (Product product : profile) {
 
-           product.setDiscount(mc.discountProfile);
+            product.setDiscount(mc.discountProfile);
             product.setSum((product.getCena().multiply(product.getQuantity())).multiply(mc.discountProfile)
                     .setScale(2, BigDecimal.ROUND_HALF_UP));
         }
@@ -295,61 +264,48 @@ public class Calculation {
     public void settingColorSum(int colorType) {
         for (Product product : profile) {
             if (product.getColor() == 1) {
+                product.setColorSum(BigDecimal.ZERO);
+                product.setColored(BigDecimal.ZERO);
                 switch (colorType) {
-                    case 0:
-                        product.setColorSum(BigDecimal.ZERO);
-                        product.setColored(BigDecimal.ZERO);
-                        break;
                     case 1:
-                        product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.colored))
-                                .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                .setScale(2, BigDecimal.ROUND_HALF_UP));
                         product.setColored(mc.colored.multiply(product.getPerimeter()));
+                        product.setColorSum((product.getQuantity().multiply(product.getColored()))
+                                .setScale(2, BigDecimal.ROUND_HALF_UP));
                         break;
                     case 2:
                         if (product.getBicolorWhiteIn() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.colored))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
                             product.setColored(mc.colored.multiply(product.getPerimeter()));
-                        } else if (product.getBicolor() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.coloredBicolor))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                            product.setColorSum((product.getQuantity().multiply(product.getColored()))
                                     .setScale(2, BigDecimal.ROUND_HALF_UP));
+                        }
+                        if (product.getBicolor() == 1) {
                             product.setColored(mc.coloredBicolor.multiply(product.getPerimeter()));
-                        } /*else {
-                            product.setColorSum(BigDecimal.ZERO);
-                        }*/
+                            product.setColorSum((product.getQuantity().multiply(product.getColored()))
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
+                        }
                         break;
                     case 3:
                         if (product.getBicolorWhiteOut() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.colored))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
                             product.setColored(mc.colored.multiply(product.getPerimeter()));
-                        } else if (product.getBicolor() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.coloredBicolor))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                            product.setColorSum((product.getQuantity().multiply(product.getColored()))
                                     .setScale(2, BigDecimal.ROUND_HALF_UP));
+                        }
+                        if (product.getBicolor() == 1) {
                             product.setColored(mc.coloredBicolor.multiply(product.getPerimeter()));
-                        } /*else {
-                            product.setColorSum(BigDecimal.ZERO);
-                        }*/
+                            product.setColorSum((product.getQuantity().multiply(product.getColored()))
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
+                        }
                         break;
                     case 4:
                         if (product.getBicolorWhiteOut() == 1 || product.getBicolorWhiteIn() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.colored))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
                             product.setColored(mc.colored.multiply(product.getPerimeter()));
-                        } else if (product.getBicolor() == 1) {
-                            product.setColorSum((product.getQuantity().multiply(product.getPerimeter().multiply(mc.coloredBicolor))
-                                    .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
+                            product.setColorSum((product.getQuantity().multiply(product.getColored()))
                                     .setScale(2, BigDecimal.ROUND_HALF_UP));
+                        } else if (product.getBicolor() == 1) {
                             product.setColored(mc.coloredBicolor.multiply(product.getPerimeter()));
-                        } /*else {
-                            product.setColorSum(BigDecimal.ZERO);
-                        }*/
+                            product.setColorSum((product.getQuantity().multiply(product.getColored()))
+                                    .setScale(2, BigDecimal.ROUND_HALF_UP));
+                        }
                         break;
                 }
             }
@@ -358,18 +314,11 @@ public class Calculation {
         if (colorType != 0) {
             for (Product product : furniture) {
                 if (product.getColor() == 1) {
-                    product.setColorSum((product.getQuantity().multiply(InitParam.colorFurn)
-                            .divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP))
-                            .setScale(2, BigDecimal.ROUND_HALF_UP));
                     product.setColored(InitParam.colorFurn.divide(InitParam.rateUsd, 3, BigDecimal.ROUND_HALF_UP));
+                    product.setColorSum((product.getQuantity().multiply(product.getColored()))
+                            .setScale(2, BigDecimal.ROUND_HALF_UP));
                 }
             }
-        } else {
-            furniture.stream().filter(product -> product.getColor() == 1)
-                    .forEach(product -> {
-                        product.setColorSum(BigDecimal.ZERO);
-                        product.setColored(BigDecimal.ZERO);
-                    });
         }
     }
 
@@ -390,7 +339,7 @@ public class Calculation {
         mc.checkColorInCena = true;
     }
 
-    public void prepareExcel() {
+    /*public void prepareExcel() {
         try {
             book = new XSSFWorkbook(new FileInputStream(mc.file));
         } catch (IOException e) {
@@ -422,7 +371,6 @@ public class Calculation {
         sheet.getRow(i + 2).getCell(3).setCellValue("");
         sheet.getRow(i + 2).getCell(6).setCellValue("");
 
-        System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHH");
 
         rowsForDel.forEach(System.out::println);
 
@@ -440,7 +388,7 @@ public class Calculation {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 
     public List<Product> getProfile() {
