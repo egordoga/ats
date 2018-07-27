@@ -10,7 +10,6 @@ import ua.ats.dao.ProductRepository;
 import ua.ats.entity.Product;
 import ua.ats.logic.Calculation;
 import ua.ats.util.InitParam;
-import ua.ats.util.ParseExelForDB;
 import ua.ats.util.WriteResult;
 
 import java.io.File;
@@ -82,7 +81,7 @@ public class MainController {
     public TextField ralBiWhiteOneCena;
 
 
-    public String ralNum;
+    public String strRalNumber;
     public String ralBiNum;
     public String ralBi1Num;
     public String strColor;
@@ -126,13 +125,7 @@ public class MainController {
     private Calculation calc;
 
     @Autowired
-    private ProductRepository repository;
-
-    @Autowired
     private WriteResult writeResult;
-
-    @Autowired
-    private InitParam ip;
 
     @FXML
     private void initLbl() {
@@ -445,24 +438,40 @@ public class MainController {
                         calc.removeColorFromCena();
                     }
                     calc.removeColorSum();
+                    strRalNumber = "RAL9016";
                     break;
                 case "ral":
                     initColor(InitParam.color, BigDecimal.ZERO, 1);
+                    if (ralNumber.getText() != null && !"".equals(ralNumber.getText())) {
+                        strRalNumber = "RAL" + ralNumber.getText();
+                    }
                     break;
                 case "ral9006":
                     initColor(InitParam.color9006, BigDecimal.ZERO, 1);
+                    strRalNumber = "RAL9006";
                     break;
                 case "biIn":
                     initColor(InitParam.color, InitParam.bicolorWithWhite, 2);
+                    if (ralBi1Number.getText() != null && !"".equals(ralBi1Number.getText())) {
+                        strRalNumber = "RAL" + ralBi1Number.getText() + "/9016";
+                    }
                     break;
                 case "biOut":
                     initColor(InitParam.color, InitParam.bicolorWithWhite, 3);
+                    if (ralBi1Number.getText() != null && !"".equals(ralBi1Number.getText())) {
+                        strRalNumber = "RAL9016/" + ralBi1Number.getText();
+                    }
                     break;
                 case "dec":
                     initColor(InitParam.dekor, BigDecimal.ZERO, 1);
+                    strRalNumber = "DECOR";
                     break;
                 case "bi2":
                     initColor(InitParam.color, InitParam.bicolor, 4);
+                    if (ralBiInNumber.getText() != null && ralBiOutNumber.getText() != null
+                            &&!"".equals(ralBiInNumber.getText()) &&!"".equals(ralBiOutNumber.getText())) {
+                        strRalNumber = "RAL" + ralBiOutNumber.getText() + "/" + ralBiInNumber.getText();
+                    }
                     break;
             }
             calc.rewriteColorTotal();
@@ -543,7 +552,7 @@ public class MainController {
 
         ralNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                ralNum = ralNumber.getText();
+                strRalNumber = "RAL" + ralNumber.getText();
                 ralNumber.selectAll();
             }
         });
@@ -576,6 +585,7 @@ public class MainController {
                     calc.rewriteColorTotal();
                 }
                 ral9006Cena.selectAll();
+                strRalNumber = "RAL9006";
             }
         });
 
@@ -620,14 +630,28 @@ public class MainController {
         });
 
 
+        ralBi1Number.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                if (biOut.isSelected()) {
+                    strRalNumber = "RAL9016/" + ralBi1Number.getText();
+                }
+                if (biIn.isSelected()){
+                    strRalNumber = "RAL" + ralBi1Number.getText() + "/9016";
+                }
+                ralBi1Number.selectAll();
+            }
+        });
+
         ralBiInNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
+                strRalNumber = "RAL" + ralBiOutNumber.getText() + "/" + ralBiInNumber.getText();
                 ralBiInNumber.selectAll();
             }
         });
 
         ralBiOutNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
+                strRalNumber = "RAL" + ralBiOutNumber.getText() + "/" + ralBiInNumber.getText();
                 ralBiInNumber.selectAll();
             }
         });
