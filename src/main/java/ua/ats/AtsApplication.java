@@ -9,6 +9,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 //import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,10 +20,7 @@ import java.io.File;
 
 
 @SpringBootApplication
-//@ComponentScan("ua.ats")
 public class AtsApplication extends Application {
-
-
 
     private ConfigurableApplicationContext springContext;
     private Parent root;

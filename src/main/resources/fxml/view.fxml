@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.ats.view.MainController">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ua.ats.view.MainController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -59,9 +59,9 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="599.0" prefWidth="840.0" VBox.vgrow="ALWAYS">
       <children>
-            <SplitPane dividerPositions="0.29797979797979796" prefHeight="530.0" prefWidth="840.0">
+            <SplitPane dividerPositions="0.29797979797979796" prefHeight="530.0" prefWidth="900.0">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
@@ -155,9 +155,9 @@
                         <Label fx:id="lblNoFurn" layoutX="22.0" layoutY="385.0" prefHeight="25.0" prefWidth="218.0" />
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="449.0" prefWidth="528.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="528.0" prefWidth="625.0">
                      <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2f9ff00" height="99.0" layoutX="15.0" layoutY="257.0" stroke="BLACK" strokeType="INSIDE" width="557.0">
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2f9ff00" height="99.0" layoutX="15.0" layoutY="257.0" stroke="BLACK" strokeType="INSIDE" width="604.0">
                            <effect>
                               <Shadow height="6.17" radius="2.585" width="6.17" />
                            </effect>
@@ -169,13 +169,13 @@
                         </RadioButton>
                         <RadioButton fx:id="ral9006" layoutX="128.0" layoutY="298.0" mnemonicParsing="false" text="9006" toggleGroup="$color" />
                         <RadioButton fx:id="biOut" layoutX="262.0" layoutY="298.0" mnemonicParsing="false" text="BiOut" toggleGroup="$color" />
-                        <RadioButton fx:id="dec" layoutX="510.0" layoutY="298.0" mnemonicParsing="false" text="Decor" toggleGroup="$color" />
+                        <RadioButton fx:id="dec" layoutX="543.0" layoutY="298.0" mnemonicParsing="false" text="Decor" toggleGroup="$color" />
                         <Label layoutX="28.0" layoutY="257.0" prefHeight="25.0" prefWidth="280.0" text="Покраска">
                            <font>
                               <Font name="System Bold" size="23.0" />
                            </font>
                         </Label>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1ff0ff00" height="231.0" layoutX="14.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" width="557.0">
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1ff0ff00" height="231.0" layoutX="14.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" width="604.0">
                            <effect>
                               <Shadow height="6.17" radius="2.585" width="6.17" />
                            </effect>
@@ -298,10 +298,10 @@
                         <TextField fx:id="discAccess" layoutX="182.0" layoutY="430.0" prefHeight="25.0" prefWidth="60.0" />
                         <TextField fx:id="discSeal" layoutX="182.0" layoutY="456.0" prefHeight="25.0" prefWidth="60.0" />
                         <TextField fx:id="discFurn" layoutX="182.0" layoutY="481.0" prefHeight="25.0" prefWidth="60.0" />
-                        <TextField fx:id="ralCena" layoutX="27.0" layoutY="322.0" prefHeight="25.0" prefWidth="47.0" />
-                        <TextField fx:id="ral9006Cena" layoutX="127.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
+                        <TextField fx:id="ralCena" layoutX="67.0" layoutY="322.0" prefHeight="25.0" prefWidth="47.0" />
+                        <TextField fx:id="ral9006Cena" layoutX="137.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
                         <TextField fx:id="ralBiOneCena" layoutX="398.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
-                        <TextField fx:id="decCena" layoutX="512.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
+                        <TextField fx:id="decCena" layoutX="545.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
                         <Label layoutX="158.0" layoutY="266.0" text="(цена в гривне)">
                            <font>
                               <Font size="14.0" />
@@ -315,14 +315,14 @@
                         <CheckBox fx:id="invoice" layoutX="396.0" layoutY="402.0" mnemonicParsing="false" text="Счет" />
                         <RadioButton fx:id="biIn" layoutX="206.0" layoutY="298.0" mnemonicParsing="false" text="BiIn" toggleGroup="$color" />
                         <TextField fx:id="ralBiWhiteOneCena" layoutX="218.0" layoutY="322.0" prefHeight="25.0" prefWidth="39.0" />
-                        <TextField fx:id="ralNumber" layoutX="66.0" layoutY="294.0" prefHeight="25.0" prefWidth="42.0" />
+                        <TextField fx:id="ralNumber" layoutX="66.0" layoutY="294.0" prefHeight="25.0" prefWidth="49.0" />
                         <Label layoutX="440.0" layoutY="325.0" prefHeight="20.0" prefWidth="2.0" text="/">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="ralBiOutNumber" layoutX="421.0" layoutY="294.0" prefHeight="25.0" prefWidth="33.0" />
-                        <TextField fx:id="ralBi1Number" layoutX="321.0" layoutY="294.0" prefHeight="25.0" prefWidth="39.0" />
+                        <TextField fx:id="ralBiOutNumber" layoutX="421.0" layoutY="294.0" prefHeight="25.0" prefWidth="47.0" />
+                        <TextField fx:id="ralBi1Number" layoutX="321.0" layoutY="294.0" prefHeight="25.0" prefWidth="49.0" />
                         <Label layoutX="259.0" layoutY="325.0" prefHeight="20.0" prefWidth="2.0" text="/">
                            <font>
                               <Font size="14.0" />
@@ -330,12 +330,12 @@
                         </Label>
                         <TextField fx:id="ralBiWhiteCena" layoutX="268.0" layoutY="323.0" prefHeight="25.0" prefWidth="39.0" />
                         <Label layoutX="118.0" layoutY="375.0" text="/может быть отрицательной (наценка)/" />
-                        <Label layoutX="461.0" layoutY="297.0" prefHeight="20.0" prefWidth="2.0" text="/">
+                        <Label layoutX="468.0" layoutY="297.0" prefHeight="20.0" prefWidth="2.0" text="/">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="ralBiInNumber" layoutX="469.0" layoutY="294.0" prefHeight="25.0" prefWidth="33.0" />
+                        <TextField fx:id="ralBiInNumber" layoutX="476.0" layoutY="294.0" prefHeight="25.0" prefWidth="51.0" />
                      </children>
                   </AnchorPane>
               </items>

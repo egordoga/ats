@@ -22,9 +22,34 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <start-class>ua.ats.AtsApplication</start-class>
     </properties>
 
     <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter -->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>2.0.4.RELEASE</version>
+        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+        <!--<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.0.8.RELEASE</version>
+        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-autoconfigure -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>2.0.4.RELEASE</version>
+        </dependency>
+
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -39,6 +64,17 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+        <!--<dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.197</version>
+            <scope>test</scope>
+        </dependency>-->
+
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -57,25 +93,20 @@
             <version>3.17</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.zsoltfabok/sqlite-dialect -->
-        <dependency>
-            <groupId>com.zsoltfabok</groupId>
-            <artifactId>sqlite-dialect</artifactId>
-            <version>1.0</version>
-        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
-        <dependency>
+       <!-- <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.7.0</version>
-        </dependency>
+        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
             <version>3.1.1</version>
-        </dependency>
+        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/com.zenjava/javafx-maven-plugin -->
         <dependency>
@@ -84,6 +115,12 @@
             <version>8.8.3</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
+       <!-- <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.1</version>
+        </dependency>-->
 
 
 
@@ -95,9 +132,50 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.1</version>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+            </configuration>
+        </plugin>
 
+           <!-- <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2-beta-5</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>ua.ats.AtsApplication</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>assemble-all</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
 
 
            <!-- <plugin>
@@ -112,14 +190,7 @@
                 ...
             </plugin>-->
 
-            <plugin>
-                <groupId>com.zenjava</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>8.8.3</version>
-                <configuration>
-                    <mainClass>ua.ats.AtsApplication</mainClass>
-                </configuration>
-            </plugin>
+
         </plugins>
 
 
