@@ -339,7 +339,7 @@ public class Product {
                 //", ident=" + ident +
                 ", name='" + name + '\'' +
                 ", articul='" + articul + '\'' +
-                ", color=" + color +
+                ", tgColor=" + color +
                 ", bicolor=" + bicolor +
                 ", bicolorWhiteOut=" + bicolorWhiteOut +
                 ", bicolorWhiteIn=" + bicolorWhiteIn +

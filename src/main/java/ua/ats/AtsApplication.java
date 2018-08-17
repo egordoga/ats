@@ -8,11 +8,14 @@ import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 //import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import ua.ats.dao.ProductRepository;
 import ua.ats.util.ParseExelForDB;
 
@@ -20,8 +23,12 @@ import java.io.File;
 
 
 @SpringBootApplication
+/*@EnableJpaRepositories(basePackages = {"ua.ats.dao"})
+@EntityScan(basePackages = {"ua.ats.entity"})
+@ComponentScan("ua.ats")*/
 public class AtsApplication extends Application {
 
+    //@Autowired
     private ConfigurableApplicationContext springContext;
     private Parent root;
 
@@ -37,7 +44,7 @@ public class AtsApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Calculation");
-        Scene scene = new Scene(root, 900, 600);
+        Scene scene = new Scene(root, 1000, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -45,6 +52,7 @@ public class AtsApplication extends Application {
     @Override
     public void stop() throws Exception {
         springContext.stop();
+        //springContext.close();
     }
 
 

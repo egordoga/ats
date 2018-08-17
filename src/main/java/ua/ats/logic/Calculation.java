@@ -6,8 +6,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ua.ats.dao.ProductRepository;
 import ua.ats.entity.Product;
+import ua.ats.service.ProductService;
 import ua.ats.util.InitParam;
 import ua.ats.view.MainController;
 
@@ -26,6 +26,7 @@ public class Calculation {
     private List<Product> accessories = new ArrayList<>();
     private List<Product> sealant = new ArrayList<>();
     private List<Product> furniture = new ArrayList<>();
+    private List<Product> matInstall = new ArrayList<>();
 
 
     public XSSFWorkbook book;
@@ -35,9 +36,11 @@ public class Calculation {
     private final static int NAME_CELL = 7;
     private final static int ARTICUL_CELL = 4;
 
+    private final static BigDecimal HALF = new BigDecimal("0.5");
+
     private List<String> noNeed = Arrays.asList("Профиль", "Итого по разделу", "Комплектующие",
             "Уплотнители", "Остекление (панели)", "Фурнитура", "Материалы для монтажа");
-    private List<Integer> rowsForDel = new ArrayList<>();
+    //private List<Integer> rowsForDel = new ArrayList<>();
 
     public StringBuilder noFind = new StringBuilder();
     public int lastRowNum;
@@ -45,7 +48,7 @@ public class Calculation {
     @Autowired
     private MainController mc;
 
-    public void fillLists(ProductRepository productRepository) {
+    public void fillLists(ProductService productService) {
 
         int i = START_ROW - 1;
         Row row;
@@ -59,6 +62,8 @@ public class Calculation {
             e.printStackTrace();
         }
         sheet = book.getSheetAt(0);
+
+        prepareExcel();
 
         while (true) {
             i++;
@@ -89,7 +94,7 @@ public class Calculation {
             if (row.getCell(ARTICUL_CELL) == null) {
                 continue;
             }
-            Product product = productRepository.findProductByArticul(articul);
+            Product product = productService.findProductByArticul(articul);
 
             if (product == null) {
                 noFind.append(name).append("\n");
@@ -113,19 +118,27 @@ public class Calculation {
 
                 switch (product.getSection().getName()) {
                     case "профиль":
-                        getProfile().add(product);
+                        profile.add(product);
                         initSumms(product);
                         break;
                     case "комплектующие":
-                        getAccessories().add(product);
+                        accessories.add(product);
                         initSumms(product);
                         break;
                     case "уплотнители":
-                        getSealant().add(product);
+                        if (!("SYG23".equals(product.getArticul()) || "SYG42".equals(product.getArticul()))) {
+
+                            if ("9FE/08".equals(product.getArticul())) {
+                                product.setQuantity(product.getQuantity().setScale(0, BigDecimal.ROUND_UP));
+                            } else {
+                                product.setQuantity(roundFiveTen(product.getQuantity()));
+                            }
+                        }
+                        sealant.add(product);
                         initSumms(product);
                         break;
                     case "фурнитура":
-                        getFurniture().add(product);
+                        furniture.add(product);
                         if ("EUR".equals(product.getCurrency().getName())) {
                             product.setCena(product.getPrice().multiply(InitParam.crossRate));
                         } else {
@@ -133,6 +146,11 @@ public class Calculation {
                         }
                         product.setSum(product.getCena().multiply(product.getQuantity()).setScale(2, BigDecimal.ROUND_HALF_UP));
                         break;
+                    case "материалы для монтажа" :
+                        if ("6х60".equals(product.getArticul())) {
+                            matInstall.add(product);
+                            initSumms(product);
+                        }
                 }
             }
         }
@@ -141,6 +159,9 @@ public class Calculation {
         if (noFind.length() != 0) {
             mc.showNoFind(noFind.toString());
         }
+
+        //matInstall.forEach(System.out::println);
+
     }
 
     private void initSumms(Product product) {
@@ -151,13 +172,27 @@ public class Calculation {
         product.setPreviousCena(BigDecimal.ZERO);
     }
 
+    private BigDecimal roundFiveTen(BigDecimal bd) {
+        String str = bd.toString();
+        if (!(str.contains(".") || str.contains(",")) && (str.endsWith("5") || str.endsWith("0"))) {
+            return bd;
+        }
+
+        BigDecimal result;
+        BigDecimal tempInt = bd.divide(BigDecimal.TEN, 0, BigDecimal.ROUND_DOWN);
+        BigDecimal temp = bd.divide(BigDecimal.TEN, 2, BigDecimal.ROUND_HALF_UP).subtract(tempInt);
+        result = temp.compareTo(HALF) < 0 ? (tempInt.add(HALF)).multiply(BigDecimal.TEN) : (tempInt.add(BigDecimal.ONE)).multiply(BigDecimal.TEN);
+        return result;
+
+    }
+
 
     public void rewriteByPrice(String group, BigDecimal markup) {
         for (Product product : profile) {
             if (group.equals(product.getGroupp().getName())) {
                 BigDecimal cost = product.getPrice().divide(new BigDecimal("1.2"), 3, BigDecimal.ROUND_HALF_UP);
                 product.setCena(cost.multiply(markup).multiply(mc.discountProfile));
-                if (mc.colorInCena.isSelected()) {
+                if (mc.cbColorInCena.isSelected()) {
                     product.setSum((product.getCena().multiply(product.getQuantity()).add(product.getColorSum()))
                             .setScale(2, BigDecimal.ROUND_HALF_UP));
                 } else {
@@ -181,7 +216,7 @@ public class Calculation {
                             .setScale(2, BigDecimal.ROUND_HALF_UP);
                 }
                 product.setCena(cost.multiply(markup).multiply(mc.discountProfile));
-                if (mc.colorInCena.isSelected()) {
+                if (mc.cbColorInCena.isSelected()) {
                     product.setSum((product.getCena().multiply(product.getQuantity()).add(product.getColorSum()))
                             .setScale(2, BigDecimal.ROUND_HALF_UP));
                 } else {
@@ -198,7 +233,7 @@ public class Calculation {
         for (Product product : profile) {
             if (group.equals(product.getGroupp().getName())) {
                 product.setCena(product.getCost().multiply(markup).multiply(mc.discountProfile));
-                if (mc.colorInCena.isSelected()) {
+                if (mc.cbColorInCena.isSelected()) {
                     product.setSum((product.getCena().multiply(product.getQuantity()).add(product.getColorSum()))
                             .setScale(2, BigDecimal.ROUND_HALF_UP));
                 } else {
@@ -258,7 +293,7 @@ public class Calculation {
         BigDecimal colFurn = furniture.stream().map(Product::getColorSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         mc.totalColor = colProf.add(colFurn);
 
-        mc.totColor.setText(mc.totalColor.toString());
+        mc.lblTotColor.setText(mc.totalColor.toString());
     }
 
     public void settingColorSum(int colorType) {
@@ -339,56 +374,32 @@ public class Calculation {
         mc.checkColorInCena = true;
     }
 
-    /*public void prepareExcel() {
-        try {
-            book = new XSSFWorkbook(new FileInputStream(mc.file));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        sheet = book.getSheetAt(0);
-
-        System.out.println("OOOOOOOOOOOOOOO");
-
-        int i = START_ROW - 1;
-        List<Integer> rowsForDel = new ArrayList<>();
+    private void prepareExcel() {
         Row row;
+        int lastRow;
+
+        int i = 12;
+        float heightRow = sheet.getRow(i).getHeightInPoints();
+        //List<Integer> rowsForDel = new ArrayList<>();
 
         while (true) {
             i++;
             row = sheet.getRow(i);
-            System.out.println(i);
+            row.setHeightInPoints(heightRow);
             if (row.getCell(NAME_CELL) == null) {
-                rowsForDel.add(i);
-                System.out.println(i + " EEE");
+                lastRow = sheet.getLastRowNum();
+                sheet.shiftRows(i + 1, lastRow, -1);
+
+                //rowsForDel.add(i);
+                //row.setHeightInPoints(heightRow);
                 continue;
             }
 
             if ("ИТОГО".equals(row.getCell(NAME_CELL).getStringCellValue())) {
                 break;
             }
-
         }
-        sheet.getRow(i + 2).getCell(3).setCellValue("");
-        sheet.getRow(i + 2).getCell(6).setCellValue("");
-
-
-        rowsForDel.forEach(System.out::println);
-
-        if (!rowsForDel.isEmpty()) {
-            for (int j = 0; j < rowsForDel.size(); j++) {
-                sheet.shiftRows(rowsForDel.get(j) + 1, i, -1);
-                i--;
-            }
-        }
-
-        try {
-            FileOutputStream outFile = new FileOutputStream(mc.file);
-            book.write(outFile);
-            outFile.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
+    }
 
 
     public List<Product> getProfile() {
@@ -405,5 +416,9 @@ public class Calculation {
 
     public List<Product> getFurniture() {
         return furniture;
+    }
+
+    public List<Product> getMatInstall() {
+        return matInstall;
     }
 }

@@ -6,9 +6,9 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import ua.ats.dao.ProductRepository;
 import ua.ats.entity.Product;
 import ua.ats.logic.Calculation;
+import ua.ats.service.ProductService;
 import ua.ats.util.InitParam;
 import ua.ats.util.WriteResult;
 
@@ -24,22 +24,23 @@ public class MainController {
     private final static BigDecimal HUNDRED = new BigDecimal("100");
     private final static File FILE_CHK = new File("C:\\Program Files\\Common Files\\Ats");
 
-    public ToggleGroup color;
-    public ToggleGroup w70markup;
-    public ToggleGroup f50markup;
-    public ToggleGroup l45markup;
-    public ToggleGroup f50markupType;
-    public ToggleGroup w70markupType;
-    public ToggleGroup l45markupType;
+    public ToggleGroup tgColor;
+    public ToggleGroup tgW70markup;
+    public ToggleGroup tgF50markup;
+    public ToggleGroup tgL45markup;
+    public ToggleGroup tgF50markupType;
+    public ToggleGroup tgW70markupType;
+    public ToggleGroup tgL45markupType;
 
-    public Label totProf;
-    public Label totAccess;
-    public Label cross;
-    public Label totSeal;
-    public Label totFurnit;
+    public Label lblTotProf;
+    public Label lblTotAccess;
+    public Label lblCross;
+    public Label lblTotSeal;
+    public Label lblTotFurnit;
+    public Label lblTotMat;
     public Label lblNoFurn;
-    public Label totAll;
-    public Label totColor;
+    public Label lblTotAll;
+    public Label lblTotColor;
 
     public BigDecimal markupF50 = new BigDecimal("1.2");
     public BigDecimal markupW70 = new BigDecimal("1.2");
@@ -59,26 +60,27 @@ public class MainController {
     public BigDecimal totalSealant;
     public BigDecimal totalFurniture;
     public BigDecimal totalProfile;
+    public BigDecimal totalMat;
     public BigDecimal totalAll;
     public BigDecimal totalColor;
 
-    public TextField eur;
-    public TextField usd;
-    public TextField ralCena;
-    public TextField ral9006Cena;
-    public TextField ralBiOneCena;
-    public TextField decCena;
-    public TextField ralBi2Cena;
-    public TextField ralBiWhiteCena;
-    public TextField ralNumber;
-    public TextField ralBiInNumber;
-    public TextField ralBiOutNumber;
-    public TextField ralBi1Number;
-    public TextField discProfile;
-    public TextField discAccess;
-    public TextField discSeal;
-    public TextField discFurn;
-    public TextField ralBiWhiteOneCena;
+    public TextField tfEur;
+    public TextField tfUsd;
+    public TextField tfRalCena;
+    public TextField tfRal9006Cena;
+    public TextField tfRalBiOneCena;
+    public TextField tfDecCena;
+    public TextField tfRalBi2Cena;
+    public TextField tfRalBiWhiteCena;
+    public TextField tfRalNumber;
+    public TextField tfRalBiInNumber;
+    public TextField tfRalBiOutNumber;
+    public TextField tfRalBi1Number;
+    public TextField tfRalBiWhiteOneCena;
+    public TextField tfDiscProfile;
+    public TextField tfDiscAccess;
+    public TextField tfDiscSeal;
+    public TextField tfDiscFurn;
 
 
     public String strRalNumber;
@@ -86,25 +88,25 @@ public class MainController {
     public String ralBi1Num;
     public String strColor;
 
-    public RadioButton ral;
-    public RadioButton ral9006;
-    public RadioButton biIn;
-    public RadioButton biOut;
-    public RadioButton dec;
-    public RadioButton bi2;
-    public RadioButton f5020;
-    public RadioButton w7020;
-    public RadioButton l4520;
-    public RadioButton f50price;
-    public RadioButton w70price;
-    public RadioButton l45price;
-    public RadioButton noRal;
+    public RadioButton rbRal;
+    public RadioButton rbRal9006;
+    public RadioButton rbBiIn;
+    public RadioButton rbBiOut;
+    public RadioButton rbDec;
+    public RadioButton rbBi2;
+    public RadioButton rbF5020;
+    public RadioButton rbW7020;
+    public RadioButton rbL4520;
+    public RadioButton rbF50price;
+    public RadioButton rbW70price;
+    public RadioButton rbL45price;
+    public RadioButton rbNoRal;
 
-    public CheckBox colorInCena;
-    public CheckBox withoutFurn;
-    public CheckBox invoice;
+    public CheckBox cbColorInCena;
+    public CheckBox cbWithoutFurn;
+    public CheckBox cbInvoice;
 
-    private int colorType = 0;        // 0 - none, 1 - color, bicolor: 2 - white in, 3 - white out, 4 - double
+    private int colorType = 0;        // 0 - none, 1 - tgColor, bicolor: 2 - white in, 3 - white out, 4 - double
     public int costTypeF50 = 1;
     public int costTypeW70 = 1;
     public int costTypeL45 = 1;
@@ -118,11 +120,12 @@ public class MainController {
     public MainController() {
     }
 
-    @Autowired
-    private ProductRepository productRepository;
 
     @Autowired
     private Calculation calc;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private WriteResult writeResult;
@@ -135,12 +138,12 @@ public class MainController {
         }
         openFile();
         InitParam.initParam();
-        usd.setText(String.valueOf(InitParam.rateUsd));
-        eur.setText(String.valueOf(InitParam.rateEur));
-        cross.setText(String.valueOf(InitParam.crossRate));
-        calc.fillLists(productRepository);
+        tfUsd.setText(String.valueOf(InitParam.rateUsd));
+        tfEur.setText(String.valueOf(InitParam.rateEur));
+        lblCross.setText(String.valueOf(InitParam.crossRate));
+        calc.fillLists(productService);
         fileLbl.setText("Файл: " + file.getName());
-        countAndWriteTotal(!withoutFurn.isSelected());
+        countAndWriteTotal(!cbWithoutFurn.isSelected());
         listenMarkupF50();
         listenMarkupW70();
         listenMarkupL45();
@@ -159,74 +162,79 @@ public class MainController {
         markupF50 = new BigDecimal("1.2");
         markupW70 = new BigDecimal("1.2");
         markupL45 = new BigDecimal("1.2");
-        f5020.setSelected(true);
-        w7020.setSelected(true);
-        l4520.setSelected(true);
+        rbF5020.setSelected(true);
+        rbW7020.setSelected(true);
+        rbL4520.setSelected(true);
 
         colored = BigDecimal.ZERO;
         coloredBicolor = BigDecimal.ZERO;
         colorType = 0;
-        noRal.setSelected(true);
+        rbNoRal.setSelected(true);
 
 
         discountProfile = new BigDecimal("1");
         discountAccessories = new BigDecimal("1");
         discountSealant = new BigDecimal("1");
         discountFurniture = new BigDecimal("1");
-        discProfile.setText("");
-        discAccess.setText("");
-        discSeal.setText("");
-        discFurn.setText("");
+        tfDiscProfile.setText("");
+        tfDiscAccess.setText("");
+        tfDiscSeal.setText("");
+        tfDiscFurn.setText("");
 
 
         costTypeF50 = 1;
         costTypeW70 = 1;
         costTypeL45 = 1;
-        f50price.setSelected(true);
-        w70price.setSelected(true);
-        l45price.setSelected(true);
+        rbF50price.setSelected(true);
+        rbW70price.setSelected(true);
+        rbL45price.setSelected(true);
 
         checkColorInCena = false;
-        colorInCena.setSelected(false);
+        cbColorInCena.setSelected(false);
 
         totalAccessories = BigDecimal.ZERO;
         totalSealant = BigDecimal.ZERO;
         totalFurniture = BigDecimal.ZERO;
         totalProfile = BigDecimal.ZERO;
+        totalMat = BigDecimal.ZERO;
         totalAll = BigDecimal.ZERO;
-        totProf.setText("");
-        totAccess.setText("");
-        totSeal.setText("");
-        totFurnit.setText("");
-        totAll.setText("");
-        totColor.setText("");
+        lblTotProf.setText("");
+        lblTotAccess.setText("");
+        lblTotSeal.setText("");
+        lblTotFurnit.setText("");
+        lblTotMat.setText("");
+        lblTotAll.setText("");
+        lblTotColor.setText("");
 
-        withoutFurn.setSelected(false);
-        invoice.setSelected(false);
+        cbWithoutFurn.setSelected(false);
+        cbInvoice.setSelected(false);
 
-        ralCena.setText("");
-        ral9006Cena.setText("");
-        ralBiOneCena.setText("");
-        decCena.setText("");
-        ralBi2Cena.setText("");
-        ralBiWhiteCena.setText("");
-        ralNumber.setText("");
-        ralBiInNumber.setText("");
-        ralBiOutNumber.setText("");
-        ralBi1Number.setText("");
+        tfRalCena.setText("");
+        tfRal9006Cena.setText("");
+        tfRalBiOneCena.setText("");
+        tfRalBiWhiteOneCena.setText("");
+        tfDecCena.setText("");
+        tfRalBi2Cena.setText("");
+        tfRalBiWhiteCena.setText("");
+        tfRalNumber.setText("");
+        tfRalBiInNumber.setText("");
+        tfRalBiOutNumber.setText("");
+        tfRalBi1Number.setText("");
 
         calc.getProfile().clear();
         calc.getAccessories().clear();
         calc.getSealant().clear();
         calc.getFurniture().clear();
+        calc.getMatInstall().clear();
         calc.noFind.setLength(0);
+
 
     }
 
     @FXML
     private void listenMarkupF50() {
 
-        f50markup.selectedToggleProperty().addListener((ov, t, t1) -> {
+        tgF50markup.selectedToggleProperty().addListener((ov, t, t1) -> {
             RadioButton chk = (RadioButton) t1.getToggleGroup().getSelectedToggle();
 
             switch (chk.getId()) {
@@ -236,7 +244,7 @@ public class MainController {
                 case "f5015":
                     markupF50 = new BigDecimal("1.15");
                     break;
-                case "f5020":
+                case "rbF5020":
                     markupF50 = new BigDecimal("1.2");
                     break;
                 case "f5025":
@@ -250,15 +258,15 @@ public class MainController {
             switch (costTypeF50) {
                 case 1:
                     calc.rewriteByPrice("F50", markupF50);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
                 case 2:
                     calc.rewriteByWeight("F50", markupF50);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
                 case 3:
                     calc.rewriteByCost("F50", markupF50);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
             }
         });
@@ -268,7 +276,7 @@ public class MainController {
     @FXML
     private void listenMarkupW70() {
 
-        w70markup.selectedToggleProperty().addListener((ov, t, t1) -> {
+        tgW70markup.selectedToggleProperty().addListener((ov, t, t1) -> {
             RadioButton chk = (RadioButton) t1.getToggleGroup().getSelectedToggle();
 
             switch (chk.getId()) {
@@ -278,7 +286,7 @@ public class MainController {
                 case "w7015":
                     markupW70 = new BigDecimal("1.15");
                     break;
-                case "w7020":
+                case "rbW7020":
                     markupW70 = new BigDecimal("1.2");
                     break;
                 case "w7025":
@@ -292,15 +300,15 @@ public class MainController {
             switch (costTypeW70) {
                 case 1:
                     calc.rewriteByPrice("W70", markupW70);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
                 case 2:
                     calc.rewriteByWeight("W70", markupW70);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
                 case 3:
                     calc.rewriteByCost("W70", markupW70);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
             }
         });
@@ -310,7 +318,7 @@ public class MainController {
     @FXML
     private void listenMarkupL45() {
 
-        l45markup.selectedToggleProperty().addListener((ov, t, t1) -> {
+        tgL45markup.selectedToggleProperty().addListener((ov, t, t1) -> {
             RadioButton chk = (RadioButton) t1.getToggleGroup().getSelectedToggle();
 
             switch (chk.getId()) {
@@ -320,7 +328,7 @@ public class MainController {
                 case "l4515":
                     markupL45 = new BigDecimal("1.15");
                     break;
-                case "l4520":
+                case "rbL4520":
                     markupL45 = new BigDecimal("1.2");
                     break;
                 case "l4525":
@@ -334,15 +342,15 @@ public class MainController {
             switch (costTypeL45) {
                 case 1:
                     calc.rewriteByPrice("L45", markupL45);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
                 case 2:
                     calc.rewriteByWeight("L45", markupL45);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
                 case 3:
                     calc.rewriteByCost("L45", markupL45);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
             }
         });
@@ -351,13 +359,13 @@ public class MainController {
 
     @FXML
     private void listenTypeW70() {
-        w70markupType.selectedToggleProperty().addListener((ov, t, t1) -> {
+        tgW70markupType.selectedToggleProperty().addListener((ov, t, t1) -> {
             RadioButton chk = (RadioButton) t1.getToggleGroup().getSelectedToggle();
             switch (chk.getId()) {
-                case "w70price":
+                case "rbW70price":
                     costTypeW70 = 1;
                     calc.rewriteByPrice("W70", markupW70);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
                /* case "w70weight":
                     costTypeW70 = 2;
@@ -367,7 +375,7 @@ public class MainController {
                 case "w70cost":
                     costTypeW70 = 3;
                     calc.rewriteByCost("W70", markupW70);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
 
             }
@@ -376,23 +384,23 @@ public class MainController {
 
     @FXML
     private void listenTypeF50() {
-        f50markupType.selectedToggleProperty().addListener((ov, t, t1) -> {
+        tgF50markupType.selectedToggleProperty().addListener((ov, t, t1) -> {
             RadioButton chk = (RadioButton) t1.getToggleGroup().getSelectedToggle();
             switch (chk.getId()) {
-                case "f50price":
+                case "rbF50price":
                     costTypeF50 = 1;
                     calc.rewriteByPrice("F50", markupF50);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
                 case "f50weight":
                     costTypeF50 = 2;
                     calc.rewriteByWeight("F50", markupF50);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
                 case "f50cost":
                     costTypeF50 = 3;
                     calc.rewriteByCost("F50", markupF50);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
 
             }
@@ -401,23 +409,23 @@ public class MainController {
 
     @FXML
     private void listenTypeL45() {
-        l45markupType.selectedToggleProperty().addListener((ov, t, t1) -> {
+        tgL45markupType.selectedToggleProperty().addListener((ov, t, t1) -> {
             RadioButton chk = (RadioButton) t1.getToggleGroup().getSelectedToggle();
             switch (chk.getId()) {
-                case "l45price":
+                case "rbL45price":
                     costTypeL45 = 1;
                     calc.rewriteByPrice("L45", markupL45);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
                 case "l45weight":
                     costTypeL45 = 2;
                     calc.rewriteByWeight("L45", markupL45);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
                 case "l45cost":
                     costTypeL45 = 3;
                     calc.rewriteByCost("L45", markupL45);
-                    countAndWriteTotal(!withoutFurn.isSelected());
+                    countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
 
             }
@@ -426,51 +434,51 @@ public class MainController {
 
 
     private void colorListener() {
-        color.selectedToggleProperty().addListener((ov, t, t1) -> {
+        tgColor.selectedToggleProperty().addListener((ov, t, t1) -> {
             RadioButton chk = (RadioButton) t1.getToggleGroup().getSelectedToggle();
 
             switch (chk.getId()) {
-                case "noRal":
+                case "rbNoRal":
                     colored = BigDecimal.ZERO;
                     coloredBicolor = BigDecimal.ZERO;
                     colorType = 0;
-                    if (colorInCena.isSelected()) {
+                    if (cbColorInCena.isSelected()) {
                         calc.removeColorFromCena();
                     }
                     calc.removeColorSum();
                     strRalNumber = "RAL9016";
                     break;
-                case "ral":
+                case "rbRal":
                     initColor(InitParam.color, BigDecimal.ZERO, 1);
-                    if (ralNumber.getText() != null && !"".equals(ralNumber.getText())) {
-                        strRalNumber = "RAL" + ralNumber.getText();
+                    if (tfRalNumber.getText() != null && !"".equals(tfRalNumber.getText())) {
+                        strRalNumber = "RAL" + tfRalNumber.getText();
                     }
                     break;
-                case "ral9006":
+                case "rbRal9006":
                     initColor(InitParam.color9006, BigDecimal.ZERO, 1);
                     strRalNumber = "RAL9006";
                     break;
-                case "biIn":
+                case "rbBiIn":
                     initColor(InitParam.color, InitParam.bicolorWithWhite, 2);
-                    if (ralBi1Number.getText() != null && !"".equals(ralBi1Number.getText())) {
-                        strRalNumber = "RAL" + ralBi1Number.getText() + "/9016";
+                    if (tfRalBi1Number.getText() != null && !"".equals(tfRalBi1Number.getText())) {
+                        strRalNumber = "RAL" + tfRalBi1Number.getText() + "/9016";
                     }
                     break;
-                case "biOut":
+                case "rbBiOut":
                     initColor(InitParam.color, InitParam.bicolorWithWhite, 3);
-                    if (ralBi1Number.getText() != null && !"".equals(ralBi1Number.getText())) {
-                        strRalNumber = "RAL9016/" + ralBi1Number.getText();
+                    if (tfRalBi1Number.getText() != null && !"".equals(tfRalBi1Number.getText())) {
+                        strRalNumber = "RAL9016/" + tfRalBi1Number.getText();
                     }
                     break;
-                case "dec":
+                case "rbDec":
                     initColor(InitParam.dekor, BigDecimal.ZERO, 1);
                     strRalNumber = "DECOR";
                     break;
-                case "bi2":
+                case "rbBi2":
                     initColor(InitParam.color, InitParam.bicolor, 4);
-                    if (ralBiInNumber.getText() != null && ralBiOutNumber.getText() != null
-                            &&!"".equals(ralBiInNumber.getText()) &&!"".equals(ralBiOutNumber.getText())) {
-                        strRalNumber = "RAL" + ralBiOutNumber.getText() + "/" + ralBiInNumber.getText();
+                    if (tfRalBiInNumber.getText() != null && tfRalBiOutNumber.getText() != null
+                            && !"".equals(tfRalBiInNumber.getText()) && !"".equals(tfRalBiOutNumber.getText())) {
+                        strRalNumber = "RAL" + tfRalBiOutNumber.getText() + "/" + tfRalBiInNumber.getText();
                     }
                     break;
             }
@@ -487,250 +495,250 @@ public class MainController {
     }
 
     private void chkColorInCena() {
-        colorInCena.selectedProperty().addListener((ov, t, t1) -> addColorInCena());
+        cbColorInCena.selectedProperty().addListener((ov, t, t1) -> addColorInCena());
     }
 
     private void addColorInCena() {
-        if (colorInCena.isSelected()) {
+        if (cbColorInCena.isSelected()) {
             if (checkColorInCena) {
                 calc.removeColorFromCena();
             }
             calc.settingColorSum(colorType);
             calc.addColorInCena();
-            countAndWriteTotal(!withoutFurn.isSelected());
+            countAndWriteTotal(!cbWithoutFurn.isSelected());
         } else {
             if (checkColorInCena) {
                 calc.removeColorFromCena();
             }
             calc.settingColorSum(colorType);
-            countAndWriteTotal(!withoutFurn.isSelected());
+            countAndWriteTotal(!cbWithoutFurn.isSelected());
         }
     }
 
 
     private void textFieldsInitAndListener() {
 
-        usd.setText(InitParam.rateUsd.toString());
-        eur.setText(InitParam.rateEur.toString());
-        ralCena.setText(InitParam.color.toString());
-        ralBiOneCena.setText(InitParam.color.toString());
-        ralBi2Cena.setText(InitParam.bicolor.toString());
-        ral9006Cena.setText(InitParam.color9006.toString());
-        ralBiWhiteCena.setText(InitParam.bicolorWithWhite.toString());
-        ralBiWhiteOneCena.setText(InitParam.color.toString());
-        decCena.setText(InitParam.dekor.toString());
+        tfUsd.setText(InitParam.rateUsd.toString());
+        tfEur.setText(InitParam.rateEur.toString());
+        tfRalCena.setText(InitParam.color.toString());
+        tfRalBiOneCena.setText(InitParam.color.toString());
+        tfRalBi2Cena.setText(InitParam.bicolor.toString());
+        tfRal9006Cena.setText(InitParam.color9006.toString());
+        tfRalBiWhiteCena.setText(InitParam.bicolorWithWhite.toString());
+        tfRalBiWhiteOneCena.setText(InitParam.color.toString());
+        tfDecCena.setText(InitParam.dekor.toString());
 
-        usd.setOnKeyPressed(event -> {
+        tfUsd.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    InitParam.rateUsd = new BigDecimal(usd.getText());
+                    InitParam.rateUsd = new BigDecimal(tfUsd.getText());
                 } catch (NumberFormatException e) {
                     alertNoNumber();
                 }
                 InitParam.initCross();
                 calc.rewriteFurniture();
-                countAndWriteTotal(!withoutFurn.isSelected());
-                usd.selectAll();
-                cross.setText(InitParam.crossRate.toString());
+                countAndWriteTotal(!cbWithoutFurn.isSelected());
+                tfUsd.selectAll();
+                lblCross.setText(InitParam.crossRate.toString());
             }
         });
 
-        eur.setOnKeyPressed(event -> {
+        tfEur.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    InitParam.rateEur = new BigDecimal(eur.getText());
+                    InitParam.rateEur = new BigDecimal(tfEur.getText());
                 } catch (NumberFormatException e) {
                     alertNoNumber();
                 }
                 InitParam.initCross();
                 calc.rewriteFurniture();
-                countAndWriteTotal(!withoutFurn.isSelected());
-                eur.selectAll();
-                cross.setText(InitParam.crossRate.toString());
+                countAndWriteTotal(!cbWithoutFurn.isSelected());
+                tfEur.selectAll();
+                lblCross.setText(InitParam.crossRate.toString());
             }
         });
 
-        ralNumber.setOnKeyPressed(event -> {
+        tfRalNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                strRalNumber = "RAL" + ralNumber.getText();
-                ralNumber.selectAll();
+                strRalNumber = "RAL" + tfRalNumber.getText();
+                tfRalNumber.selectAll();
             }
         });
 
-        ralCena.setOnKeyPressed(event -> {
+        tfRalCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    InitParam.color = new BigDecimal(ralCena.getText());
+                    InitParam.color = new BigDecimal(tfRalCena.getText());
                 } catch (NumberFormatException e) {
                     alertNoNumber();
                 }
-                if (ral.isSelected()) {
+                if (rbRal.isSelected()) {
                     initColor(InitParam.color, BigDecimal.ZERO, 1);
                     calc.rewriteColorTotal();
                 }
-                ralCena.selectAll();
+                tfRalCena.selectAll();
             }
         });
 
 
-        ral9006Cena.setOnKeyPressed(event -> {
+        tfRal9006Cena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    InitParam.color9006 = new BigDecimal(ral9006Cena.getText());
+                    InitParam.color9006 = new BigDecimal(tfRal9006Cena.getText());
                 } catch (NumberFormatException e) {
                     alertNoNumber();
                 }
-                if (ral9006.isSelected()) {
+                if (rbRal9006.isSelected()) {
                     initColor(InitParam.color9006, BigDecimal.ZERO, 1);
                     calc.rewriteColorTotal();
                 }
-                ral9006Cena.selectAll();
+                tfRal9006Cena.selectAll();
                 strRalNumber = "RAL9006";
             }
         });
 
-        ralBiWhiteOneCena.setOnKeyPressed(event -> {
+        tfRalBiWhiteOneCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    InitParam.color = new BigDecimal(ralBiWhiteOneCena.getText());
+                    InitParam.color = new BigDecimal(tfRalBiWhiteOneCena.getText());
                 } catch (NumberFormatException e) {
                     alertNoNumber();
                 }
-                if (biIn.isSelected()) {
+                if (rbBiIn.isSelected()) {
                     initColor(InitParam.color, InitParam.bicolorWithWhite, 2);
                     calc.rewriteColorTotal();
                 }
 
-                if (biOut.isSelected()) {
+                if (rbBiOut.isSelected()) {
                     initColor(InitParam.color, InitParam.bicolorWithWhite, 3);
                     calc.rewriteColorTotal();
                 }
-                ralBiWhiteOneCena.selectAll();
+                tfRalBiWhiteOneCena.selectAll();
             }
         });
 
-        ralBiWhiteCena.setOnKeyPressed(event -> {
+        tfRalBiWhiteCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    InitParam.bicolorWithWhite = new BigDecimal(ralBiWhiteCena.getText());
+                    InitParam.bicolorWithWhite = new BigDecimal(tfRalBiWhiteCena.getText());
                 } catch (NumberFormatException e) {
                     alertNoNumber();
                 }
-                if (biIn.isSelected()) {
+                if (rbBiIn.isSelected()) {
                     initColor(InitParam.color, InitParam.bicolorWithWhite, 2);
                     calc.rewriteColorTotal();
                 }
 
-                if (biOut.isSelected()) {
+                if (rbBiOut.isSelected()) {
                     initColor(InitParam.color, InitParam.bicolorWithWhite, 3);
                     calc.rewriteColorTotal();
                 }
-                ralBiWhiteCena.selectAll();
+                tfRalBiWhiteCena.selectAll();
             }
         });
 
 
-        ralBi1Number.setOnKeyPressed(event -> {
+        tfRalBi1Number.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                if (biOut.isSelected()) {
-                    strRalNumber = "RAL9016/" + ralBi1Number.getText();
+                if (rbBiOut.isSelected()) {
+                    strRalNumber = "RAL9016/" + tfRalBi1Number.getText();
                 }
-                if (biIn.isSelected()){
-                    strRalNumber = "RAL" + ralBi1Number.getText() + "/9016";
+                if (rbBiIn.isSelected()) {
+                    strRalNumber = "RAL" + tfRalBi1Number.getText() + "/9016";
                 }
-                ralBi1Number.selectAll();
+                tfRalBi1Number.selectAll();
             }
         });
 
-        ralBiInNumber.setOnKeyPressed(event -> {
+        tfRalBiInNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                strRalNumber = "RAL" + ralBiOutNumber.getText() + "/" + ralBiInNumber.getText();
-                ralBiInNumber.selectAll();
+                strRalNumber = "RAL" + tfRalBiOutNumber.getText() + "/" + tfRalBiInNumber.getText();
+                tfRalBiInNumber.selectAll();
             }
         });
 
-        ralBiOutNumber.setOnKeyPressed(event -> {
+        tfRalBiOutNumber.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                strRalNumber = "RAL" + ralBiOutNumber.getText() + "/" + ralBiInNumber.getText();
-                ralBiInNumber.selectAll();
+                strRalNumber = "RAL" + tfRalBiOutNumber.getText() + "/" + tfRalBiInNumber.getText();
+                tfRalBiInNumber.selectAll();
             }
         });
 
-        ralBiOneCena.setOnKeyPressed(event -> {
+        tfRalBiOneCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    InitParam.color = new BigDecimal(ralBiOneCena.getText());
+                    InitParam.color = new BigDecimal(tfRalBiOneCena.getText());
                 } catch (NumberFormatException e) {
                     alertNoNumber();
                 }
-                if (bi2.isSelected()) {
+                if (rbBi2.isSelected()) {
                     initColor(InitParam.color, InitParam.bicolor, 4);
                     calc.rewriteColorTotal();
                 }
-                ralBiOneCena.selectAll();
+                tfRalBiOneCena.selectAll();
             }
         });
 
-        ralBi2Cena.setOnKeyPressed(event -> {
+        tfRalBi2Cena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    InitParam.bicolor = new BigDecimal(ralBi2Cena.getText());
+                    InitParam.bicolor = new BigDecimal(tfRalBi2Cena.getText());
                 } catch (NumberFormatException e) {
                     alertNoNumber();
                 }
-                if (bi2.isSelected()) {
+                if (rbBi2.isSelected()) {
                     initColor(InitParam.color, InitParam.bicolor, 4);
                     calc.rewriteColorTotal();
                 }
-                ralBi2Cena.selectAll();
+                tfRalBi2Cena.selectAll();
             }
         });
 
-        decCena.setOnKeyPressed(event -> {
+        tfDecCena.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 try {
-                    InitParam.dekor = new BigDecimal(decCena.getText());
+                    InitParam.dekor = new BigDecimal(tfDecCena.getText());
                 } catch (NumberFormatException e) {
                     alertNoNumber();
                 }
-                if (dec.isSelected()) {
+                if (rbDec.isSelected()) {
                     initColor(InitParam.dekor, BigDecimal.ZERO, 1);
                     calc.rewriteColorTotal();
                 }
-                decCena.selectAll();
+                tfDecCena.selectAll();
             }
         });
 
 
-        discProfile.setOnKeyPressed(event -> {
+        tfDiscProfile.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                discountProfile = settingDiscount(discProfile);
+                discountProfile = settingDiscount(tfDiscProfile);
                 calc.rewriteProfile();
-                countAndWriteTotal(!withoutFurn.isSelected());
+                countAndWriteTotal(!cbWithoutFurn.isSelected());
             }
         });
 
-        discAccess.setOnKeyPressed(event -> {
+        tfDiscAccess.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                discountAccessories = settingDiscount(discAccess);
+                discountAccessories = settingDiscount(tfDiscAccess);
                 calc.rewriteAccessories();
-                countAndWriteTotal(!withoutFurn.isSelected());
+                countAndWriteTotal(!cbWithoutFurn.isSelected());
             }
         });
 
-        discSeal.setOnKeyPressed(event -> {
+        tfDiscSeal.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                discountSealant = settingDiscount(discSeal);
+                discountSealant = settingDiscount(tfDiscSeal);
                 calc.rewriteSealant();
-                countAndWriteTotal(!withoutFurn.isSelected());
+                countAndWriteTotal(!cbWithoutFurn.isSelected());
             }
         });
 
-        discFurn.setOnKeyPressed(event -> {
+        tfDiscFurn.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                discountFurniture = settingDiscount(discFurn);
+                discountFurniture = settingDiscount(tfDiscFurn);
                 calc.rewriteFurniture();
-                countAndWriteTotal(!withoutFurn.isSelected());
+                countAndWriteTotal(!cbWithoutFurn.isSelected());
             }
         });
     }
@@ -759,7 +767,7 @@ public class MainController {
 
 
     private void chkNeedFurnListener() {
-        withoutFurn.selectedProperty().addListener((ov, t, t1) -> {
+        cbWithoutFurn.selectedProperty().addListener((ov, t, t1) -> {
             countAndWriteTotal(!t1);
         });
     }
@@ -770,22 +778,24 @@ public class MainController {
         totalAccessories = calc.getAccessories().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         totalSealant = calc.getSealant().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         totalFurniture = calc.getFurniture().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        totalMat = calc.getMatInstall().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         if (furn) {
-            totalAll = totalProfile.add(totalAccessories).add(totalSealant).add(totalFurniture);
+            totalAll = totalProfile.add(totalAccessories).add(totalSealant).add(totalFurniture).add(totalMat);
         } else {
-            totalAll = totalProfile.add(totalAccessories).add(totalSealant);
+            totalAll = totalProfile.add(totalAccessories).add(totalSealant).add(totalMat);
         }
         writeTotal();
     }
 
 
     private void writeTotal() {
-        totProf.setText(totalProfile.toString());
-        totAccess.setText(totalAccessories.toString());
-        totSeal.setText(totalSealant.toString());
-        totFurnit.setText(totalFurniture.toString());
-        totAll.setText(totalAll.toString());
-        if (withoutFurn.isSelected()) {
+        lblTotProf.setText(totalProfile.toString());
+        lblTotAccess.setText(totalAccessories.toString());
+        lblTotSeal.setText(totalSealant.toString());
+        lblTotFurnit.setText(totalFurniture.toString());
+        lblTotMat.setText(totalMat.toString());
+        lblTotAll.setText(totalAll.toString());
+        if (cbWithoutFurn.isSelected()) {
             lblNoFurn.setText("/В общей сумме не учитывается/");
         } else {
             lblNoFurn.setText("");
@@ -829,12 +839,18 @@ public class MainController {
             writeResult.writeExcel(calc.getProfile());
             writeResult.writeExcel(calc.getAccessories());
             writeResult.writeExcel(calc.getSealant());
-            if (!withoutFurn.isSelected()) {
-                writeResult.writeExcel(calc.getFurniture());
-            } else {
-                writeResult.writeExcelFurnZero();
+            if (calc.getFurniture().size() > 0) {
+                if (!cbWithoutFurn.isSelected()) {
+                    writeResult.writeExcel(calc.getFurniture());
+                } else {
+                    writeResult.writeExcelFurnZero();
+                }
             }
+           /* if (calc.getMatInstall().size() > 0) {
+                writeResult.writeExcel(calc.getMatInstall());
+            }*/
             writeResult.writeExcelAllSum();
+            writeResult.writeQuantitySealent();
             writeResult.decorateExcel();
             writeResult.changeColorColumn();
             try {
