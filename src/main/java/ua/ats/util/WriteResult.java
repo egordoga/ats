@@ -83,8 +83,6 @@ public class WriteResult {
         cell = calc.sheet.getRow(colNum).getCell(SUMM_CELL);
         cell.setCellType(CellType.FORMULA);
         cell.setCellFormula("SUM(N" + startSummCell + ":N" + colNum + ")");
-
-
     }
 
     public void writeExcelFurnZero() {
@@ -135,7 +133,7 @@ public class WriteResult {
                     "N" + (calc.getSealant().get(calc.getSealant().size() - 1).getColumnNumberExel() + 2) + "+" +*/
 
 
-                    totalFormula += "+N" + calc.lastRowNum;
+            totalFormula += "+N" + calc.lastRowNum;
         }
 
         cell.setCellFormula(totalFormula);
@@ -187,7 +185,11 @@ public class WriteResult {
             style.setFont(fontColor);
             cellColor.setCellStyle(style);
             cellColor.setCellType(CellType.STRING);
-            cellColor.setCellValue("Покраска в " + mc.strRalNumber + " составляет " + mc.totalColor.setScale(0, BigDecimal.ROUND_UP) + " USD");
+            if (mc.strRalNumber != null) {
+                cellColor.setCellValue("Покраска в " + mc.strRalNumber + " составляет " + mc.totalColor.setScale(0, BigDecimal.ROUND_UP) + " USD");
+            } else {
+                cellColor.setCellValue("Покраска составляет " + mc.totalColor.setScale(0, BigDecimal.ROUND_UP) + " USD");
+            }
         } else {
             cellColor.setCellType(CellType.STRING);
             cellColor.setCellValue("");
@@ -215,7 +217,6 @@ public class WriteResult {
         switch (((RadioButton) mc.tgColor.getSelectedToggle()).getId()) {
             case "rbRal":
                 if (!(mc.tfRalNumber == null || "".equals(mc.tfRalNumber.getText()))) {
-                   // strColor = "RAL" + mc.tfRalNumber.getText();
                     for (Product product : calc.getProfile()) {
                         if (product.getColor() == 1) {
                             calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL).setCellValue("RAL" + mc.tfRalNumber.getText());
@@ -240,15 +241,29 @@ public class WriteResult {
                     }
                 }
                 break;
+
+            case "rbRalFactory":
+                if (!(mc.tfRalFactory == null || "".equals(mc.tfRalFactory.getText()))) {
+                    for (Product product : calc.getProfile()) {
+                        if (product.getColor() == 1) {
+                            calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL).setCellValue("RAL" + mc.tfRalFactory.getText());
+                        }
+                    }
+                    for (Product product : calc.getFurniture()) {
+                        if (product.getColor() == 1) {
+                            calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL).setCellValue("RAL" + mc.tfRalFactory.getText());
+                        }
+                    }
+                } else return;
+                break;
             case "rbBiIn":
                 if (!(mc.tfRalBi1Number == null || "".equals(mc.tfRalBi1Number.getText()))) {
-                    //strColor = "RAL" + mc.tfRalNumber.getText();
                     for (Product product : calc.getProfile()) {
                         if (product.getColor() == 1) {
                             if (product.getBicolor() == 1) {
                                 calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
                                         .setCellValue("RAL" + mc.tfRalBi1Number.getText() + "/9016");
-                            } else if (product.getBicolorWhiteIn() == 1){
+                            } else if (product.getBicolorWhiteIn() == 1) {
                                 calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
                                         .setCellValue("RAL" + mc.tfRalBi1Number.getText());
                             }
@@ -265,13 +280,12 @@ public class WriteResult {
 
             case "rbBiOut":
                 if (!(mc.tfRalBi1Number == null || "".equals(mc.tfRalBi1Number.getText()))) {
-                    //strColor = "RAL" + mc.tfRalNumber.getText();
                     for (Product product : calc.getProfile()) {
                         if (product.getColor() == 1) {
                             if (product.getBicolor() == 1) {
                                 calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
                                         .setCellValue("RAL9016/" + mc.tfRalBi1Number.getText());
-                            } else if (product.getBicolorWhiteOut() == 1){
+                            } else if (product.getBicolorWhiteOut() == 1) {
                                 calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
                                         .setCellValue("RAL" + mc.tfRalBi1Number.getText());
                             }
@@ -293,10 +307,10 @@ public class WriteResult {
                             if (product.getBicolor() == 1) {
                                 calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
                                         .setCellValue("RAL" + mc.tfRalBiOutNumber.getText() + "/" + mc.tfRalBiInNumber.getText());
-                            } else if (product.getBicolorWhiteOut() == 1){
+                            } else if (product.getBicolorWhiteOut() == 1) {
                                 calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
                                         .setCellValue("RAL" + mc.tfRalBiInNumber.getText());
-                            } else if (product.getBicolorWhiteIn() == 1){
+                            } else if (product.getBicolorWhiteIn() == 1) {
                                 calc.sheet.getRow(product.getColumnNumberExel()).getCell(COLOR_CELL)
                                         .setCellValue("RAL" + mc.tfRalBiOutNumber.getText());
                             }

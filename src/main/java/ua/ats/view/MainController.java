@@ -77,11 +77,11 @@ public class MainController {
     public TextField tfRalBiOutNumber;
     public TextField tfRalBi1Number;
     public TextField tfRalBiWhiteOneCena;
+    public TextField tfRalFactory;
     public TextField tfDiscProfile;
     public TextField tfDiscAccess;
     public TextField tfDiscSeal;
     public TextField tfDiscFurn;
-
 
     public String strRalNumber;
     public String ralBiNum;
@@ -101,12 +101,14 @@ public class MainController {
     public RadioButton rbW70price;
     public RadioButton rbL45price;
     public RadioButton rbNoRal;
+    public RadioButton rbRalFactory;
 
     public CheckBox cbColorInCena;
     public CheckBox cbWithoutFurn;
     public CheckBox cbInvoice;
 
-    private int colorType = 0;        // 0 - none, 1 - tgColor, bicolor: 2 - white in, 3 - white out, 4 - double
+    private int colorType = 0;        // 0 - none, 1 - tgColor, bicolor: 2 - white in, 3 - white out,
+    // 4 - double, 5 - coloredInFactory
     public int costTypeF50 = 1;
     public int costTypeW70 = 1;
     public int costTypeL45 = 1;
@@ -171,7 +173,6 @@ public class MainController {
         colorType = 0;
         rbNoRal.setSelected(true);
 
-
         discountProfile = new BigDecimal("1");
         discountAccessories = new BigDecimal("1");
         discountSealant = new BigDecimal("1");
@@ -180,7 +181,6 @@ public class MainController {
         tfDiscAccess.setText("");
         tfDiscSeal.setText("");
         tfDiscFurn.setText("");
-
 
         costTypeF50 = 1;
         costTypeW70 = 1;
@@ -211,6 +211,7 @@ public class MainController {
 
         tfRalCena.setText("");
         tfRal9006Cena.setText("");
+        tfRalFactory.setText("");
         tfRalBiOneCena.setText("");
         tfRalBiWhiteOneCena.setText("");
         tfDecCena.setText("");
@@ -432,7 +433,6 @@ public class MainController {
         });
     }
 
-
     private void colorListener() {
         tgColor.selectedToggleProperty().addListener((ov, t, t1) -> {
             RadioButton chk = (RadioButton) t1.getToggleGroup().getSelectedToggle();
@@ -481,13 +481,18 @@ public class MainController {
                         strRalNumber = "RAL" + tfRalBiOutNumber.getText() + "/" + tfRalBiInNumber.getText();
                     }
                     break;
+                case "rbRalFactory":
+                    initColor(BigDecimal.ZERO, BigDecimal.ZERO, 5);
+                    if (tfRalNumber.getText() != null && !"".equals(tfRalNumber.getText())) {
+                        strRalNumber = "RAL" + tfRalFactory.getText();
+                    }
             }
             calc.rewriteColorTotal();
         });
     }
 
     private void initColor(BigDecimal color, BigDecimal colorBi, int i) {
-        colored = color.divide(InitParam.rateUsd, 2, BigDecimal.ROUND_HALF_UP);
+        colored = color.divide(InitParam.rateUsd, 4, BigDecimal.ROUND_HALF_UP);
         coloredBicolor = colorBi.divide(InitParam.rateUsd, 2, BigDecimal.ROUND_HALF_UP);
         colorType = i;
         addColorInCena();
@@ -709,6 +714,13 @@ public class MainController {
             }
         });
 
+        tfRalFactory.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                strRalNumber = "RAL" + tfRalFactory.getText();
+                tfRalFactory.selectAll();
+            }
+        });
+
 
         tfDiscProfile.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -806,7 +818,6 @@ public class MainController {
     private void openFile() {
         FileChooser fc = new FileChooser();
         file = fc.showOpenDialog(null);
-        // pe.parseExel();
     }
 
     public void showNoFind(String s) {
@@ -846,9 +857,7 @@ public class MainController {
                     writeResult.writeExcelFurnZero();
                 }
             }
-           /* if (calc.getMatInstall().size() > 0) {
-                writeResult.writeExcel(calc.getMatInstall());
-            }*/
+
             writeResult.writeExcelAllSum();
             writeResult.writeQuantitySealent();
             writeResult.decorateExcel();

@@ -28,7 +28,6 @@ public class Calculation {
     private List<Product> furniture = new ArrayList<>();
     private List<Product> matInstall = new ArrayList<>();
 
-
     public XSSFWorkbook book;
     public XSSFSheet sheet;
 
@@ -40,7 +39,6 @@ public class Calculation {
 
     private List<String> noNeed = Arrays.asList("Профиль", "Итого по разделу", "Комплектующие",
             "Уплотнители", "Остекление (панели)", "Фурнитура", "Материалы для монтажа");
-    //private List<Integer> rowsForDel = new ArrayList<>();
 
     public StringBuilder noFind = new StringBuilder();
     public int lastRowNum;
@@ -94,6 +92,7 @@ public class Calculation {
             if (row.getCell(ARTICUL_CELL) == null) {
                 continue;
             }
+
             Product product = productService.findProductByArticul(articul);
 
             if (product == null) {
@@ -146,7 +145,7 @@ public class Calculation {
                         }
                         product.setSum(product.getCena().multiply(product.getQuantity()).setScale(2, BigDecimal.ROUND_HALF_UP));
                         break;
-                    case "материалы для монтажа" :
+                    case "материалы для монтажа":
                         if ("6х60".equals(product.getArticul())) {
                             matInstall.add(product);
                             initSumms(product);
@@ -159,9 +158,6 @@ public class Calculation {
         if (noFind.length() != 0) {
             mc.showNoFind(noFind.toString());
         }
-
-        //matInstall.forEach(System.out::println);
-
     }
 
     private void initSumms(Product product) {
@@ -223,7 +219,6 @@ public class Calculation {
                     product.setSum((product.getCena().multiply(product.getQuantity()))
                             .setScale(2, BigDecimal.ROUND_HALF_UP));
                 }
-                ;
             }
             mc.totalProfile = profile.stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         }
@@ -312,11 +307,15 @@ public class Calculation {
                             product.setColored(mc.colored.multiply(product.getPerimeter()));
                             product.setColorSum((product.getQuantity().multiply(product.getColored()))
                                     .setScale(2, BigDecimal.ROUND_HALF_UP));
+
+                            System.out.println(product);
                         }
                         if (product.getBicolor() == 1) {
                             product.setColored(mc.coloredBicolor.multiply(product.getPerimeter()));
                             product.setColorSum((product.getQuantity().multiply(product.getColored()))
                                     .setScale(2, BigDecimal.ROUND_HALF_UP));
+
+                            System.out.println(product);
                         }
                         break;
                     case 3:
@@ -341,6 +340,11 @@ public class Calculation {
                             product.setColorSum((product.getQuantity().multiply(product.getColored()))
                                     .setScale(2, BigDecimal.ROUND_HALF_UP));
                         }
+                        break;
+                    case 5:
+                        product.setColored(product.getCena().multiply(new BigDecimal("0.1")));
+                        product.setColorSum((product.getQuantity().multiply(product.getColored()))
+                                .setScale(2, BigDecimal.ROUND_HALF_UP));
                         break;
                 }
             }
@@ -380,20 +384,22 @@ public class Calculation {
 
         int i = 12;
         float heightRow = sheet.getRow(i).getHeightInPoints();
-        //List<Integer> rowsForDel = new ArrayList<>();
 
         while (true) {
             i++;
             row = sheet.getRow(i);
-            row.setHeightInPoints(heightRow);
+
+            if (row == null) {
+                row = sheet.createRow(i);
+            }
+
             if (row.getCell(NAME_CELL) == null) {
                 lastRow = sheet.getLastRowNum();
                 sheet.shiftRows(i + 1, lastRow, -1);
-
-                //rowsForDel.add(i);
-                //row.setHeightInPoints(heightRow);
+                i--;
                 continue;
             }
+            row.setHeightInPoints(heightRow);
 
             if ("ИТОГО".equals(row.getCell(NAME_CELL).getStringCellValue())) {
                 break;

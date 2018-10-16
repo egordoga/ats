@@ -312,16 +312,16 @@
                         <TextField fx:id="tfRal9006Cena" layoutX="137.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
                         <TextField fx:id="tfRalBiOneCena" layoutX="476.0" layoutY="322.0" prefHeight="25.0" prefWidth="47.0" />
                         <TextField fx:id="tfDecCena" layoutX="603.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
-                        <Label layoutX="158.0" layoutY="266.0" text="(цена в гривне)">
+                        <Label layoutX="146.0" layoutY="267.0" text="(цена в гривне)">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <CheckBox fx:id="cbColorInCena" layoutX="403.0" layoutY="268.0" mnemonicParsing="false" text="Включить в стоимость" />
+                        <CheckBox fx:id="cbColorInCena" layoutX="526.0" layoutY="266.0" mnemonicParsing="false" text="Включить в стоимость" />
                         <CheckBox fx:id="cbWithoutFurn" layoutX="396.0" layoutY="375.0" mnemonicParsing="false" text="Без фурнитуры" />
                         <RadioButton fx:id="rbBi2" layoutX="432.0" layoutY="298.0" mnemonicParsing="false" text="Bi2" toggleGroup="$tgColor" />
                         <TextField fx:id="tfRalBi2Cena" layoutX="535.0" layoutY="322.0" prefHeight="25.0" prefWidth="47.0" />
-                        <RadioButton fx:id="rbNoRal" layoutX="287.0" layoutY="268.0" mnemonicParsing="false" selected="true" text="Нет" toggleGroup="$tgColor" />
+                        <RadioButton fx:id="rbNoRal" layoutX="256.0" layoutY="268.0" mnemonicParsing="false" selected="true" text="Нет" toggleGroup="$tgColor" />
                         <CheckBox fx:id="cbInvoice" layoutX="396.0" layoutY="402.0" mnemonicParsing="false" text="Счет" />
                         <RadioButton fx:id="rbBiIn" layoutX="216.0" layoutY="298.0" mnemonicParsing="false" text="Bi9016In" toggleGroup="$tgColor" />
                         <TextField fx:id="tfRalBiWhiteOneCena" layoutX="236.0" layoutY="322.0" prefHeight="25.0" prefWidth="49.0" />
@@ -346,6 +346,8 @@
                            </font>
                         </Label>
                         <TextField fx:id="tfRalBiInNumber" layoutX="531.0" layoutY="294.0" prefHeight="25.0" prefWidth="51.0" />
+                        <RadioButton fx:id="rbRalFactory" layoutX="314.0" layoutY="266.0" mnemonicParsing="false" text="Заводская" toggleGroup="$tgColor" />
+                        <TextField fx:id="tfRalFactory" layoutX="408.0" layoutY="262.0" prefHeight="25.0" prefWidth="82.0" />
                      </children>
                   </AnchorPane>
               </items>
