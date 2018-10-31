@@ -35,10 +35,8 @@ public class Product {
     private BigDecimal discount;
 
 
-
     public Product() {
     }
-
 
 
     public Product(Integer ident, String name, String articul, Byte color, Byte bicolor, Byte bicolorWhiteOut,

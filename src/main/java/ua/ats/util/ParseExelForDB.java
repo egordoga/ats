@@ -5,10 +5,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
-import ua.ats.AtsApplication;
 import ua.ats.dao.*;
 import ua.ats.entity.*;
 
@@ -158,17 +155,17 @@ public class ParseExelForDB {
             }
 
             Byte biWO = 0;
-                if (row.getCell(22) != null) {
-                    if (row.getCell(22).getCellTypeEnum() == CellType.NUMERIC) {
-                        if ((int) row.getCell(22).getNumericCellValue() == 1) {
-                            biWO = 1;
-                        }
-                    } else {
-                        if (row.getCell(22).getStringCellValue().equals("1")) {
-                            biWO = 1;
-                        }
+            if (row.getCell(22) != null) {
+                if (row.getCell(22).getCellTypeEnum() == CellType.NUMERIC) {
+                    if ((int) row.getCell(22).getNumericCellValue() == 1) {
+                        biWO = 1;
+                    }
+                } else {
+                    if (row.getCell(22).getStringCellValue().equals("1")) {
+                        biWO = 1;
                     }
                 }
+            }
 
 
             productRepository.save(new Product(ident, name, articul, color, bi, biWO, biWI,

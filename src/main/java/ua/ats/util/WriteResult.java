@@ -122,17 +122,6 @@ public class WriteResult {
         }
 
         if (calc.getMatInstall().size() > 0) {
-           /* cell.setCellFormula("N" + (calc.getProfile().get(calc.getProfile().size() - 1).getColumnNumberExel() + 2) + "+" +
-                    "N" + (calc.getAccessories().get(calc.getAccessories().size() - 1).getColumnNumberExel() + 2) + "+" +
-                    "N" + (calc.getSealant().get(calc.getSealant().size() - 1).getColumnNumberExel() + 2) + "+" +
-                    "N" + (calc.getFurniture().get(calc.getFurniture().size() - 1).getColumnNumberExel() + 2) + "+" +
-                    "N" + calc.lastRowNum);
-        } else {
-            cell.setCellFormula("N" + (calc.getProfile().get(calc.getProfile().size() - 1).getColumnNumberExel() + 2) + "+" +
-                    "N" + (calc.getAccessories().get(calc.getAccessories().size() - 1).getColumnNumberExel() + 2) + "+" +
-                    "N" + (calc.getSealant().get(calc.getSealant().size() - 1).getColumnNumberExel() + 2) + "+" +*/
-
-
             totalFormula += "+N" + calc.lastRowNum;
         }
 
@@ -325,6 +314,5 @@ public class WriteResult {
                 } else return;
                 break;
         }
-
     }
 }

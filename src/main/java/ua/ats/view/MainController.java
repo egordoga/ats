@@ -520,7 +520,6 @@ public class MainController {
         }
     }
 
-
     private void textFieldsInitAndListener() {
 
         tfUsd.setText(InitParam.rateUsd.toString());
@@ -755,7 +754,6 @@ public class MainController {
         });
     }
 
-
     private BigDecimal settingDiscount(TextField textField) {
         BigDecimal discount = BigDecimal.ONE;
         if ("".equals(textField.getText()) || "0".equals(textField.getText())) {
@@ -777,13 +775,11 @@ public class MainController {
         return discount;
     }
 
-
     private void chkNeedFurnListener() {
         cbWithoutFurn.selectedProperty().addListener((ov, t, t1) -> {
             countAndWriteTotal(!t1);
         });
     }
-
 
     private void countAndWriteTotal(boolean furn) {
         totalProfile = calc.getProfile().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
