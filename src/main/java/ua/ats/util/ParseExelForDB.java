@@ -35,7 +35,7 @@ public class ParseExelForDB {
     public void parseExel() {
         XSSFWorkbook book = null;
         try {
-            book = new XSSFWorkbook(new FileInputStream("e://1.xlsx"));
+            book = new XSSFWorkbook(new FileInputStream("d://Fornax.xlsx"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,7 +78,7 @@ public class ParseExelForDB {
                     articul = row.getCell(4).getStringCellValue();
                 }
                 if (row.getCell(4).getCellTypeEnum() == CellType.NUMERIC) {
-                    articul = String.valueOf((int) row.getCell(4).getNumericCellValue());
+                    articul = String.valueOf((long) row.getCell(4).getNumericCellValue());
                 }
             }
 

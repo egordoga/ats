@@ -362,6 +362,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
+            <Button layoutX="22.0" layoutY="539.0" mnemonicParsing="false" onAction="#downloadDB" text="DB" />
       </children>
     </AnchorPane>
   </children>

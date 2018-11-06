@@ -10,6 +10,7 @@ import ua.ats.entity.Product;
 import ua.ats.logic.Calculation;
 import ua.ats.service.ProductService;
 import ua.ats.util.InitParam;
+import ua.ats.util.ParseExelForDB;
 import ua.ats.util.WriteResult;
 
 import java.io.File;
@@ -131,6 +132,9 @@ public class MainController {
 
     @Autowired
     private WriteResult writeResult;
+
+    @Autowired
+    private ParseExelForDB parseExelForDB;
 
     @FXML
     private void initLbl() {
@@ -875,6 +879,11 @@ public class MainController {
         }
         file = null;
         rollBack();
+    }
+
+    @FXML
+    public void downloadDB() {
+        //parseExelForDB.parseExel();
     }
 
 

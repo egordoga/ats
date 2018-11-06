@@ -79,7 +79,7 @@ public class Calculation {
                 if (row.getCell(ARTICUL_CELL).getCellTypeEnum() == CellType.STRING) {
                     articul = row.getCell(ARTICUL_CELL).getStringCellValue();
                 } else {
-                    articul = String.valueOf((int) (row.getCell(ARTICUL_CELL).getNumericCellValue()));
+                    articul = String.valueOf((long) (row.getCell(ARTICUL_CELL).getNumericCellValue()));
                 }
             } else {
                 continue;
@@ -154,6 +154,8 @@ public class Calculation {
             }
         }
         lastRowNum = i;
+
+
 
         if (noFind.length() != 0) {
             mc.showNoFind(noFind.toString());
