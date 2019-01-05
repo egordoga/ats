@@ -12,19 +12,19 @@ import java.util.List;
 @Component
 public class InitParam {
 
-    public static BigDecimal costAlumWhite;     // = new BigDecimal("3.97");
-    public static BigDecimal costAlum;          // = new BigDecimal("3.97");
-    public static BigDecimal rateEur;           // = new BigDecimal("1.172");
-    public static BigDecimal rateUsd;           // = new BigDecimal("27.1");
-    public static BigDecimal crossRate;           // = new BigDecimal("27.1");
-    public static BigDecimal color;             // = new BigDecimal("160");
-    public static BigDecimal color9006;         // = new BigDecimal("170");
-    public static BigDecimal colorFurn;         // = new BigDecimal("50");
-    public static BigDecimal bicolor;           // = new BigDecimal("190");
-    public static BigDecimal bicolorWithWhite;  // = new BigDecimal("380");
-    public static BigDecimal dekor;             // = new BigDecimal("630");
+    public static BigDecimal costAlumWhite;
+    public static BigDecimal costAlum;
+    public static BigDecimal rateEur;
+    public static BigDecimal rateUsd;
+    public static BigDecimal crossRate;
+    public static BigDecimal color;
+    public static BigDecimal color9006;
+    public static BigDecimal colorFurn;
+    public static BigDecimal bicolor;
+    public static BigDecimal bicolorWithWhite;
+    public static BigDecimal dekor;
 
-    private static final Path PROP = Paths.get("d://alumotr/properties.txt");
+    private static final Path PROP = Paths.get("e://alumotr/properties.txt");
 
     public static void initParam() {
         try {

@@ -10,6 +10,7 @@ import ua.ats.entity.Product;
 import ua.ats.logic.Calculation;
 import ua.ats.service.ProductService;
 import ua.ats.util.InitParam;
+import ua.ats.util.ParseData;
 import ua.ats.util.ParseExelForDB;
 import ua.ats.util.WriteResult;
 
@@ -46,9 +47,7 @@ public class MainController {
     public BigDecimal markupF50 = new BigDecimal("1.2");
     public BigDecimal markupW70 = new BigDecimal("1.2");
     public BigDecimal markupL45 = new BigDecimal("1.2");
-    /*public BigDecimal discountF50;
-    public BigDecimal discountW70;
-    public BigDecimal discountL45;*/
+
     public BigDecimal discountProfile = new BigDecimal("1");
     public BigDecimal discountAccessories = new BigDecimal("1");
     public BigDecimal discountSealant = new BigDecimal("1");
@@ -85,9 +84,6 @@ public class MainController {
     public TextField tfDiscFurn;
 
     public String strRalNumber;
-    public String ralBiNum;
-    public String ralBi1Num;
-    public String strColor;
 
     public RadioButton rbRal;
     public RadioButton rbRal9006;
@@ -136,6 +132,9 @@ public class MainController {
     @Autowired
     private ParseExelForDB parseExelForDB;
 
+    @Autowired
+    private ParseData data;
+
     @FXML
     private void initLbl() {
         if (!FILE_CHK.exists()) {
@@ -147,7 +146,7 @@ public class MainController {
         tfUsd.setText(String.valueOf(InitParam.rateUsd));
         tfEur.setText(String.valueOf(InitParam.rateEur));
         lblCross.setText(String.valueOf(InitParam.crossRate));
-        calc.fillLists(productService);
+        data.fillLists(productService);
         fileLbl.setText("Файл: " + file.getName());
         countAndWriteTotal(!cbWithoutFurn.isSelected());
         listenMarkupF50();
@@ -226,12 +225,12 @@ public class MainController {
         tfRalBiOutNumber.setText("");
         tfRalBi1Number.setText("");
 
-        calc.getProfile().clear();
-        calc.getAccessories().clear();
-        calc.getSealant().clear();
-        calc.getFurniture().clear();
-        calc.getMatInstall().clear();
-        calc.noFind.setLength(0);
+        data.getProfile().clear();
+        data.getAccessories().clear();
+        data.getSealant().clear();
+        data.getFurniture().clear();
+        data.getMatInstall().clear();
+        data.getNoFind().setLength(0);
 
 
     }
@@ -786,11 +785,11 @@ public class MainController {
     }
 
     private void countAndWriteTotal(boolean furn) {
-        totalProfile = calc.getProfile().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        totalAccessories = calc.getAccessories().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        totalSealant = calc.getSealant().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        totalFurniture = calc.getFurniture().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        totalMat = calc.getMatInstall().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        totalProfile = data.getProfile().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        totalAccessories = data.getAccessories().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        totalSealant = data.getSealant().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        totalFurniture = data.getFurniture().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        totalMat = data.getMatInstall().stream().map(Product::getSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         if (furn) {
             totalAll = totalProfile.add(totalAccessories).add(totalSealant).add(totalFurniture).add(totalMat);
         } else {
@@ -847,12 +846,12 @@ public class MainController {
     @FXML
     private void saveExcel() {
         if (file != null) {
-            writeResult.writeExcel(calc.getProfile());
-            writeResult.writeExcel(calc.getAccessories());
-            writeResult.writeExcel(calc.getSealant());
-            if (calc.getFurniture().size() > 0) {
+            writeResult.writeExcel(data.getProfile());
+            writeResult.writeExcel(data.getAccessories());
+            writeResult.writeExcel(data.getSealant());
+            if (data.getFurniture().size() > 0) {
                 if (!cbWithoutFurn.isSelected()) {
-                    writeResult.writeExcel(calc.getFurniture());
+                    writeResult.writeExcel(data.getFurniture());
                 } else {
                     writeResult.writeExcelFurnZero();
                 }
@@ -864,8 +863,8 @@ public class MainController {
             writeResult.changeColorColumn();
             try {
                 FileOutputStream outFile = new FileOutputStream(file);
-                calc.book.write(outFile);
-                calc.book.close();
+                data.getBook().write(outFile);
+                data.getBook().close();
                 outFile.close();
             } catch (IOException e) {
                 e.printStackTrace();

@@ -12,11 +12,11 @@ public class Currency {
 
     private List<Product> products = new ArrayList<>();
 
-    public Currency() {
-    }
-
     public Currency(String name) {
         this.name = name;
+    }
+
+    public Currency() {
     }
 
     @Id

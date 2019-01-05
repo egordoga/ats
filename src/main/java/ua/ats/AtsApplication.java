@@ -23,12 +23,8 @@ import java.io.File;
 
 
 @SpringBootApplication
-/*@EnableJpaRepositories(basePackages = {"ua.ats.dao"})
-@EntityScan(basePackages = {"ua.ats.entity"})
-@ComponentScan("ua.ats")*/
 public class AtsApplication extends Application {
 
-    //@Autowired
     private ConfigurableApplicationContext springContext;
     private Parent root;
 
@@ -52,19 +48,12 @@ public class AtsApplication extends Application {
     @Override
     public void stop() throws Exception {
         springContext.stop();
-        //springContext.close();
     }
 
 
 
     public static void main(String[] args) {
         launch(AtsApplication.class, args);
-
-
-        /* ConfigurableApplicationContext context = SpringApplication.run(AtsApplication.class);
-         ProductRepository repository = context.getBean(ProductRepository.class);
-        ParseExelForDB parseExelForDB = new ParseExelForDB();
-        parseExelForDB.parseExel(repository);*/
     }
 }
 

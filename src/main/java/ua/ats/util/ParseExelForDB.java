@@ -42,7 +42,6 @@ public class ParseExelForDB {
         assert book != null;
         XSSFSheet sheet = book.getSheetAt(0);
 
-
         System.out.println("Start parsing");
 
 
@@ -171,8 +170,6 @@ public class ParseExelForDB {
             productRepository.save(new Product(ident, name, articul, color, bi, biWO, biWI,
                     price, BigDecimal.ZERO, weight, perimeter, currency,
                     groupp, measure, section));
-
-            System.out.println("BB " + i);
         }
         System.out.println("THE END");
     }
