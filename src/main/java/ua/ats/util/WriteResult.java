@@ -20,10 +20,8 @@ public class WriteResult {
     private static final int QUANT_CELL = 11;
     private final static int HEADER_ROW = 8;
 
-
     @Autowired
     private MainController mc;
-
     @Autowired
     private ParseData data;
 
@@ -112,19 +110,17 @@ public class WriteResult {
         Cell cell = data.getSheet().getRow(data.getLastRowNum()).getCell(SUMM_CELL);
         cell.setCellType(CellType.FORMULA);
 
-        String totalFormula = "N" + (data.getProfile().get(data.getProfile().size() - 1).getColumnNumberExel() + 2) + "+" +
-                "N" + (data.getAccessories().get(data.getAccessories().size() - 1).getColumnNumberExel() + 2) + "+" +
-                "N" + (data.getSealant().get(data.getSealant().size() - 1).getColumnNumberExel() + 2);
+        StringBuilder totalFormula = new StringBuilder().append("N").append(data.getProfile().get(data.getProfile().size() - 1).getColumnNumberExel() + 2)
+                .append("+").append("N").append(data.getAccessories().get(data.getAccessories().size() - 1).getColumnNumberExel() + 2)
+                .append("+").append("N").append(data.getSealant().get(data.getSealant().size() - 1).getColumnNumberExel() + 2);
 
         if (data.getFurniture().size() > 0) {
-            totalFormula += "+N" + (data.getFurniture().get(data.getFurniture().size() - 1).getColumnNumberExel() + 2);
+            totalFormula.append("+N").append(data.getFurniture().get(data.getFurniture().size() - 1).getColumnNumberExel() + 2);
         }
-
         if (data.getMatInstall().size() > 0) {
-            totalFormula += "+N" + data.getLastRowNum();
+            totalFormula.append("+N").append(data.getLastRowNum());
         }
-
-        cell.setCellFormula(totalFormula);
+        cell.setCellFormula(totalFormula.toString());
     }
 
     public void decorateExcel() {

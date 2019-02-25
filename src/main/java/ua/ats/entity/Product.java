@@ -1,11 +1,18 @@
 package ua.ats.entity;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 
+@Data
+@NoArgsConstructor
 @Entity
 public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private Integer ident;
     private String name;
@@ -18,26 +25,42 @@ public class Product {
     private BigDecimal cost;
     private BigDecimal weight;
     private BigDecimal perimeter;
+
+    @ManyToOne()
+    @JoinColumn(name = "CURRENCY_ID")
     private Currency currency;
+
+    @ManyToOne()
+    @JoinColumn(name = "GROUP_ID")
     private Groupp groupp;
+
+    @ManyToOne()
+    @JoinColumn(name = "MEASURE_ID")
     private Measure measure;
+
+    @ManyToOne()
+    @JoinColumn(name = "SECTION_ID")
     private Section section;
 
 
+    @Transient
     private Integer columnNumberExel;
+    @Transient
     private BigDecimal sum;
+    @Transient
     private BigDecimal colorSum;
+    @Transient
     private BigDecimal quantity;
+    @Transient
     private BigDecimal cena;
+    @Transient
     private BigDecimal discountSum;
+    @Transient
     private BigDecimal previousCena;
+    @Transient
     private BigDecimal colored;
+    @Transient
     private BigDecimal discount;
-
-
-    public Product() {
-    }
-
 
     public Product(Integer ident, String name, String articul, Byte color, Byte bicolor, Byte bicolorWhiteOut,
                    Byte bicolorWhiteIn, BigDecimal price, BigDecimal cost, BigDecimal weight, BigDecimal perimeter,
@@ -57,307 +80,5 @@ public class Product {
         this.groupp = groupp;
         this.measure = measure;
         this.section = sectionn;
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Basic
-    @Column(name = "IDENT")
-    public Integer getIdent() {
-        return ident;
-    }
-
-    public void setIdent(Integer ident) {
-        this.ident = ident;
-    }
-
-    @Basic
-    @Column(name = "NAME")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Basic
-    @Column(name = "ARTICUL")
-    public String getArticul() {
-        return articul;
-    }
-
-    public void setArticul(String articul) {
-        this.articul = articul;
-    }
-
-    @Basic
-    @Column(name = "COLOR")
-    public Byte getColor() {
-        return color;
-    }
-
-    public void setColor(Byte color) {
-        this.color = color;
-    }
-
-    @Basic
-    @Column(name = "BICOLOR")
-    public Byte getBicolor() {
-        return bicolor;
-    }
-
-    public void setBicolor(Byte bicolor) {
-        this.bicolor = bicolor;
-    }
-
-    @Basic
-    @Column(name = "BICOLOR_WHITE_OUT")
-    public Byte getBicolorWhiteOut() {
-        return bicolorWhiteOut;
-    }
-
-    public void setBicolorWhiteOut(Byte bicolorWhite) {
-        this.bicolorWhiteOut = bicolorWhite;
-    }
-
-    @Basic
-    @Column(name = "BICOLOR_WHITE_IN")
-    public Byte getBicolorWhiteIn() {
-        return bicolorWhiteIn;
-    }
-
-    public void setBicolorWhiteIn(Byte bicolorWhiteIn) {
-        this.bicolorWhiteIn = bicolorWhiteIn;
-    }
-
-    @Basic
-    @Column(name = "PRICE")
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    @Basic
-    @Column(name = "COST")
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
-    }
-
-    @Basic
-    @Column(name = "WEIGHT")
-    public BigDecimal getWeight() {
-        return weight;
-    }
-
-    public void setWeight(BigDecimal weight) {
-        this.weight = weight;
-    }
-
-    @Basic
-    @Column(name = "PERIMETER")
-    public BigDecimal getPerimeter() {
-        return perimeter;
-    }
-
-    public void setPerimeter(BigDecimal square) {
-        this.perimeter = square;
-    }
-
-    @ManyToOne()
-    @JoinColumn(name = "CURRENCY_ID")
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-
-    @Transient
-    public Integer getColumnNumberExel() {
-        return columnNumberExel;
-    }
-
-    public void setColumnNumberExel(Integer columnNumberExel) {
-        this.columnNumberExel = columnNumberExel;
-    }
-
-    @Transient
-    public BigDecimal getSum() {
-        return sum;
-    }
-
-    public void setSum(BigDecimal sum) {
-        this.sum = sum;
-    }
-
-    @Transient
-    public BigDecimal getColorSum() {
-        return colorSum;
-    }
-
-    public void setColorSum(BigDecimal colorSum) {
-        this.colorSum = colorSum;
-    }
-
-    @Transient
-    public BigDecimal getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(BigDecimal quantity) {
-        this.quantity = quantity;
-    }
-
-    @Transient
-    public BigDecimal getCena() {
-        return cena;
-    }
-
-    public void setCena(BigDecimal cena) {
-        this.cena = cena;
-    }
-
-    @Transient
-    public BigDecimal getDiscountSum() {
-        return discountSum;
-    }
-
-    public void setDiscountSum(BigDecimal discountSum) {
-        this.discountSum = discountSum;
-    }
-
-    @Transient
-    public BigDecimal getPreviousCena() {
-        return previousCena;
-    }
-
-    public void setPreviousCena(BigDecimal previousCena) {
-        this.previousCena = previousCena;
-    }
-
-    @Transient
-    public BigDecimal getColored() {
-        return colored;
-    }
-
-    public void setColored(BigDecimal colored) {
-        this.colored = colored;
-    }
-
-    @Transient
-    public BigDecimal getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(BigDecimal discount) {
-        this.discount = discount;
-    }
-
-    @ManyToOne()
-    @JoinColumn(name = "GROUP_ID")
-    public Groupp getGroupp() {
-        return groupp;
-    }
-
-    public void setGroupp(Groupp groupp) {
-        this.groupp = groupp;
-    }
-
-    @ManyToOne()
-    @JoinColumn(name = "MEASURE_ID")
-    public Measure getMeasure() {
-        return measure;
-    }
-
-    public void setMeasure(Measure measure) {
-        this.measure = measure;
-    }
-
-    @ManyToOne()
-    @JoinColumn(name = "SECTION_ID")
-    public Section getSection() {
-        return section;
-    }
-
-    public void setSection(Section section) {
-        this.section = section;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return id == product.id &&
-                Objects.equals(ident, product.ident) &&
-                Objects.equals(name, product.name) &&
-                Objects.equals(articul, product.articul) &&
-                Objects.equals(color, product.color) &&
-                Objects.equals(bicolor, product.bicolor) &&
-                Objects.equals(bicolorWhiteOut, product.bicolorWhiteOut) &&
-                Objects.equals(price, product.price) &&
-                Objects.equals(cost, product.cost) &&
-                Objects.equals(weight, product.weight) &&
-                Objects.equals(perimeter, product.perimeter) &&
-                Objects.equals(currency, product.currency) &&
-                Objects.equals(groupp, product.groupp) &&
-                Objects.equals(measure, product.measure) &&
-                Objects.equals(section, product.section);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, ident, name, articul, color, bicolor, bicolorWhiteOut, price, cost, weight, perimeter, currency, groupp, measure, section);
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                //"id=" + id +
-                //", ident=" + ident +
-                ", name='" + name + '\'' +
-                ", articul='" + articul + '\'' +
-                ", tgColor=" + color +
-                ", bicolor=" + bicolor +
-                ", bicolorWhiteOut=" + bicolorWhiteOut +
-                ", bicolorWhiteIn=" + bicolorWhiteIn +
-                ", price=" + price +
-                //", cost=" + cost +
-                //", weight=" + weight +
-                ", perimeter=" + perimeter +
-                //", currency=" + currency +
-                //", groupp=" + groupp +
-                //", measure=" + measure +
-                //", section=" + section +
-                //", columnNumberExel=" + columnNumberExel +
-                ", sum=" + sum +
-                ", colorSum=" + colorSum +
-                ", quantity=" + quantity +
-                ", cena=" + cena +
-                //", discountSum=" + discountSum +
-                //", previousCena=" + previousCena +
-                ", colored=" + colored +
-                //", discount=" + discount +
-                '}';
     }
 }

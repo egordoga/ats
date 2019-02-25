@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ua.ats.entity.Product;
@@ -11,14 +12,13 @@ import ua.ats.logic.Calculation;
 import ua.ats.service.ProductService;
 import ua.ats.util.InitParam;
 import ua.ats.util.ParseData;
-import ua.ats.util.ParseExelForDB;
+import ua.ats.util.ParseExcelForDB;
 import ua.ats.util.WriteResult;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-
 
 @Controller
 public class MainController {
@@ -44,9 +44,9 @@ public class MainController {
     public Label lblTotAll;
     public Label lblTotColor;
 
-    public BigDecimal markupF50 = new BigDecimal("1.2");
-    public BigDecimal markupW70 = new BigDecimal("1.2");
-    public BigDecimal markupL45 = new BigDecimal("1.2");
+    private BigDecimal markupF50 = new BigDecimal("1.2");
+    private BigDecimal markupW70 = new BigDecimal("1.2");
+    private BigDecimal markupL45 = new BigDecimal("1.2");
 
     public BigDecimal discountProfile = new BigDecimal("1");
     public BigDecimal discountAccessories = new BigDecimal("1");
@@ -56,12 +56,12 @@ public class MainController {
     public BigDecimal colored = BigDecimal.ZERO;
     public BigDecimal coloredBicolor = BigDecimal.ZERO;
 
-    public BigDecimal totalAccessories;
-    public BigDecimal totalSealant;
-    public BigDecimal totalFurniture;
+    private BigDecimal totalAccessories;
+    private BigDecimal totalSealant;
+    private BigDecimal totalFurniture;
+    private BigDecimal totalMat;
+    private BigDecimal totalAll;
     public BigDecimal totalProfile;
-    public BigDecimal totalMat;
-    public BigDecimal totalAll;
     public BigDecimal totalColor;
 
     public TextField tfEur;
@@ -106,9 +106,9 @@ public class MainController {
 
     private int colorType = 0;        // 0 - none, 1 - tgColor, bicolor: 2 - white in, 3 - white out,
     // 4 - double, 5 - coloredInFactory
-    public int costTypeF50 = 1;
-    public int costTypeW70 = 1;
-    public int costTypeL45 = 1;
+    private int costTypeF50 = 1;
+    private int costTypeW70 = 1;
+    private int costTypeL45 = 1;
     public boolean checkColorInCena;
 
     public File file;
@@ -116,22 +116,15 @@ public class MainController {
     @FXML
     private Label fileLbl;
 
-    public MainController() {
-    }
-
 
     @Autowired
     private Calculation calc;
-
     @Autowired
     private ProductService productService;
-
     @Autowired
     private WriteResult writeResult;
-
     @Autowired
-    private ParseExelForDB parseExelForDB;
-
+    private ParseExcelForDB parseExcelForDB;
     @Autowired
     private ParseData data;
 
@@ -371,11 +364,6 @@ public class MainController {
                     calc.rewriteByPrice("W70", markupW70);
                     countAndWriteTotal(!cbWithoutFurn.isSelected());
                     break;
-               /* case "w70weight":
-                    costTypeW70 = 2;
-                    calc.rewriteByWeight("W70", markupW70);
-                    countAndWriteTotal();
-                    break;*/
                 case "w70cost":
                     costTypeW70 = 3;
                     calc.rewriteByCost("W70", markupW70);
@@ -779,9 +767,7 @@ public class MainController {
     }
 
     private void chkNeedFurnListener() {
-        cbWithoutFurn.selectedProperty().addListener((ov, t, t1) -> {
-            countAndWriteTotal(!t1);
-        });
+        cbWithoutFurn.selectedProperty().addListener((ov, t, t1) -> countAndWriteTotal(!t1));
     }
 
     private void countAndWriteTotal(boolean furn) {
@@ -882,7 +868,7 @@ public class MainController {
 
     @FXML
     public void downloadDB() {
-        //parseExelForDB.parseExel();
+        parseExcelForDB.parseExcel();
     }
 
 

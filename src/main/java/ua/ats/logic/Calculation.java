@@ -1,5 +1,6 @@
 package ua.ats.logic;
 
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.ats.entity.Product;
@@ -12,15 +13,19 @@ import java.math.BigDecimal;
 @Component
 public class Calculation {
 
+    private final static BigDecimal KOEFF_WEIGHT = new BigDecimal("1.01");
+    private final static BigDecimal MARKUP = new BigDecimal("1.2");
+    private final static BigDecimal MARKUP_COLOR_FACTORY = new BigDecimal("0.1");
+
     @Autowired
-    private MainController mc;
+    private  MainController mc;
     @Autowired
-    private ParseData data;
+    private  ParseData data;
 
     public void rewriteByPrice(String group, BigDecimal markup) {
         for (Product product : data.getProfile()) {
             if (group.equals(product.getGroupp().getName())) {
-                BigDecimal cost = product.getPrice().divide(new BigDecimal("1.2"), 3, BigDecimal.ROUND_HALF_UP);
+                BigDecimal cost = product.getPrice().divide(MARKUP, 3, BigDecimal.ROUND_HALF_UP);
                 product.setCena(cost.multiply(markup).multiply(mc.discountProfile));
                 if (mc.cbColorInCena.isSelected()) {
                     product.setSum((product.getCena().multiply(product.getQuantity()).add(product.getColorSum()))
@@ -39,10 +44,10 @@ public class Calculation {
             if (group.equals(product.getGroupp().getName())) {
                 BigDecimal cost;
                 if (product.getColor() == 1) {
-                    cost = product.getWeight().multiply(InitParam.costAlumWhite).multiply(new BigDecimal("1.01")
-                            .setScale(2, BigDecimal.ROUND_HALF_UP));
+                    cost = product.getWeight().multiply(InitParam.costAlumWhite).multiply(KOEFF_WEIGHT)
+                            .setScale(2, BigDecimal.ROUND_HALF_UP);
                 } else {
-                    cost = product.getWeight().multiply(InitParam.costAlum).multiply(new BigDecimal("1.01"))
+                    cost = product.getWeight().multiply(InitParam.costAlum).multiply(KOEFF_WEIGHT)
                             .setScale(2, BigDecimal.ROUND_HALF_UP);
                 }
                 product.setCena(cost.multiply(markup).multiply(mc.discountProfile));
@@ -176,7 +181,7 @@ public class Calculation {
                         }
                         break;
                     case 5:
-                        product.setColored(product.getCena().multiply(new BigDecimal("0.1")));
+                        product.setColored(product.getCena().multiply(MARKUP_COLOR_FACTORY));
                         product.setColorSum((product.getQuantity().multiply(product.getColored()))
                                 .setScale(2, BigDecimal.ROUND_HALF_UP));
                         break;

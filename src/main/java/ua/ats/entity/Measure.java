@@ -1,64 +1,26 @@
 package ua.ats.entity;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 
+@Data
+@NoArgsConstructor
 @Entity
 public class Measure {
-    private int id;
-    private String name;
-    private List<Product> products;
 
-    public Measure() {
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String name;
+
+    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
+    private List<Product> products;
 
     public Measure(String name) {
         this.name = name;
-    }
-
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Basic
-    @Column(name = "NAME")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL)
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Measure measure = (Measure) o;
-        return id == measure.id &&
-                Objects.equals(name, measure.name);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, name);
     }
 }

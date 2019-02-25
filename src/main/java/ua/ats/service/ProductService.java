@@ -8,8 +8,12 @@ import ua.ats.entity.Product;
 @Service
 public class ProductService {
 
+    private final ProductRepository productRepository;
+
     @Autowired
-    private ProductRepository productRepository;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     public Product findProductByArticul(String articul) {
         return productRepository.findProductByArticul(articul);

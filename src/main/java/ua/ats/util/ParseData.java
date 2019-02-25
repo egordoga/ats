@@ -1,5 +1,6 @@
 package ua.ats.util;
 
+import lombok.Data;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Data
 @Component
 public class ParseData {
 
@@ -31,19 +33,24 @@ public class ParseData {
     private XSSFSheet sheet;
 
     private final static int START_ROW = 11;
+    private final static int QUANTITY_CELL = 11;
     private final static int NAME_CELL = 7;
     private final static int ARTICUL_CELL = 4;
 
     private final static BigDecimal HALF = new BigDecimal("0.5");
 
-    private List<String> noNeed = Arrays.asList("Профиль", "Итого по разделу", "Комплектующие",
+    private final List<String> noNeed = Arrays.asList("Профиль", "Итого по разделу", "Комплектующие",
             "Уплотнители", "Остекление (панели)", "Фурнитура", "Материалы для монтажа");
 
     private StringBuilder noFind = new StringBuilder();
     private int lastRowNum;
 
+    private final MainController mc;
+
     @Autowired
-    private MainController mc;
+    public ParseData(MainController mc) {
+        this.mc = mc;
+    }
 
     public void fillLists(ProductService productService) {
 
@@ -105,8 +112,8 @@ public class ParseData {
                 product.setPreviousCena(BigDecimal.ZERO);
                 product.setColored(BigDecimal.ZERO);
                 product.setDiscount(BigDecimal.ONE);
-                if (row.getCell(11) != null) {
-                    product.setQuantity(new BigDecimal(String.valueOf(row.getCell(11).getNumericCellValue())));
+                if (row.getCell(QUANTITY_CELL) != null) {
+                    product.setQuantity(new BigDecimal(String.valueOf(row.getCell(QUANTITY_CELL).getNumericCellValue())));
                     product.setColorSum(BigDecimal.ZERO);
                 } else {
                     product.setQuantity(BigDecimal.ZERO);
@@ -208,41 +215,5 @@ public class ParseData {
         result = temp.compareTo(HALF) < 0 ? (tempInt.add(HALF)).multiply(BigDecimal.TEN) : (tempInt.add(BigDecimal.ONE)).multiply(BigDecimal.TEN);
         return result;
 
-    }
-
-    public List<Product> getProfile() {
-        return profile;
-    }
-
-    public List<Product> getAccessories() {
-        return accessories;
-    }
-
-    public List<Product> getSealant() {
-        return sealant;
-    }
-
-    public List<Product> getFurniture() {
-        return furniture;
-    }
-
-    public List<Product> getMatInstall() {
-        return matInstall;
-    }
-
-    public XSSFWorkbook getBook() {
-        return book;
-    }
-
-    public XSSFSheet getSheet() {
-        return sheet;
-    }
-
-    public int getLastRowNum() {
-        return lastRowNum;
-    }
-
-    public StringBuilder getNoFind() {
-        return noFind;
     }
 }
